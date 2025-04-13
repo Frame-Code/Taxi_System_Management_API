@@ -1,34 +1,64 @@
 package entities;
 
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Getter @Setter
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
+    @Column(length = 60, nullable = false)
+    private String names;
+
+    @Column(length = 60, nullable = false)
     private String lastNames;
-    private LocalDate bornDate;
+
+    @Column(length = 80, nullable = false, unique = true)
     private String email;
+
+    @Column(length = 15, nullable = false, unique = true)
     private String phone;
+
+    @Column(columnDefinition = "TEXT")
     private String passwordHash;
-    private String photo;
+
+    @Column(nullable = false)
     private LocalDate createdAt;
+
+    @Column(nullable = false)
     private String createdBy;
-    private LocalDate updatedAt;
-    private String updatedBy;
+
+    @Column(nullable = false)
     private boolean isDeleted;
 
-    public String getFullNames() {return name + " " + lastNames;}
+    private LocalDate updatedAt;
+    private String updatedBy;
+    private String photo;
+    private LocalDate bornDate;
 
-    private void prePersist() {
+    public String getFullNames() {return names + " " + lastNames;}
+
+    @PrePersist
+    private void load() {
         createdAt = LocalDate.now();
         isDeleted = false;
+    }
+    @PreUpdate
+    private void update() {
+        updatedAt = LocalDate.now();
     }
 }

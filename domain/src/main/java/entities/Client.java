@@ -1,9 +1,28 @@
 package entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.CascadeType;
+
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 @Builder
-public class Client extends User{
+@Getter @Setter
+@Entity
+public class Client {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private ClientLocation clientLocation;
 
 }
