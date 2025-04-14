@@ -1,6 +1,6 @@
 package entities;
 
-import Enums.STATUS_ROAD;
+import Enums.entitiesEnums.STATUS_ROAD;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

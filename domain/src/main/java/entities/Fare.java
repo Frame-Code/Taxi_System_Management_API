@@ -1,12 +1,33 @@
 package entities;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
+@Builder
+@Getter @Setter
+@Entity
 public class Fare {
-    private Long id;
+    @Id
+    private final Integer id = 1;
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private Double pricePerMinute;
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private Double pricePerKm;
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private Double baseFare;
-    private boolean isDeleted;
+
+    @Column(nullable = false)
     private LocalDate createdAt;
+
 }

@@ -1,6 +1,6 @@
 package entities;
 
-import Enums.ROLE_NAME;
+import Enums.entitiesEnums.ROLE_NAME;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

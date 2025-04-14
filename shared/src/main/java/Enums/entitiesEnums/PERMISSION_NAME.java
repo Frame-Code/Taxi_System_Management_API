@@ -1,4 +1,4 @@
-package Enums;
+package Enums.entitiesEnums;
 
 public enum PERMISSION_NAME {
     CREATE,

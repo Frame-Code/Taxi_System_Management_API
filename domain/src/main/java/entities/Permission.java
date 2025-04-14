@@ -1,6 +1,6 @@
 package entities;
 
-import Enums.PERMISSION_NAME;
+import Enums.entitiesEnums.PERMISSION_NAME;
 
 import java.time.LocalDate;
 

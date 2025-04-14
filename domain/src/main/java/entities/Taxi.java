@@ -1,6 +1,6 @@
 package entities;
 
-import Enums.STATUS_TAXI;
+import Enums.entitiesEnums.STATUS_TAXI;
 import lombok.Builder;
 
 import java.time.LocalDate;

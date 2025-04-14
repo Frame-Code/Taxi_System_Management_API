@@ -1,6 +1,6 @@
 package entities;
 
-import Enums.TOKEN_TYPE;
+import Enums.entitiesEnums.TOKEN_TYPE;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

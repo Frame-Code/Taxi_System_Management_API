@@ -1,6 +1,6 @@
 package entities;
 
-import Enums.PAYMENT_METHOD;
+import Enums.entitiesEnums.PAYMENT_METHOD;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

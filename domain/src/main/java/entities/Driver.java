@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.CascadeType;
 
@@ -12,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.List;
 
 @Builder
 @Getter @Setter
@@ -30,8 +32,14 @@ public class Driver{
     @Column(nullable = false)
     private String address;
 
-    private Integer experienceYears;
+    @Column(nullable = false)
     private LocalDate entryDate;
+
+    @ManyToOne
+
+    private List<Notification> notifications;
+
+    private Integer experienceYears;
 
 }
 
