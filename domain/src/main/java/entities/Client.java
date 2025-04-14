@@ -1,15 +1,18 @@
 package entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.CascadeType;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Builder
 @Getter @Setter
@@ -22,7 +25,7 @@ public class Client {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ClientLocation clientLocation;
+    @OneToMany(mappedBy = "idClient")
+    private List<ClientLocation> clientLocations;
 
 }
