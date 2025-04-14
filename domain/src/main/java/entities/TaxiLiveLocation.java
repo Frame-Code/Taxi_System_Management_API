@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.locationtech.jts.geom.Point;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
