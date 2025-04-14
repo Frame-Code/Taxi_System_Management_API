@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +30,10 @@ public class Fare {
 
     @Column(nullable = false)
     private LocalDate createdAt;
+
+    @PrePersist
+    private void load() {
+        createdAt = LocalDate.now();
+    }
 
 }

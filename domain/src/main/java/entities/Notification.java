@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.PrePersist;
 
 import lombok.Builder;
@@ -15,8 +17,8 @@ import java.time.LocalDate;
 
 @Builder
 @Getter @Setter
-@Entity
-public class Notification {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

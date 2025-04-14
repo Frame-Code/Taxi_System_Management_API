@@ -48,6 +48,8 @@ public class User {
     private LocalDate updatedAt;
     private String updatedBy;
     private String photo;
+
+    @Column(nullable = false)
     private LocalDate bornDate;
 
     public String getFullNames() {return names + " " + lastNames;}

@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.CascadeType;
@@ -36,7 +37,7 @@ public class Driver{
     private LocalDate entryDate;
 
     @ManyToOne
-
+    @JoinColumn(name = "idNotification")
     private List<Notification> notifications;
 
     private Integer experienceYears;
