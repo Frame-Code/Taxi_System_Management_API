@@ -1,4 +1,4 @@
-package entities;
+package io.github.frame_code.domain.entities;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -25,7 +25,7 @@ public class Client {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToMany(mappedBy = "idClient")
+    @OneToMany(mappedBy = "client")
     private List<ClientLocation> clientLocations;
 
 }

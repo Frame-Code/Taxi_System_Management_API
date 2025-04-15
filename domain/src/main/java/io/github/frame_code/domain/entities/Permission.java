@@ -1,12 +1,14 @@
-package entities;
+package io.github.frame_code.domain.entities;
+
+import Enums.entitiesEnums.PERMISSION_NAME;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.PrePersist;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -16,23 +18,24 @@ import java.time.LocalDate;
 
 @Builder
 @Getter @Setter
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Notification {
+@Entity
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String title;
-
-    @Column(columnDefinition = "TEXT")
-    private String message;
+    private PERMISSION_NAME permissionName;
 
     @Column(nullable = false)
     private LocalDate createdAt;
 
-    @PrePersist
+    @Column(nullable = false)
+    private boolean isDeleted;
+
     private void load() {
         createdAt = LocalDate.now();
+        isDeleted = false;
     }
 }

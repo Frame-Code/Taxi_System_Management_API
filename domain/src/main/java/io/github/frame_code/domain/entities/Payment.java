@@ -1,4 +1,4 @@
-package entities;
+package io.github.frame_code.domain.entities;
 
 import Enums.entitiesEnums.PAYMENT_METHOD;
 import jakarta.persistence.Column;

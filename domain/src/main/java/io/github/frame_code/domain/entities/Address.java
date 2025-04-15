@@ -1,4 +1,4 @@
-package entities;
+package io.github.frame_code.domain.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
