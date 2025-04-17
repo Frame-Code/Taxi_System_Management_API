@@ -10,24 +10,15 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 
-@Builder
+@SuperBuilder
 @Getter @Setter
 @Entity
-public class TaxiLiveLocation{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(columnDefinition = "POINT")
-    private Point location;
-
-    @Column(columnDefinition = "DATETIME(6)")
-    private LocalDateTime timeStamp;
-
+public class TaxiLiveAddress extends Address {
     @ManyToOne
     @JoinColumn(name = "idTaxi")
     private Taxi taxi;

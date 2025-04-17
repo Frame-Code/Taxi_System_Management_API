@@ -6,41 +6,41 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.CascadeType;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
-import java.util.List;
 
-@Builder
+/**
+ * Entidad que representa un conductor en el sistema
+ */
 @Getter @Setter
+@NoArgsConstructor
+@SuperBuilder
 @Entity
-public class Driver{
+public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idUser")
     private User user;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idLicense")
     private License license;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String address;
 
     @Column(nullable = false)
     private LocalDate entryDate;
 
-    @OneToMany(mappedBy = "driver")
-    private List<RoadNotification> notifications;
-
     private Integer experienceYears;
-
 }
 

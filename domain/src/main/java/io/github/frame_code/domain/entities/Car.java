@@ -2,19 +2,25 @@ package io.github.frame_code.domain.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-
-import lombok.Builder;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+/**
+ * Entidad para representar un automóvil, extiende de Vehicle
+ */
 @Getter @Setter
+@NoArgsConstructor
+@SuperBuilder
 @Entity
-public class Car extends Vehicle{
+@PrimaryKeyJoinColumn(name = "id")
+public class Car extends Vehicle {
+    
     @Column(length = 15, unique = true, nullable = false)
     private String licensePlate;
 
     @Column(length = 25, unique = true, nullable = false)
     private String chassisNumber;
-
 }

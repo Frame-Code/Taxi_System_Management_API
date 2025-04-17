@@ -8,18 +8,21 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
-@Builder
+/**
+ * Entidad que representa un pago en el sistema
+ */
 @Getter @Setter
+@NoArgsConstructor
+@SuperBuilder
 @Entity
-public class Payment {
+public class Payment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,25 +31,9 @@ public class Payment {
     @Column(nullable = false)
     private PAYMENT_METHOD paymentMethod;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false)
     private Double amount;
 
     @Column(nullable = false)
-    private UUID transaction_code;
-
-    @Column(nullable = false)
-    private boolean isDeleted;
-
-    @Column(nullable = false)
-    private LocalDate createdAt;
-
-    @Column(nullable = false, length = 50)
-    private String createdBy;
-
-    @PrePersist
-    private void load() {
-        createdAt = LocalDate.now();
-        isDeleted = false;
-    }
-
+    private UUID transactionCode;
 }

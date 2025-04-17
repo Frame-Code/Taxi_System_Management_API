@@ -5,18 +5,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import lombok.Builder;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
-@Builder
+/**
+ * Entidad que representa un usuario en el sistema
+ */
 @Getter @Setter
+@NoArgsConstructor
+@SuperBuilder
 @Entity
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,31 +41,21 @@ public class User {
     @Column(columnDefinition = "TEXT")
     private String passwordHash;
 
-    @Column(nullable = false)
-    private LocalDate createdAt;
-
-    @Column(nullable = false)
-    private String createdBy;
-
-    @Column(nullable = false)
-    private boolean isDeleted;
-
-    private LocalDate updatedAt;
-    private String updatedBy;
+    @Column(length = 255)
     private String photo;
 
     @Column(nullable = false)
     private LocalDate bornDate;
 
-    public String getFullNames() {return names + " " + lastNames;}
+    @ManyToOne
+    @JoinColumn(name = "idRole")
+    private Role role;
 
-    @PrePersist
-    private void load() {
-        createdAt = LocalDate.now();
-        isDeleted = false;
-    }
-    @PreUpdate
-    private void update() {
-        updatedAt = LocalDate.now();
+    /**
+     * Retorna el nombre completo del usuario
+     * @return Nombre completo concatenado
+     */
+    public String getFullNames() {
+        return names + " " + lastNames;
     }
 }

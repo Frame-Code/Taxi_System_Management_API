@@ -7,19 +7,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.PrePersist;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
-
+@SuperBuilder
 @Getter @Setter
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Notification {
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Notification extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
@@ -27,12 +26,4 @@ public abstract class Notification {
 
     @Column(columnDefinition = "TEXT")
     private String message;
-
-    @Column(nullable = false)
-    private LocalDate createdAt;
-
-    @PrePersist
-    private void load() {
-        createdAt = LocalDate.now();
-    }
 }

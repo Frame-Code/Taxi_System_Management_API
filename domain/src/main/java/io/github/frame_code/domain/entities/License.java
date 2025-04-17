@@ -5,16 +5,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
-@Builder
+/**
+ * Entidad que representa una licencia de conducir en el sistema
+ */
 @Getter @Setter
+@NoArgsConstructor
+@SuperBuilder
 @Entity
-public class License {
+public class License extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,35 +1,41 @@
 package io.github.frame_code.domain.entities;
 
-import Enums.entitiesEnums.STATUS_ROAD;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Builder
-@Getter @Setter
+import Enums.entitiesEnums.STATUS_ROAD;
+
+/**
+ * Entidad que representa un viaje/ruta en el sistema
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@SuperBuilder
 @Entity
-public class Road {
+public class Road extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @ManyToOne
     @JoinColumn(name = "idAddressOrigin")
@@ -39,33 +45,19 @@ public class Road {
     @JoinColumn(name = "idAddressDestiny")
     private Address endAddress;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private STATUS_ROAD status;
 
-    @Column(nullable = false)
-    private LocalDate createdAt;
+    @ManyToOne
+    @JoinColumn(name = "idPayment")
+    private Payment payment;
 
-    @Column(nullable = false, length = 60)
-    private String createdBy;
+    @ManyToOne
+    @JoinColumn(name = "idTaxi")
+    private Taxi taxi;
 
-    @Column(nullable = false)
-    private LocalDate updatedAt;
-
-    @Column(nullable = false, length = 60)
-    private String updatedBy;
-
-    @Column(nullable = false)
-    private boolean isDeleted;
-
-    @PrePersist
-    private void load() {
-        createdAt = LocalDate.now();
-        isDeleted = false;
-    }
-
-    @PreUpdate
-    private void update() {
-        updatedAt = LocalDate.now();
-    }
+    @ManyToOne
+    @JoinColumn(name = "idClient")
+    private Client client;
 }
