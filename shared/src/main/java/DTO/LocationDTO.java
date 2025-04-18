@@ -1,7 +1,6 @@
 package DTO;
 
-public record LocationDTO (
-        Double latitude,
-        Double longitude,
-        String reference){
-}
+public record LocationDTO(
+    String city, 
+    String province
+    ) {}

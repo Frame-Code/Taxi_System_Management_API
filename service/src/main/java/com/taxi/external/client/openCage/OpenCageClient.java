@@ -13,7 +13,7 @@ public class OpenCageClient implements IOpenCageClient {
     public String reverse_geocoding(double latitude, double longitude) {
         return openCageApi
                 .get()
-                .attribute("q", String.valueOf(latitude) + "+" + String.valueOf(longitude))
+                .uri("?q={coordinates}", latitude + "+" + longitude)
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();

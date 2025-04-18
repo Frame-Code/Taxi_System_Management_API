@@ -1,17 +1,29 @@
 package com.taxi_api;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import lombok.extern.java.Log;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
-@EntityScan(basePackages = "io.github.frame_code.domain.entities")
 @SpringBootApplication
+@EntityScan(basePackages = {
+	"io.github.frame_code.domain.entities"
+})
+@ComponentScan(basePackages = {
+	"com.controllers",
+	"com.taxi.service",
+	"com.taxi.external"
+})
+@EnableJpaRepositories(basePackages = {
+	"io.github.frame_code.domain.repository"
+})
+@Log
 public class TaxiApiApplication {
-	private static final Logger LOG = Logger.getLogger(TaxiApiApplication.class.getName());
 
 	public static void main(String[] args) {
 		try {
@@ -21,9 +33,9 @@ public class TaxiApiApplication {
 			dotenv.entries().forEach(entry
 					-> System.setProperty(entry.getKey(), entry.getValue())
 			);
-			LOG.log(Level.INFO, "Environment variables loaded correctly!");
+			log.log(Level.INFO, "Environment variables loaded correctly");
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, "Error loading .env: ".concat(e.getMessage()));
+			log.log(Level.SEVERE, "Error loading environment variables");
 			System.exit(1);
 		}
 

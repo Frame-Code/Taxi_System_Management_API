@@ -1,6 +1,6 @@
 package com.taxi.external.service;
 
-import DTO.LocalityDTO;
+import DTO.LocationDTO;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class OpenCageService implements IOpenCageService{
 
     @Override
-    public Optional<LocalityDTO> getLocalityFromResponse(String response) {
+    public Optional<LocationDTO> getLocationFromResponse(String response) {
         if(!response.contains("components")) {
             return Optional.empty();
         }
@@ -30,7 +30,7 @@ public class OpenCageService implements IOpenCageService{
             state =  StringEscapeUtils.unescapeJava(stateMatcher.group(1));
         }
 
-        return Optional.of(new LocalityDTO(city,state));
+        return Optional.of(new LocationDTO(city,state));
     }
 
 }
