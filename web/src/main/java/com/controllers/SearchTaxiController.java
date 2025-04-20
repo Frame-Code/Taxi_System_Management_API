@@ -34,6 +34,7 @@ public class SearchTaxiController {
         return locationOpt.map(locationDTO -> verifyLocationService.isLocationAvailable(locationDTO) ?
                 ResponseEntity.ok(BaseResponse.builder()
                         .status_code("200")
+                        .response(coordinatesDTO)
                         .status_message("Successfully")
                         .message("Location is available")
                         .timeStamp(LocalDateTime.now())

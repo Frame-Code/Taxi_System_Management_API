@@ -4,21 +4,21 @@ import DTO.LocationDTO;
 import com.opencagedata.jopencage.JOpenCageGeocoder;
 import com.opencagedata.jopencage.model.JOpenCageResponse;
 import com.opencagedata.jopencage.model.JOpenCageReverseRequest;
+import lombok.Setter;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.logging.Level;
 
 @Component
 @Log
 public class OpenCageClient implements IOpenCageClient {
-    @Value("${API_KEY_OPEN_CAGE}")
-    private static String API_KEY;
     private final JOpenCageGeocoder jOpenCageGeocoder;
 
     public OpenCageClient() {
-        this.jOpenCageGeocoder = new JOpenCageGeocoder(API_KEY);
+        this.jOpenCageGeocoder = new JOpenCageGeocoder(System.getProperty("API_KEY_OPEN_CAGE"));
     }
 
     @Override
@@ -32,6 +32,7 @@ public class OpenCageClient implements IOpenCageClient {
         JOpenCageResponse response = jOpenCageGeocoder.reverse(request);
 
         if(response.getResults().isEmpty()) {
+            log.log(Level.INFO, "Coordinates not founded");
             return Optional.empty();
         }
 
