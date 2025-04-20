@@ -20,9 +20,7 @@ public class ParseCoordinatesServiceImpl implements IParseCoordinatesService {
 
     @Override
     public Optional<LocationDTO> parseCoordinatesToLocation(CoordinatesDTO coordinatesDTO) {
-        return openCageService.getLocationFromResponse(
-          openCageClient.reverse_geocoding(coordinatesDTO.latitude(), coordinatesDTO.longitude())
-        );
+        return openCageService.getLocationFromCoordinates(coordinatesDTO.latitude(), coordinatesDTO.latitude());
     }
 
 }

@@ -1,5 +1,9 @@
 package com.taxi.external.client.openCage;
 
+import DTO.LocationDTO;
+
+import java.util.Optional;
+
 public interface IOpenCageClient {
-    String reverse_geocoding(double latitude, double longitude);
+    Optional<LocationDTO> reverse_geocoding(double latitude, double longitude);
 }
