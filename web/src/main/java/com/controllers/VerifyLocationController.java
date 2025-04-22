@@ -18,7 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/api/search_taxi")
 @RequiredArgsConstructor
-public class SearchTaxiController {
+public class VerifyLocationController {
     private final IParseCoordinatesService parseCoordinatesService;
     private final IVerifyLocationService verifyLocationService;
 
@@ -30,7 +30,6 @@ public class SearchTaxiController {
         
         CoordinatesDTO coordinatesDTO = new CoordinatesDTO(latitude, longitude, reference);
         Optional<LocationDTO> locationOpt = parseCoordinatesService.parseCoordinatesToLocation(coordinatesDTO);
-
         return locationOpt.map(locationDTO -> verifyLocationService.isLocationAvailable(locationDTO) ?
                 ResponseEntity.ok(BaseResponse.builder()
                         .status_code("200")
@@ -41,6 +40,7 @@ public class SearchTaxiController {
                         .build()) :
                 ResponseEntity.ok(BaseResponse.builder()
                         .status_code("204")
+                        .response(coordinatesDTO)
                         .status_message("Successfully")
                         .message("The system has not support the location provided")
                         .timeStamp(LocalDateTime.now())
@@ -48,6 +48,7 @@ public class SearchTaxiController {
         ).orElseGet(() ->
                 ResponseEntity.ok(BaseResponse.builder()
                         .status_code("204")
+                        .response(coordinatesDTO)
                         .status_message("Successfully")
                         .message("Coordinates not founded")
                         .timeStamp(LocalDateTime.now())
