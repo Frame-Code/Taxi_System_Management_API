@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import Enums.entitiesEnums.STATUS_TAXI;
@@ -44,5 +45,5 @@ public class Taxi extends BaseEntity {
     private STATUS_TAXI status;
 
     @OneToMany(mappedBy = "taxi")
-    private List<TaxiLiveAddress> taxiLiveAddresses;
+    private LinkedList<TaxiLiveAddress> taxiLiveAddresses;
 }

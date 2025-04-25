@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,7 +30,7 @@ public abstract class Address {
     @JoinColumn(name = "idCity")
     private City city;
 
-    @Column(columnDefinition = "POINT")
+    @Column(columnDefinition = "POINT SRID 4326")
     private Point location;
 
     private String reference;

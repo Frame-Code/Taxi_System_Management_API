@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/search_taxi")
+@RequestMapping(value = "/api/location_taxi")
 @RequiredArgsConstructor
 public class VerifyLocationController {
     private final IParseCoordinatesService parseCoordinatesService;
@@ -24,11 +24,10 @@ public class VerifyLocationController {
 
     @GetMapping(value = "/verify_location")
     public ResponseEntity<?> verifyLocation(
-            @RequestParam("latitude") Double latitude,
-            @RequestParam("longitude") Double longitude,
-            @RequestParam(value = "reference", required = false) String reference) {
+            @RequestParam("latitude") final Double latitude,
+            @RequestParam("longitude") final Double longitude) {
         
-        CoordinatesDTO coordinatesDTO = new CoordinatesDTO(latitude, longitude, reference);
+        CoordinatesDTO coordinatesDTO = new CoordinatesDTO(latitude, longitude);
         Optional<LocationDTO> locationOpt = parseCoordinatesService.parseCoordinatesToLocation(coordinatesDTO);
         return locationOpt.map(locationDTO -> verifyLocationService.isLocationAvailable(locationDTO) ?
                 ResponseEntity.ok(BaseResponse.builder()
