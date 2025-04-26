@@ -12,6 +12,7 @@ import jakarta.persistence.CascadeType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
+@ToString
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

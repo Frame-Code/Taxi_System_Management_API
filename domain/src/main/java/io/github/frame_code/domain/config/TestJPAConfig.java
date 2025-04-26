@@ -12,8 +12,8 @@ import javax.sql.DataSource;
 import java.util.logging.Level;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "org.springframework.data.jpa.repository")
-@EntityScan(basePackages = "org.springframework.data.jpa.entities")
+@EnableJpaRepositories(basePackages = "io.github.frame_code.domain.repository")
+@EntityScan(basePackages = "io.github.frame_code.domain.entities")
 @Log
 public class TestJPAConfig {
 
