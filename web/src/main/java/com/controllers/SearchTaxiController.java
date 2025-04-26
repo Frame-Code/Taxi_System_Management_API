@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/search_taxi")
 @RequiredArgsConstructor
 public class SearchTaxiController {
-    private final ISearchTaxiService searchTaxiService;
+    //private final ISearchTaxiService searchTaxiService;
 
     @PostMapping
     public ResponseEntity<?> searchTaxi(@RequestBody final CoordinatesToSearchDTO coordinatesToSearchDTO) {
