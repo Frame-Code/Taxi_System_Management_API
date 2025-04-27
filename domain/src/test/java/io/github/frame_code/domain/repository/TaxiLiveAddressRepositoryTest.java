@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
@@ -28,11 +29,12 @@ public class TaxiLiveAddressRepositoryTest {
     TaxiRepository taxiRepository;
 
     @Test
+    @Rollback(value = false)
     public void testSave() {
         TaxiLiveAddress taxiLiveAddressSaved = taxiLiveAddressRepository.save(TaxiLiveAddress.builder()
-                .location(GeolocationUtils.createPoint(-34.656, -12.43434))
-                .reference("parroquia tarqui")
-                .taxi(taxiRepository.getReferenceById(9L))
+                .location(GeolocationUtils.createPoint(-2.153026, -79.826456))
+                .reference("america del sur")
+                .taxi(taxiRepository.getReferenceById(2L))
                 .build());
         assertNotNull(taxiLiveAddressSaved.getId());
     }

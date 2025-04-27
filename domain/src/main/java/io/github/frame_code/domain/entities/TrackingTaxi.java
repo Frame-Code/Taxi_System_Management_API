@@ -2,12 +2,11 @@ package io.github.frame_code.domain.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
@@ -15,9 +14,8 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class TaxiLiveAddress extends Address {
-    @OneToOne
-    @JoinColumn(name = "idTaxi", unique = true)
+public class TrackingTaxi extends Address{
+    @ManyToOne
+    @JoinColumn(name = "idTaxi")
     private Taxi taxi;
 }

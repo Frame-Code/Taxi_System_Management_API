@@ -47,8 +47,11 @@ public class Taxi extends BaseEntity {
     @Column(nullable = false)
     private STATUS_TAXI status;
 
+    @OneToOne(mappedBy = "taxi", cascade = CascadeType.ALL)
+    private TaxiLiveAddress taxiLiveAddresses;
+
     @OneToMany(mappedBy = "taxi", cascade = CascadeType.ALL)
-    private List<TaxiLiveAddress> taxiLiveAddresses;
+    private List<TrackingTaxi> trackingTaxiList;
 
     @Override
     public String toString() {
