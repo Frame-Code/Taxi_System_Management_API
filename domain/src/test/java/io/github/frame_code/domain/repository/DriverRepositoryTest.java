@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,23 +20,22 @@ public class DriverRepositoryTest{
     DriverRepository driverRepository;
 
     @Test
-    @Rollback(value = false)
     public void testSave() {
         Driver savedDriver = driverRepository.save(Driver.builder()
                 .user(User.builder()
                         .bornDate(LocalDate.now())
-                        .email("mail@email.com")
-                        .lastNames("Mora Cantillo")
-                        .names("Daniel Isur")
-                        .passwordHash("jkljkljkljkljkljkl")
-                        .phone("094123")
+                        .email("mail5@email.com")
+                        .lastNames("Reyna Smith")
+                        .names("Jon Saul")
+                        .passwordHash("jkghlkljkljkljdsdkljkljkqwl")
+                        .phone("0941256")
                         .createdBy("admin")
                         .build())
                 .address("any place")
                 .entryDate(LocalDate.now())
                 .build());
         assertThat(savedDriver.getId()).isNotNull();
-        assertThat(savedDriver.getUser().getEmail()).isEqualTo("mail@email.com");
+        assertThat(savedDriver.getUser().getEmail()).isEqualTo("mail5@email.com");
 
     }
 
