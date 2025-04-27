@@ -1,22 +1,23 @@
 package io.github.frame_code.domain.entities;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import Enums.entitiesEnums.STATUS_TAXI;
@@ -25,6 +26,7 @@ import Enums.entitiesEnums.STATUS_TAXI;
  * Entidad que representa un taxi en el sistema
  */
 @Getter @Setter
+@AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 @Entity
@@ -45,6 +47,16 @@ public class Taxi extends BaseEntity {
     @Column(nullable = false)
     private STATUS_TAXI status;
 
-    @OneToMany(mappedBy = "taxi", fetch = FetchType.EAGER)
-    private LinkedList<TaxiLiveAddress> taxiLiveAddresses;
+    @OneToMany(mappedBy = "taxi", cascade = CascadeType.ALL)
+    private List<TaxiLiveAddress> taxiLiveAddresses;
+
+    @Override
+    public String toString() {
+        return "Taxi{" +
+                "id=" + id +
+                ", vehicle=" + vehicle +
+                ", driver=" + driver +
+                ", status=" + status +
+                '}';
+    }
 }

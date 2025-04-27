@@ -11,7 +11,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Column;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import lombok.experimental.SuperBuilder;
@@ -20,6 +23,8 @@ import org.locationtech.jts.geom.Point;
 @SuperBuilder
 @Getter @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Address {
     @Id
@@ -30,7 +35,7 @@ public abstract class Address {
     @JoinColumn(name = "idCity")
     private City city;
 
-    @Column(columnDefinition = "POINT SRID 4326")
+    @Column(columnDefinition = "POINT SRID 4326", nullable = false)
     private Point location;
 
     private String reference;
