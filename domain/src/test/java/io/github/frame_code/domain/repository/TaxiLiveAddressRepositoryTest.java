@@ -8,11 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
-import java.util.logging.Level;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -29,12 +27,11 @@ public class TaxiLiveAddressRepositoryTest {
     TaxiRepository taxiRepository;
 
     @Test
-    @Rollback(value = false)
     public void testSave() {
         TaxiLiveAddress taxiLiveAddressSaved = taxiLiveAddressRepository.save(TaxiLiveAddress.builder()
-                .location(GeolocationUtils.createPoint(-2.153026, -79.826456))
-                .reference("america del sur")
-                .taxi(taxiRepository.getReferenceById(2L))
+                .location(GeolocationUtils.createPoint(-665564, 65765))
+                .reference("any place")
+                .taxi(taxiRepository.getReferenceById(9L))
                 .build());
         assertNotNull(taxiLiveAddressSaved.getId());
     }
@@ -42,8 +39,8 @@ public class TaxiLiveAddressRepositoryTest {
     @Test
     public void nearbyTaxisTest() {
         List<TaxiLiveAddress> taxiLiveAddressSaved = taxiLiveAddressRepository.findNearbyTaxis(
-                GeolocationUtils.coordinatesToWKT(-77.45, -10.66),
-                5000.0 );
+                GeolocationUtils.coordinatesToWKT(-6435457,-5351354),
+                8000.0 );
         assertNotNull(taxiLiveAddressSaved);
     }
 }

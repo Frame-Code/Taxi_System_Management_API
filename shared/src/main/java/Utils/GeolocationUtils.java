@@ -10,7 +10,7 @@ public class GeolocationUtils {
     private static final GeometryFactory factory = new GeometryFactory(new PrecisionModel(), 4326);
 
     public static Point createPoint(double latitude, double longitude) {
-        return factory.createPoint(new Coordinate(latitude, longitude));
+        return factory.createPoint(new Coordinate(longitude, latitude));
     }
 
     public static String pointToWKT(Point point) {
