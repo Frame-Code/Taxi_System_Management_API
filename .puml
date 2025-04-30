@@ -1,0 +1,108 @@
+@startuml  uml
+top to bottom direction
+package "domain"{
+    entity Address <<entity>> {
+        - Long id
+        - String city
+        - Point location
+        - String reference
+    }
+
+    entity TaxiLiveAddress <<Entity>> {
+        - Taxi taxi
+    }
+
+    entity Taxi <<entity>> {
+        - Long id
+        - Vehicle vehicle
+        - Driver driver
+        - Enum status
+        - TaxiLiveAddress
+    }
+
+    interface TaxiLiveAddressRepository <<interface>> {
+        + List<TaxiLiveAddress> findNearbyTaxis(String pointwtk, double meters)
+    }
+}
+
+package shared {
+    class CoordinatesDTO <<DTO>>{
+        - double latitude
+        - double longitude
+        + getLatitude()
+        + getLongitude()
+    }
+
+    class SearchCabDTO <<DTO>> {
+        - SearchCabType seachCabType
+        - CoordinatesDTO coordinatesDTO
+    }
+
+    enum SearchCabType <<enum>> {
+        + SEARCH_CAB_BY_DISTANCE
+    }
+}
+
+package web {
+    class SearchTaxiController <<controller>> {
+        - SearchCab searchCab
+        + ResponseEntity<?> searchCabs(CoordinatesDTO coordinatesDTO)
+    }
+}
+
+package service {
+    interface IFindCabsService <<interface>>{
+        + List<Taxi> findNearbyCabs(CoordinatesDTO coordinatesDTO, double meters)
+    }
+
+    class FindCabsServiceImpl <<service>>{
+        - TaxiLiveAddressRepository TaxiLiveAddressRepository
+        + List<Taxi> findNearbyCabs(CoordinatesDTO coordinatesDTO, double meters) <<override>>
+    }
+
+    abstract class SearchCab <<abstract class>>{
+        + Optional<TaxiDTO> beginSearch()
+    }
+
+    class SearchCabByDistance <<service>> {
+        - IFindCabsService findCabsService
+        - double distanceMax
+        - CoordinatesDTO coordinatesDTO
+        + Optional<TaxiDTO> beginSearch() 
+    }
+
+    interface SearchCabFactory <<interface>>{
+        + SearchCab createSearchCab(SearchCabDTO searchCabDTO)
+    }
+
+    class SearchCabFactoryImpl {
+        + SearchCab createSearchCab(SearchCabDTO searchCabDTO)
+    }
+
+
+}
+
+
+
+
+Address <|-- TaxiLiveAddress
+TaxiLiveAddressRepository --> TaxiLiveAddress
+Taxi *-- TaxiLiveAddress
+IFindCabsService ..> CoordinatesDTO
+IFindCabsService ..> Taxi
+
+IFindCabsService <|.. FindCabsServiceImpl
+FindCabsServiceImpl --> TaxiLiveAddressRepository
+
+SearchCab <|-- SearchCabByDistance
+SearchCabByDistance --> IFindCabsService
+
+SearchTaxiController ..> CoordinatesDTO
+SearchTaxiController ..> SearchCab
+
+SearchTaxiController --> SearchCabFactory
+SearchCabFactory <.. SearchCabFactoryImpl
+SearchCabFactory ..> SearchCabDTO
+SearchCabDTO --> SearchCabType
+
+@enduml

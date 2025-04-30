@@ -1,5 +1,6 @@
 package com.controllers;
 
+import DTO.CoordinatesDTO;
 import DTO.CoordinatesToSearchDTO;
 import com.taxi.service.interfaces.ISearchTaxiService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class SearchTaxiController {
     //private final ISearchTaxiService searchTaxiService;
 
     @PostMapping
-    public ResponseEntity<?> searchTaxi(@RequestBody final CoordinatesToSearchDTO coordinatesToSearchDTO) {
+    public ResponseEntity<?> searchCabs(@RequestBody final CoordinatesDTO coordinatesDTO) {
         return null;
     }
 }
