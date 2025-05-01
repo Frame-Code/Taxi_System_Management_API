@@ -1,6 +1,13 @@
 @startuml  uml
 top to bottom direction
-package "domain"{
+package web {
+    class SearchTaxiController <<controller>> {
+        - SearchCab searchCab
+        - MatcherCostumerCab MatcherCostumerCab
+        + ResponseEntity<?> searchCabs(CoordinatesDTO coordinatesDTO)
+    }
+}
+package domain{
     entity Address <<entity>> {
         - Long id
         - String city
@@ -41,13 +48,15 @@ package shared {
     enum SearchCabType <<enum>> {
         + SEARCH_CAB_BY_DISTANCE
     }
-}
 
-package web {
-    class SearchTaxiController <<controller>> {
-        - SearchCab searchCab
-        + ResponseEntity<?> searchCabs(CoordinatesDTO coordinatesDTO)
+    class CabDTO {
+        - Long id
+        - String vehicleInfo
+        - String driverInfo
+        - String status
+        - String liveAddress
     }
+
 }
 
 package service {
@@ -61,14 +70,14 @@ package service {
     }
 
     abstract class SearchCab <<abstract class>>{
-        + Optional<TaxiDTO> beginSearch()
+        + List<TaxiDTO> findCabs()
     }
 
     class SearchCabByDistance <<service>> {
         - IFindCabsService findCabsService
         - double distanceMax
         - CoordinatesDTO coordinatesDTO
-        + Optional<TaxiDTO> beginSearch() 
+        + List<TaxiDTO> findCabs()
     }
 
     interface SearchCabFactory <<interface>>{
@@ -78,6 +87,53 @@ package service {
     class SearchCabFactoryImpl {
         + SearchCab createSearchCab(SearchCabDTO searchCabDTO)
     }
+
+    interface MatcherCostumerCab {
+        + setCabsToNotify(List<TaxiDTO> taxiDTO)
+        + setClientDTO(ClientDTO clientDTO)
+        + attach(TaxiDTO taxiDTO)
+        + dettach(Long id)
+        + Optional<TaxiDTO> notify()
+    }
+
+    class MatcherCostumerCabImpl {
+        - IRoadNotificationService requestRoad
+        - ClientDTO clientDTO
+        - List<TaxiDTO> cabsToNotify
+        + setCabsToNotify(List<TaxiDTO> taxiDTO)
+        + setClientDTO(ClientDTO clientDTO)
+        + attach(TaxiDTO taxiDTO)
+        + dettach(Long id)
+        + Optional<TaxiDTO> notify()
+    }
+
+    interface INotificationService {
+        + send(String title, String message)
+        + setSender(Sender sender)
+    }
+
+    interface SenderNotification {
+        +send(String title, String message)
+    }
+
+    interface SenderNotificationPush {
+        + send(String title, String message)
+    }
+
+    class SenderNotificationPushImpl {
+        - NotificationRepository notificationRepository
+        + send(String title, String message)
+    }
+
+    interface IRoadNotificationService {
+        + send(String title, String message)
+        + setSender(Sender sender)
+        + boolean isRoadAccept(Long id)
+    }
+
+
+
+
 
 
 }
@@ -98,11 +154,19 @@ SearchCab <|-- SearchCabByDistance
 SearchCabByDistance --> IFindCabsService
 
 SearchTaxiController ..> CoordinatesDTO
-SearchTaxiController ..> SearchCab
+SearchTaxiController --> SearchCab
+SearchTaxiController --> MatcherCostumerCab
 
-SearchTaxiController --> SearchCabFactory
+SearchTaxiController ..> SearchCabFactory
 SearchCabFactory <.. SearchCabFactoryImpl
 SearchCabFactory ..> SearchCabDTO
 SearchCabDTO --> SearchCabType
 
+MatcherCostumerCab <.. MatcherCostumerCabImpl
+SenderNotification <|-- SenderNotificationPush
+INotificationService <|-- IRoadNotificationService
+
+MatcherCostumerCabImpl <-- IRoadNotificationService
+SenderNotificationPush <|-- SenderNotificationPushImpl
+SenderNotification <-- INotificationService
 @enduml
