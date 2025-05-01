@@ -30,6 +30,10 @@ package domain{
     interface TaxiLiveAddressRepository <<interface>> {
         + List<TaxiLiveAddress> findNearbyTaxis(String pointwtk, double meters)
     }
+
+    interface RoadNotificationRepository <<interface>> {
+        + save(RoadNotification notification)
+    }
 }
 
 package shared {
@@ -57,6 +61,12 @@ package shared {
         - String liveAddress
     }
 
+    class NotificationDTO {
+        - String title
+        - String message
+        - DriverDTO driverDTO
+        - ClientDTO clientDTO
+    }
 }
 
 package service {
@@ -113,20 +123,35 @@ package service {
     }
 
     interface SenderNotification {
-        +send(String title, String message)
+        +send(NotificationDTO notificationDTO)
     }
 
     interface SenderNotificationPush {
-        + send(String title, String message)
+        + send(NotificationDTO notificationDTO)
     }
 
     class SenderNotificationPushImpl {
-        - NotificationRepository notificationRepository
-        + send(String title, String message)
+        - RoadNotificationRepository notificationRepository
+        + send(NotificationDTO notificationDTO)
+        + setDriver(Driver driver)
+        + setClient(Client client)
     }
 
     interface IRoadNotificationService {
-        + send(String title, String message)
+        + send(NotificationDTO notificationDTO)
+        + setSender(SenderNotification sender)
+        + boolean isRoadAccept(Long id)
+        + setDriver(Driver driver)
+        + setClient(Client client)
+    }
+
+    class RoadNotificationServiceImpl {
+        - Driver driver
+        - Client client
+        + setDriver(Driver driver)
+        + setClient(Client client)
+        - SenderNotification sender
+        + send(NotificationDTO notificationDTO)
         + setSender(Sender sender)
         + boolean isRoadAccept(Long id)
     }
@@ -169,4 +194,7 @@ INotificationService <|-- IRoadNotificationService
 MatcherCostumerCabImpl <-- IRoadNotificationService
 SenderNotificationPush <|-- SenderNotificationPushImpl
 SenderNotification <-- INotificationService
+IRoadNotificationService <.. RoadNotificationServiceImpl
+SenderNotificationPushImpl --> RoadNotificationRepository
+
 @enduml
