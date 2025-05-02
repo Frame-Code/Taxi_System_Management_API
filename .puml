@@ -67,6 +67,13 @@ package shared {
         - DriverDTO driverDTO
         - ClientDTO clientDTO
     }
+
+    enum RequestStatus <<enum>> {
+        + PENDING 
+        + ACCEPTED
+        + REJECTED
+        + TIMEOUT
+    }
 }
 
 package service {

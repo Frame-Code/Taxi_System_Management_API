@@ -5,6 +5,6 @@ import io.github.frame_code.domain.entities.Taxi;
 
 import java.util.List;
 
-public interface ISearchTaxiService {
+public interface IFindCabsService {
     List<Taxi> findNearbyCabs(CoordinatesDTO coordinatesDTO, double meters);
 }

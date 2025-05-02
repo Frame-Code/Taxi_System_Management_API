@@ -14,6 +14,9 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.Period;
+
+import static java.time.Period.between;
 
 /**
  * Entidad que representa un usuario en el sistema
@@ -59,5 +62,8 @@ public class User extends BaseEntity {
      */
     public String getFullNames() {
         return names + " " + lastNames;
+    }
+    public String getAge() {
+        return String.valueOf(Period.between(bornDate, LocalDate.now()).getYears());
     }
 }
