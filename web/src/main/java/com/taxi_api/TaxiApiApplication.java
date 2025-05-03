@@ -60,6 +60,7 @@ public class TaxiApiApplication {
 
 			cityRepository.save(city1);
 			log.log(Level.INFO, "City saved");
+			log.log(Level.INFO, "Application loaded correctly");
 		};
     }
 

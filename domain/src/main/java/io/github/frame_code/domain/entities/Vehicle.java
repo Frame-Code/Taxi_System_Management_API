@@ -37,6 +37,9 @@ public abstract class Vehicle extends BaseEntity {
     @Column(length = 50, nullable = false)
     private String model;
 
+    @Column(length = 15, unique = true, nullable = false)
+    private String licensePlate;
+
     @Column(length = 255)
     private String photo;
 }

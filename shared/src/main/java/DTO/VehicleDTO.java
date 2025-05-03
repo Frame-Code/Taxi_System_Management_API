@@ -3,6 +3,7 @@ package DTO;
 public record VehicleDTO(
         String color,
         String model,
-        String brand
+        String brand,
+        String licensePlate
 ) {
 }

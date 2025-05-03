@@ -24,13 +24,13 @@ public class SearchCabByDistance extends SearchCab {
     @Override
     public List<TaxiDTO> findCabs() {
         double minDistance = 4000;
-        double MAX_DISTANCE = 8000;
+        double MAX_DISTANCE = 6500;
 
         List<Taxi> nearbyCabs = List.of();
         while (minDistance <= MAX_DISTANCE) {
             nearbyCabs = findCabsService.findNearbyCabs(coordinatesDTO, minDistance);
             if(!nearbyCabs.isEmpty()) {
-                log.info("Nearby cabs founded for the client " + coordinatesDTO.toString());
+                log.info("Nearby cabs founded for the client " + coordinatesDTO.toString() + "with distance min: " + minDistance);
                 break;
             }
             minDistance += 500;
@@ -39,6 +39,8 @@ public class SearchCabByDistance extends SearchCab {
         if(nearbyCabs.isEmpty()) {
             log.warn("No nearby cabs founded for the client " + coordinatesDTO.toString());
         }
-        return nearbyCabs.stream().map(TaxiMapper.INSTANCE::toDTO).toList();
+        return nearbyCabs.stream()
+                .map(TaxiMapper.INSTANCE::toDTO)
+                .toList();
     }
 }

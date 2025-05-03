@@ -23,6 +23,7 @@ public class FindCabsServiceImpl implements IFindCabsService {
                 GeolocationUtils.coordinatesToWKT(coordinatesDTO.latitude(), coordinatesDTO.longitude()), meters)
                 .stream()
                 .map(TaxiLiveAddress::getTaxi)
+                .filter(taxi -> !taxi.isDeleted())
                 .filter(taxi -> taxi.getStatus().equals(STATUS_TAXI.ENABLE))
                 .toList();
     }
