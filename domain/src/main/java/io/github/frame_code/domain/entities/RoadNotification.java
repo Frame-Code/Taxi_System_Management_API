@@ -8,17 +8,21 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoadNotification extends Notification{
     @ManyToOne
-    @JoinColumn(name = "idDriver")
-    private Driver driver;
+    @JoinColumn(name = "idTaxi")
+    private Taxi taxi;
 
     @ManyToOne
     @JoinColumn(name = "idClient")

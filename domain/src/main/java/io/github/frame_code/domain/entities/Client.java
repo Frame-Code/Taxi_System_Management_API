@@ -8,8 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.List;
 @Builder
 @Getter @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +29,7 @@ public class Client {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToMany(mappedBy = "client")
-    private List<ClientAddress> clientAddresses;
+    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+    private ClientAddress clientLiveAddress;
 
 }
