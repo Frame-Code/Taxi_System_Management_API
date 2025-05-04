@@ -5,8 +5,9 @@ import io.github.frame_code.domain.entities.RoadNotification;
 
 import java.util.Optional;
 
-public interface IRoadNotificationService {
-     RoadNotification send(String title, String message, Long idUser, Long idTaxi);
+import DTO.NotificationDTO;
+
+public interface IRoadNotificationService extends INotificationService{
      boolean isRoadAccept(Long id);
      Optional<RoadNotification> findById(Long id);
      void updateStatus(REQUEST_STATUS status, Long id);

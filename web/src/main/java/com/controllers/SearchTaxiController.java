@@ -7,6 +7,8 @@ import com.taxi.service.SearchCab;
 import com.taxi.service.SearchCabFactory;
 import com.taxi.service.interfaces.MatcherCostumerCab;
 import io.github.frame_code.domain.repository.ClientRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CommonsLog
 @RestController
 @RequestMapping("/api/search_taxi")
+@AllArgsConstructor
+@NoArgsConstructor
 public class SearchTaxiController {
     @Qualifier("byDistance")
     @Autowired
