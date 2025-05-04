@@ -8,10 +8,12 @@ import io.github.frame_code.domain.repository.DriverRepository;
 import io.github.frame_code.domain.repository.RoadNotificationRepository;
 import io.github.frame_code.domain.repository.TaxiRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@CommonsLog
 @RequiredArgsConstructor
 @Service
 public class RoadNotificationServiceImpl implements IRoadNotificationService {
@@ -44,6 +46,19 @@ public class RoadNotificationServiceImpl implements IRoadNotificationService {
     @Override
     public Optional<RoadNotification> findById(Long id) {
         return roadNotificationRepository.findById(id);
+    }
+
+    @Override
+    public void updateStatus(REQUEST_STATUS status, Long id) {
+        var notification = findById(id);
+        if(notification.isEmpty()) {
+            log.warn("Notification to update status not founded");
+            return;
+        }
+
+        notification.get().setStatus(status);
+        roadNotificationRepository.save(notification.get());
+
     }
 
 }

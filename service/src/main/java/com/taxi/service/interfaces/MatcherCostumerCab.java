@@ -11,5 +11,5 @@ public interface MatcherCostumerCab {
     void setClientToMatch(ClientDTO clientDTO);
     void attach(TaxiDTO taxiDTO);
     void detach(Long id);
-    Optional<TaxiDTO> notifyEachCab();
+    Optional<TaxiDTO> notifyEachCab() throws NullPointerException;
 }

@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,7 +31,7 @@ public class MatcherCostumerCabImpl implements MatcherCostumerCab {
     private final int TOTAL_DURATION = 20;
     private final int RANGE = 2;
     private final AtomicReference<Optional<TaxiDTO>> cabToAccepted = new AtomicReference<>();
-    private final AtomicInteger iterable = new AtomicInteger(0);
+
     @Override
     public void setCabsToNotify(List<TaxiDTO> taxiDTO) {
         this.taxiDTOList = taxiDTO;
@@ -63,65 +64,124 @@ public class MatcherCostumerCabImpl implements MatcherCostumerCab {
     }
 
     @Override
-    public Optional<TaxiDTO> notifyEachCab() {
+    public Optional<TaxiDTO> notifyEachCab() throws NullPointerException {
+        int MAX_ATTEMPTS = taxiDTOList.size();
+        log.info("MAXIMUM ATTEMPTS: " + MAX_ATTEMPTS);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        AtomicReference<ScheduledFuture<?>> futureRef = new AtomicReference<>();
 
-        RoadNotification notification = roadNotificationService.send(
-                "Request road",
-                clientDTO.toString(),
-                clientDTO.id(),
-                taxiDTOList.get(iterable.get()).id()
-        );
+        final AtomicReference<ScheduledFuture<?>> futureRef = new AtomicReference<>();
+        final AtomicInteger attemptCount = new AtomicInteger(0);
+        final AtomicBoolean isTaskCompleted = new AtomicBoolean(false);
+        final AtomicReference<RoadNotification> roadNotificationAtomicReference = new AtomicReference<>();
 
-        ScheduledFuture<?> verifyRequestAccepted = executor.scheduleAtFixedRate(
-            () -> {
-                try {
-                    var roadNotificationOpt = roadNotificationService.findById(notification.getId());
-                    boolean ifPresent = roadNotificationOpt
-                            .map(roadNotification -> roadNotification.getStatus().equals(REQUEST_STATUS.ACCEPTED))
-                            .orElse(false);
-
-                    if(ifPresent) {
-                        log.info("Cab accepted the road!");
-                        cabToAccepted.set(roadNotificationOpt
-                                .map(RoadNotification::getTaxi)
-                                .map(TaxiMapper.INSTANCE::toDTO));
-                        ScheduledFuture<?> task = futureRef.get();
-                        if(task != null) {
-                            task.cancel(false);
+        Runnable sendAndVerifyRequest = () -> {
+            if (isTaskCompleted.get() || attemptCount.get() >= MAX_ATTEMPTS) {
+                executor.shutdown();
+                log.info("Finalizing Tasks to match a client with a cab");
+                return;
+            }
+            ScheduledFuture<?> verifyRequestAccepted = executor.scheduleAtFixedRate(() -> {
+                        if (isTaskCompleted.get()) {
+                            ScheduledFuture<?> task = futureRef.get();
+                            if (task != null) {
+                                log.warn("Attempt task: " + attemptCount.get() + "cancelled");
+                                task.cancel(false);
+                            }
+                            log.warn("Attempt task: " + attemptCount.get() + "completed");
+                            return;
                         }
-                    }
-                    log.info("Cab doesn't accept the road");
+                        try {
+                            var roadNotificationOpt = roadNotificationService.findById(roadNotificationAtomicReference.get().getId());
+                            boolean isAccepted = roadNotificationOpt
+                                    .map(roadNotification -> roadNotification.getStatus().equals(REQUEST_STATUS.ACCEPTED))
+                                    .orElse(false);
+                            boolean isRejected = roadNotificationOpt
+                                    .map(roadNotification -> roadNotification.getStatus().equals(REQUEST_STATUS.REJECTED))
+                                    .orElse(false);
 
-                    iterable.incrementAndGet();
-                } catch (Exception e) {
-                    log.warn("Exception matching client and cab ex: " + e.getMessage());
-                }
-            }, 0, RANGE, TimeUnit.SECONDS
-        );
-        futureRef.set(verifyRequestAccepted);
+                            if (isAccepted) {
+                                log.info("Cab accepted the road!");
+                                isTaskCompleted.set(true);
+                                cabToAccepted.set(roadNotificationOpt
+                                        .map(RoadNotification::getTaxi)
+                                        .map(TaxiMapper.INSTANCE::toDTO));
+                                ScheduledFuture<?> task = futureRef.get();
+                                if (task != null) {
+                                    task.cancel(false);
+                                    log.info("Task matching finished");
+                                }
+                                executor.shutdown();
+                                return;
+                            }
 
-        executor.schedule(
-                () -> {
-                    log.warn("Maximum waiting time reached to accept the request");
-                    verifyRequestAccepted.cancel(false);
+                            if(isRejected) {
+                                log.info("Cab rejected the road!");
+                                ScheduledFuture<?> task = futureRef.get();
+                                if (task != null) {
+                                    task.cancel(false);
+                                    log.info("Task matching finished");
+                                }
+                                return;
+                            }
+
+                            log.info("Cab doesn't accept the road");
+                        } catch (Exception e) {
+                            log.warn("Exception matching client and cab ex: " + e.getMessage());
+                        }
+                    }, 0, RANGE, TimeUnit.SECONDS
+            );
+            futureRef.set(verifyRequestAccepted);
+
+            //Finalizar ciclo de busqueda despues de TOTAL_DURATION
+            executor.schedule(() -> {
+                log.warn("End attempt #" + attemptCount.get());
+                if (!isTaskCompleted.get() && attemptCount.get() <= MAX_ATTEMPTS) {
+                    attemptCount.incrementAndGet();
+                    roadNotificationService.updateStatus(REQUEST_STATUS.TIMEOUT, roadNotificationAtomicReference.get().getId());
+                    roadNotificationAtomicReference.set(
+                            roadNotificationService.send(
+                                    "Request road",
+                                    clientDTO.toString(),
+                                    clientDTO.id(),
+                                    taxiDTOList.get(attemptCount.get()).id())
+                    );
+                    log.info("Starting a new matching between cab with a client, attempt: " + attemptCount.get());
+                    executor.schedule((Runnable) this, 0, TimeUnit.SECONDS);
+                } else if (!isTaskCompleted.get()) {
+                    log.warn("Maximum attempts reached, any cab accept this road");
                     executor.shutdown();
 
-                    try {
-                        if(!executor.awaitTermination(5, TimeUnit.SECONDS)) {
-                            log.warn("Finishing all pending threads to waiting the request road accept");
-                            executor.shutdownNow();
-                            log.warn("all threads finished to waiting the request road accept");
-                        } else {
-                            log.warn("all threads finished to waiting the request road accept");
-                        }
-                    } catch (InterruptedException e) {
-                        executor.shutdownNow();
-                        Thread.currentThread().interrupt();
-                    }
-                }, TOTAL_DURATION, TimeUnit.SECONDS
-        );
+                }
+            }, TOTAL_DURATION, TimeUnit.SECONDS);
+        };
+
+        //INICIA EL PRIMER CICLO
+        executor.schedule(() -> {
+            roadNotificationAtomicReference.set(
+                    roadNotificationService.send(
+                            "Request road",
+                            clientDTO.toString(),
+                            clientDTO.id(),
+                            taxiDTOList.get(attemptCount.get()).id())
+            );
+            log.info("Starting a new matching between cab with a client, attempt: " + attemptCount.get());
+            sendAndVerifyRequest.run();
+        }, 0, TimeUnit.SECONDS);
+
+        try {
+            executor.awaitTermination((long) MAX_ATTEMPTS * TOTAL_DURATION + 10, TimeUnit.SECONDS);
+            log.info("All task ended");
+        } catch (InterruptedException e) {
+            log.warn("Interrupted task finishing");
+            Thread.currentThread().interrupt();
+        }
+
+        if (!executor.isShutdown()) {
+            executor.shutdownNow();
+            log.info("ScheduleExecutorService finished");
+        }
+
+        log.info("Returning the value: " + cabToAccepted.get());
         return cabToAccepted.get();
     }
 }
