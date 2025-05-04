@@ -117,16 +117,6 @@ public class MatcherCostumerCabImpl implements MatcherCostumerCab {
                                 return;
                             }
 
-                            if (isRejected) {
-                                log.info("Cab rejected the road!");
-                                ScheduledFuture<?> task = futureRef.get();
-                                if (task != null) {
-                                    task.cancel(false);
-                                    log.info("This Task matching finished because the cab rejected the road");
-                                }
-                                return;
-                            }
-
                             log.info("Cab doesn't accept the road");
 
                         } catch (Exception e) {
