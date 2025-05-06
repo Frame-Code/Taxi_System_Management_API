@@ -1,11 +1,11 @@
 package com.controllers;
 
-import DTO.CoordinatesDTO;
-import DTO.SearchCabDTO;
+import dto.CoordinatesDTO;
+import dto.SearchCabDTO;
 import com.taxi.mappers.ClientMapper;
-import com.taxi.service.SearchCab;
-import com.taxi.service.SearchCabFactory;
-import com.taxi.service.interfaces.MatcherCostumerCab;
+import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
+import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCabFactory;
+import com.taxi.service.interfaces.matcher_module.IMatcherCostumerCab;
 import io.github.frame_code.domain.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -26,20 +26,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class SearchTaxiController {
     @Qualifier("byDistance")
     @Autowired
-    private SearchCabFactory searchCabFactory;
+    private AbstractSearchCabFactory abstractSearchCabFactory;
 
     @Autowired
-    private MatcherCostumerCab matcherCostumerCab;
+    private IMatcherCostumerCab IMatcherCostumerCab;
 
     @Autowired
     private ClientRepository clientRepository;
 
     @PostMapping
     public ResponseEntity<?> searchCabs(@RequestBody final CoordinatesDTO coordinatesDTO) {
-        SearchCab searchCab = searchCabFactory.createSearchCab(new SearchCabDTO(coordinatesDTO));
-        var listTaxi = searchCab.findCabs();
-        matcherCostumerCab.setCabsToNotify(listTaxi);
-        matcherCostumerCab.setClientToMatch(ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
-        return ResponseEntity.ok(matcherCostumerCab.notifyEachCab());
+        AbstractSearchCab abstractSearchCab = abstractSearchCabFactory.createSearchCab(new SearchCabDTO(coordinatesDTO));
+        var listTaxi = abstractSearchCab.findCabs();
+        IMatcherCostumerCab.setCabsToNotify(listTaxi);
+        IMatcherCostumerCab.setClientToMatch(ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
+        return ResponseEntity.ok(IMatcherCostumerCab.notifyEachCab());
     }
 }

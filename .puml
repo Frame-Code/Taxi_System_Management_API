@@ -2,7 +2,7 @@
 top to bottom direction
 package web {
     class SearchTaxiController <<controller>> {
-        - SearchCab searchCab
+        - SearchCab abstractSearchCab
         - MatcherCostumerCab MatcherCostumerCab
         + ResponseEntity<?> searchCabs(CoordinatesDTO coordinatesDTO)
     }
@@ -37,14 +37,14 @@ package domain{
 }
 
 package shared {
-    class CoordinatesDTO <<DTO>>{
+    class CoordinatesDTO <<dto>>{
         - double latitude
         - double longitude
         + getLatitude()
         + getLongitude()
     }
 
-    class SearchCabDTO <<DTO>> {
+    class SearchCabDTO <<dto>> {
         - SearchCabType seachCabType
         - CoordinatesDTO coordinatesDTO
     }

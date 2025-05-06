@@ -1,10 +1,10 @@
 package com.controllers;
 
-import DTO.BaseResponse;
-import DTO.CoordinatesDTO;
-import DTO.LocationDTO;
-import com.taxi.service.interfaces.IParseCoordinatesService;
-import com.taxi.service.interfaces.IVerifyLocationService;
+import dto.BaseResponse;
+import dto.CoordinatesDTO;
+import dto.LocationDTO;
+import com.taxi.service.interfaces.location_module.IParseCoordinatesService;
+import com.taxi.service.interfaces.location_module.IVerifyLocationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,6 @@
 package io.github.frame_code.domain.repository;
 
-import Utils.GeolocationUtils;
+import utils.GeolocationUtils;
 import io.github.frame_code.domain.config.TestJPAConfig;
 import io.github.frame_code.domain.entities.TaxiLiveAddress;
 import lombok.extern.java.Log;

@@ -1,12 +1,10 @@
 package com.taxi.external.client.openCage;
 
-import DTO.LocationDTO;
+import dto.LocationDTO;
 import com.opencagedata.jopencage.JOpenCageGeocoder;
 import com.opencagedata.jopencage.model.JOpenCageResponse;
 import com.opencagedata.jopencage.model.JOpenCageReverseRequest;
-import lombok.Setter;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

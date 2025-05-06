@@ -1,0 +1,81 @@
+@startuml  uml1
+top to bottom direction
+interface IMatchingState <<interface>> {
+    + Optional<TaxiDTO> getResult()
+    + void changeInstance(RoadNotification roadNotification)
+}
+
+class PendingState {
+    - Context context
+    + Optional<TaxiDTO> getResult()
+    + void changeInstance(RoadNotification roadNotification)
+}
+note right of PendingState
+    Implementation:
+    + getResult(): returns empty Optional
+    + changeInstance(): 
+      if (notification.isAccepted())
+        context.setState(new AcceptedState())
+      else if (notification.isRejected())
+        context.setState(new RejectedState())
+      else if (notification.isTimeout())
+        context.setState(new TimeOutState())
+end note
+
+class AcceptedState {
+    - Context context
+    + Optional<TaxiDTO> getResult()
+    + void changeInstance(RoadNotification roadNotification)
+}
+note right of AcceptedState
+    Implementation:
+    - getResult(): returns Optional.of(roadNotification.getTaxi())
+    - changeInstance(): does nothing
+end note
+
+class RejectedState {
+    - Context context
+    + Optional<TaxiDTO> getResult()
+    + void changeInstance(RoadNotification roadNotification)
+}
+note right of RejectedState
+    Implementation:
+    - getResult(): returns empty Optional
+    - changeInstance(): does nothing
+end note
+
+class TimeOutState {
+    - Context context
+    + Optional<TaxiDTO> getResult()
+    + void changeInstance(RoadNotification roadNotification)
+}
+note right of TimeOutState
+    Implementation:
+    - getResult(): returns empty Optional
+    - changeInstance(): does nothing
+end note
+
+class Context {
+    - IMatchingState currentState
+    - RoadNotification roadNotification
+    + Context()
+    + setState(IMatchingState newState)
+    + setInstance(RoadNotification roadNotification)
+    + Optional<TaxiDTO> getResult()
+}
+note right of Context
+    Implementation:
+    - Context(): initializes with PendingState this.currentState = new PendingState()
+    - setState(IMatchingState newState): updates currentState
+    - setInstance(RoadNotification roadNotification): updates roadNotification
+    - getResult(): delegates to currentState.getResult()
+end note
+
+IMatchingState <|.. PendingState
+IMatchingState <|.. AcceptedState
+IMatchingState <|.. RejectedState
+IMatchingState <|.. TimeOutState
+
+IMatchingState --o Context
+
+@enduml

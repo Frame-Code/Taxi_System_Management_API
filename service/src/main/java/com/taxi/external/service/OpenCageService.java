@@ -1,6 +1,6 @@
 package com.taxi.external.service;
 
-import DTO.LocationDTO;
+import dto.LocationDTO;
 import com.taxi.external.client.openCage.IOpenCageClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
