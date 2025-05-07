@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,4 +32,9 @@ public class RoadNotification extends Notification{
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private REQUEST_STATUS status;
+
+    @PrePersist
+    protected void onPersist() {
+        status = REQUEST_STATUS.PENDING;
+    }
 }

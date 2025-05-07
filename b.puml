@@ -1,0 +1,84 @@
+@startuml notification
+top to bottom direction
+
+class MatcherCostumerCabImpl {
+    - List<TaxiDTO> observers;
+    - ClientDTO client
+    - TaxiMatchingScheduler matching
+    + setObservers(List<TaxiDTO>)
+    + setClient(ClientDTO)
+    + Optional<TaxiDTO> notify();
+}
+
+interface TaxiMatchingScheduler {
+    +CompletableFuture<Optional<TaxiDTO>> findCab()
+}
+class TaxiMatchingSchedulerImpl {
+    - MatchingScheduler scheduler
+    + CompletableFuture<Optional<TaxiDTO>> findCab()
+}
+
+
+interface MatchingScheduler {
+    + SchedulerFuture<?> scheduleVerification(Runnable task, int initialDelay, int period)
+    + shutdown()
+}
+class MatchingSchedulerImpl {
+    - ScheduledExecutorService executor = Executors.newScheduledThreadPool(1)
+    + SchedulerFuture<?> scheduleVerification(Runnable task, int initialDelay, int period)
+}
+
+class RoadNotificationManagerImpl {
+    - IRoadNotificationService roadNotificationService
+    + Optional<RoadNotification> send(NotificationDTO notificationDTO)
+    + void updateNotificationStatus(REQUEST_STATUS status, Long notificationId)
+    + void setRejected(Long notificationId)
+    + void setTimeOut(Long notificationId)
+    + void setAccepted(Long notificationId)
+}
+note right of RoadNotificationManagerImpl
+    --MANAGER--
+    - Send a road notification
+    - Status update of an existing road notification
+end note
+
+class RoadNotificationVerifier {
+    - IRoadNotificationService roadNotificationService
+    + TaxiResponseDTO verifyResponse(Long notificationId)
+}
+
+note right of RoadNotificationVerifier {
+    --VERIFIER--
+    - Return a DTO with the boolean if the notification was accepted or deleted
+}
+
+class RoadNotificationServiceImpl {
+    - ISenderNotification senderNotification
+    - RoadNotificationRepository roadNotificationRepository
+    + Optional<Notification> send(NotificationDTO notificationDTO)
+    + setSender(ISenderNotification senderNotification)
+    + boolean isRoadAccept(Long id)
+    + Optional<RoadNotification> findById(Long id)
+    + void updateStatus(REQUEST_STATUS status, Long id)
+}
+note right of RoadNotificationServiceImpl {
+    --Service--
+    - A down level service
+    - Connect to the repository
+    - Have a public interface to the different actions
+}
+
+interface RoadNotificationRepository <<interface>>{
+}
+note bottom of RoadNotificationRepository {
+    --REPOSITORY--
+}
+MatchingScheduler <|.. MatchingSchedulerImpl
+
+RoadNotificationManagerImpl --> RoadNotificationServiceImpl
+RoadNotificationVerifier --> RoadNotificationServiceImpl
+RoadNotificationServiceImpl --> RoadNotificationRepository
+MatcherCostumerCabImpl --> TaxiMatchingScheduler
+TaxiMatchingScheduler <|.. TaxiMatchingSchedulerImpl
+TaxiMatchingSchedulerImpl --> MatchingScheduler
+@enduml
