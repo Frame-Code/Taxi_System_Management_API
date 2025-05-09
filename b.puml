@@ -1,21 +1,37 @@
 @startuml notification
 top to bottom direction
 
+interface MatchMediator {
+    + send(NotificationDTO notificationDTO)
+    + updateStatus(REQUEST_STATUS status, Long idNotification)
+    + TaxiResponseDTO getResponse(Long id)
+}
+
+class MatchMediatorImpl {
+    - TaxiMatchingScheduler matchingScheduler
+    - RoadNotificationVerifier notificationVerifier
+    - RoadNotificationManager notificationManager
+    + send(NotificationDTO notificationDTO)
+    + updateStatus(REQUEST_STATUS status, Long idNotification)
+}
+
+
 class MatcherCostumerCabImpl {
+    - MatchMediator mediator
     - List<TaxiDTO> observers;
     - ClientDTO client
-    - TaxiMatchingScheduler matching
+    + MatcherCostumerCabImpl(MatchMediator mediator)
     + setObservers(List<TaxiDTO>)
     + setClient(ClientDTO)
     + Optional<TaxiDTO> notify();
 }
 
 interface TaxiMatchingScheduler {
-    +CompletableFuture<Optional<TaxiDTO>> findCab()
+    +CompletableFuture<Optional<TaxiDTO>> matchCab()
 }
 class TaxiMatchingSchedulerImpl {
     - MatchingScheduler scheduler
-    + CompletableFuture<Optional<TaxiDTO>> findCab()
+    + CompletableFuture<Optional<TaxiDTO>> matchCab()
 }
 
 
@@ -29,7 +45,9 @@ class MatchingSchedulerImpl {
 }
 
 class RoadNotificationManagerImpl {
+    - MatchMediator mediator
     - IRoadNotificationService roadNotificationService
+    + RoadNotificationManagerImpl(MatchMediator mediator)
     + Optional<RoadNotification> send(NotificationDTO notificationDTO)
     + void updateNotificationStatus(REQUEST_STATUS status, Long notificationId)
     + void setRejected(Long notificationId)
@@ -43,7 +61,9 @@ note right of RoadNotificationManagerImpl
 end note
 
 class RoadNotificationVerifier {
+    - MatchMediator mediator
     - IRoadNotificationService roadNotificationService
+    + RoadNotificationVerifier(MatchMediator mediator)
     + TaxiResponseDTO verifyResponse(Long notificationId)
 }
 
@@ -75,10 +95,14 @@ note bottom of RoadNotificationRepository {
 }
 MatchingScheduler <|.. MatchingSchedulerImpl
 
-RoadNotificationManagerImpl --> RoadNotificationServiceImpl
-RoadNotificationVerifier --> RoadNotificationServiceImpl
-RoadNotificationServiceImpl --> RoadNotificationRepository
-MatcherCostumerCabImpl --> TaxiMatchingScheduler
+RoadNotificationManagerImpl *--> RoadNotificationServiceImpl
+RoadNotificationVerifier *--> RoadNotificationServiceImpl
+RoadNotificationServiceImpl *--> RoadNotificationRepository
+MatcherCostumerCabImpl *--> MatchMediator
 TaxiMatchingScheduler <|.. TaxiMatchingSchedulerImpl
 TaxiMatchingSchedulerImpl --> MatchingScheduler
+MatchMediator <|.. MatchMediatorImpl
+MatchMediatorImpl *--> TaxiMatchingScheduler
+MatchMediatorImpl *--> RoadNotificationVerifier
+MatchMediatorImpl *--> RoadNotificationManagerImpl
 @enduml
