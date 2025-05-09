@@ -16,10 +16,8 @@ public class RoadNotificationManagerImpl implements IRoadNotificationManager {
     private final IRoadNotificationService roadNotificationService;
 
     @Override
-    public Optional<RoadNotification> sendNotification(NotificationDTO notificationDTO) {
-        return roadNotificationService.send(notificationDTO)
-                .map(notification -> roadNotificationService.findById(notification.getId()))
-                .orElse(Optional.empty());
+    public RoadNotification sendNotification(NotificationDTO notificationDTO) {
+        return roadNotificationService.send(notificationDTO);
     }
 
     @Override

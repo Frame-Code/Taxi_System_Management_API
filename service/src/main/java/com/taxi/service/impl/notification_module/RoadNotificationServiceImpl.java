@@ -26,7 +26,7 @@ public class RoadNotificationServiceImpl implements IRoadNotificationService {
     private RoadNotificationRepository roadNotificationRepository;
 
     @Override
-    public Optional<Notification> send(NotificationDTO notificationDTO) throws NullPointerException{
+    public Notification send(NotificationDTO notificationDTO) {
         return ISenderNotification.send(notificationDTO);
     }
 

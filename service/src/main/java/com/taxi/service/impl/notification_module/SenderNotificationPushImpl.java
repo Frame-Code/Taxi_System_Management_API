@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -24,22 +25,17 @@ public class SenderNotificationPushImpl implements ISenderNotificationPush {
 
 
     @Override
-    public Optional<Notification> send(NotificationDTO notificationDTO) {
+    public Notification send(NotificationDTO notificationDTO) {
         var client = clientRepository.findById(notificationDTO.clientDTO().id());
         var taxi = taxiRepository.findById(notificationDTO.taxiDTO().id());
 
-        if(client.isEmpty() || taxi.isEmpty()) {
-            log.warn("The info client or the info taxi empty, impossible send message ");
-            return Optional.empty();
-        }
-
-        return Optional.of(roadNotificationRepository.save(RoadNotification.builder()
-                .client(client.get())
-                .taxi(taxi.get())
+        return roadNotificationRepository.save(RoadNotification.builder()
+                .client(client.orElseThrow())
+                .taxi(taxi.orElseThrow())
                 .title(notificationDTO.title())
                 .createdBy(client.get().getUser().getFullNames())
                 .message(notificationDTO.message())
                 .status(REQUEST_STATUS.PENDING)
-                .build()));
+                .build());
     }
 }

@@ -129,16 +129,15 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
 
         //INICIA EL PRIMER CICLO
         executor.scheduleAtFixedRate(() -> {
-            if(roadNotificationAtomicReference.get() == null) {
+            if (roadNotificationAtomicReference.get() == null) {
                 var notificationOpt = roadNotificationService.send(new NotificationDTO(
                         "Request to new Road!!", clientDTO.getInfoJSON(), clientDTO, taxiDTOList.get(attemptCount.get()))
                 );
 
-                if(notificationOpt.isPresent()) {
-                    var roadNotificationOpt = roadNotificationService.findById(notificationOpt.get().getId());
-                    roadNotificationAtomicReference.set(roadNotificationService.findById(roadNotificationOpt.get().getId()).get());
-                    log.info("A new Road Notification was set on the Atomic reference");
-                }
+                var roadNotificationOpt = roadNotificationService.findById(notificationOpt.getId());
+                roadNotificationAtomicReference.set(roadNotificationService.findById(roadNotificationOpt.get().getId()).get());
+                log.info("A new Road Notification was set on the Atomic reference");
+
 
                 log.info("Starting a new matching between cab with a client, attempt: " + attemptCount.get());
                 sendAndVerifyRequest.run();
@@ -150,11 +149,10 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
                             "Request to new Road!!", clientDTO.getInfoJSON(), clientDTO, taxiDTOList.get(attemptCount.get()))
                     );
 
-                    if(notificationOpt.isPresent()) {
-                        var roadNotificationOpt = roadNotificationService.findById(notificationOpt.get().getId());
-                        roadNotificationAtomicReference.set(roadNotificationService.findById(roadNotificationOpt.get().getId()).get());
-                        log.info("A new Road Notification was set on the Atomic reference");
-                    }
+                    var roadNotificationOpt = roadNotificationService.findById(notificationOpt.getId());
+                    roadNotificationAtomicReference.set(roadNotificationService.findById(roadNotificationOpt.get().getId()).get());
+                    log.info("A new Road Notification was set on the Atomic reference");
+
 
                     log.info("Starting a new matching between cab with a client, attempt: " + attemptCount.get());
                     sendAndVerifyRequest.run();
@@ -181,6 +179,6 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
         }
 
         log.info("Returning the value: " + cabToAccepted.get());
-        return cabToAccepted.get() == null? Optional.empty(): cabToAccepted.get();
+        return cabToAccepted.get() == null ? Optional.empty() : cabToAccepted.get();
     }
 }
