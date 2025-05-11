@@ -2,8 +2,7 @@ package com.taxi.service.impl.notification_module;
 
 import dto.NotificationDTO;
 import Enums.entitiesEnums.REQUEST_STATUS;
-import com.taxi.service.interfaces.notification_module.ISenderNotificationPush;
-import io.github.frame_code.domain.entities.Notification;
+import com.taxi.service.interfaces.notification_module.ISenderRoadNotificationPush;
 import io.github.frame_code.domain.entities.RoadNotification;
 import io.github.frame_code.domain.repository.ClientRepository;
 import io.github.frame_code.domain.repository.RoadNotificationRepository;
@@ -12,20 +11,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service("push")
 @CommonsLog
-public class SenderNotificationPushImpl implements ISenderNotificationPush {
+public class SenderRoadNotificationPushImpl implements ISenderRoadNotificationPush {
     private final RoadNotificationRepository roadNotificationRepository;
     private final TaxiRepository taxiRepository;
     private final ClientRepository clientRepository;
 
-
     @Override
-    public Notification send(NotificationDTO notificationDTO) {
+    public RoadNotification send(NotificationDTO notificationDTO) {
         var client = clientRepository.findById(notificationDTO.clientDTO().id());
         var taxi = taxiRepository.findById(notificationDTO.taxiDTO().id());
 

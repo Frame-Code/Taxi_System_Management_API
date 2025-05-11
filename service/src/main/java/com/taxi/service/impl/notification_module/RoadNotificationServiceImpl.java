@@ -5,7 +5,6 @@ import com.taxi.service.interfaces.notification_module.IRoadNotificationService;
 
 import dto.NotificationDTO;
 import com.taxi.service.interfaces.notification_module.ISenderNotification;
-import io.github.frame_code.domain.entities.Notification;
 import io.github.frame_code.domain.entities.RoadNotification;
 import io.github.frame_code.domain.repository.RoadNotificationRepository;
 import lombok.extern.apachecommons.CommonsLog;
@@ -20,18 +19,18 @@ import java.util.Optional;
 public class RoadNotificationServiceImpl implements IRoadNotificationService {
     @Autowired
     @Qualifier(value = "push")
-    private ISenderNotification ISenderNotification;
+    private ISenderNotification<RoadNotification> ISenderNotification;
 
     @Autowired
     private RoadNotificationRepository roadNotificationRepository;
 
     @Override
-    public Notification send(NotificationDTO notificationDTO) {
+    public RoadNotification send(NotificationDTO notificationDTO) {
         return ISenderNotification.send(notificationDTO);
     }
 
     @Override
-    public void setSender(ISenderNotification ISenderNotification) {
+    public void setSender(ISenderNotification<RoadNotification> ISenderNotification) {
         this.ISenderNotification = ISenderNotification;
     }
 
