@@ -1,5 +1,6 @@
 package com.taxi.service.interfaces.scheduler_module;
 
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
 public interface IMatchingScheduler {
@@ -7,4 +8,5 @@ public interface IMatchingScheduler {
     ScheduledFuture<?> scheduleUnique(Runnable task, int delay);
     void shutdown();
     void shutdownNow();
+    ScheduledExecutorService getExecutor();
 }

@@ -23,4 +23,19 @@ public class RoadNotificationManagerImpl implements IRoadNotificationManager {
     public void updateNotificationStatus(REQUEST_STATUS status, Long notificationId) {
         roadNotificationService.updateStatus(status, notificationId);
     }
+
+    @Override
+    public void setRejected(Long notificationId) {
+        updateNotificationStatus(REQUEST_STATUS.REJECTED, notificationId);
+    }
+
+    @Override
+    public void setTimeOut(Long notificationId) {
+        updateNotificationStatus(REQUEST_STATUS.TIMEOUT, notificationId);
+    }
+
+    @Override
+    public void setAccepted(Long notificationId) {
+        updateNotificationStatus(REQUEST_STATUS.ACCEPTED, notificationId);
+    }
 }

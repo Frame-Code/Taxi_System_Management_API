@@ -31,4 +31,9 @@ public class MatchingSchedulerImpl implements IMatchingScheduler {
     public void shutdownNow() {
         executor.shutdownNow();
     }
+
+    @Override
+    public ScheduledExecutorService getExecutor() {
+        return executor;
+    }
 }

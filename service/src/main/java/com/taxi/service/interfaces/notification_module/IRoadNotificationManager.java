@@ -7,5 +7,7 @@ import io.github.frame_code.domain.entities.RoadNotification;
 public interface IRoadNotificationManager {
     RoadNotification sendNotification(NotificationDTO notificationDTO);
     void updateNotificationStatus(REQUEST_STATUS status, Long notificationId);
-
+    void setRejected(Long notificationId);
+    void setTimeOut(Long notificationId);
+    void setAccepted(Long notificationId);
 }

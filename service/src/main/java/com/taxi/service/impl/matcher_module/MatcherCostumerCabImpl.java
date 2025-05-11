@@ -66,7 +66,7 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
 
     @Override
     public Optional<TaxiDTO> notifyEachCab() throws NullPointerException, NoSuchElementException {
-        int MAX_ATTEMPTS = taxiDTOList.size();
+        /*int MAX_ATTEMPTS = taxiDTOList.size();
         log.info("MAXIMUM ATTEMPTS: " + MAX_ATTEMPTS);
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
@@ -179,6 +179,7 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
         }
 
         log.info("Returning the value: " + cabToAccepted.get());
-        return cabToAccepted.get() == null ? Optional.empty() : cabToAccepted.get();
+        return cabToAccepted.get() == null ? Optional.empty() : cabToAccepted.get();*/
+        return null;
     }
 }

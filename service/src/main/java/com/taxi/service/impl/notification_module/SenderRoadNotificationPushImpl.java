@@ -21,18 +21,15 @@ public class SenderRoadNotificationPushImpl implements ISenderRoadNotificationPu
 
     @Override
     public RoadNotification send(NotificationDTO notificationDTO) {
-        var client = clientRepository.findById(notificationDTO.clientDTO().id());
-        var taxi = taxiRepository.findById(notificationDTO.taxiDTO().id());
-        log.info("Sender: " + client);
-        log.info("Sender: " + taxi);
-
+        var client = clientRepository.findById(notificationDTO.getClientDTO().id());
+        var taxi = taxiRepository.findById(notificationDTO.getTaxiDTO().id());
 
         return roadNotificationRepository.save(RoadNotification.builder()
                 .client(client.orElseThrow())
                 .taxi(taxi.orElseThrow())
-                .title(notificationDTO.title())
+                .title(notificationDTO.getTitle())
                 .createdBy(client.get().getUser().getFullNames())
-                .message(notificationDTO.message())
+                .message(notificationDTO.getMessage())
                 .status(REQUEST_STATUS.PENDING)
                 .build());
     }

@@ -1,13 +1,13 @@
 package com.controllers;
 
-import com.taxi.service.interfaces.matcher_module.MatchMediator;
+import com.taxi.service.interfaces.matcher_module.IMatchMediator;
 import dto.CoordinatesDTO;
 import dto.NotificationDTO;
 import dto.SearchCabDTO;
 import com.taxi.mappers.ClientMapper;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCabFactory;
-import com.taxi.service.interfaces.matcher_module.IMatcherCostumerCab;
+import dto.TaxiDTO;
 import io.github.frame_code.domain.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -31,7 +31,7 @@ public class SearchTaxiController {
     private AbstractSearchCabFactory abstractSearchCabFactory;
 
     @Autowired
-    private MatchMediator mediator;
+    private IMatchMediator mediator;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -42,9 +42,20 @@ public class SearchTaxiController {
         var listTaxi = abstractSearchCab.findCabs();
         /*IMatcherCostumerCab.setCabsToNotify(listTaxi);
         IMatcherCostumerCab.setClientToMatch(ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));*/
-        return ResponseEntity.ok(mediator.send(new NotificationDTO("notification",
-                "road",
-                ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()),
-                listTaxi.get(0))));
+        mediator.send(NotificationDTO.builder()
+                .title("notification")
+                .message("road")
+                .clientDTO(ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()))
+                .taxiDTO(listTaxi.get(0))
+                .build());
+        for (TaxiDTO taxiDTO : listTaxi) {
+            var taxiOpt = mediator.match(taxiDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
+            if( taxiOpt.isPresent()) {
+                log.info("Cab accepted the road");
+                return ResponseEntity.ok(taxiOpt.get());
+            }
+            log.info("end of loop");
+        }
+        return ResponseEntity.ok("No cabs accepted the road");
     }
 }

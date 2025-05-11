@@ -17,6 +17,7 @@ public class RoadNotificationVerifierImpl implements IRoadNotificationVerifier {
         var notification = roadNotificationService.findById(notificationId);
         return new TaxiResponseDTO(
                 notification.map(n -> n.getStatus().equals(REQUEST_STATUS.ACCEPTED)).orElse(false),
-                notification.map(n -> n.getStatus().equals(REQUEST_STATUS.REJECTED)).orElse(false));
+                notification.map(n -> n.getStatus().equals(REQUEST_STATUS.REJECTED)).orElse(false),
+                notification.map(n -> n.getStatus().equals(REQUEST_STATUS.TIMEOUT)).orElse(false));
     }
 }
