@@ -1,6 +1,8 @@
 package com.controllers;
 
+import com.taxi.service.interfaces.matcher_module.MatchMediator;
 import dto.CoordinatesDTO;
+import dto.NotificationDTO;
 import dto.SearchCabDTO;
 import com.taxi.mappers.ClientMapper;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
@@ -29,7 +31,7 @@ public class SearchTaxiController {
     private AbstractSearchCabFactory abstractSearchCabFactory;
 
     @Autowired
-    private IMatcherCostumerCab IMatcherCostumerCab;
+    private MatchMediator mediator;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -38,8 +40,11 @@ public class SearchTaxiController {
     public ResponseEntity<?> searchCabs(@RequestBody final CoordinatesDTO coordinatesDTO) {
         AbstractSearchCab abstractSearchCab = abstractSearchCabFactory.createSearchCab(new SearchCabDTO(coordinatesDTO));
         var listTaxi = abstractSearchCab.findCabs();
-        IMatcherCostumerCab.setCabsToNotify(listTaxi);
-        IMatcherCostumerCab.setClientToMatch(ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
-        return ResponseEntity.ok(IMatcherCostumerCab.notifyEachCab());
+        /*IMatcherCostumerCab.setCabsToNotify(listTaxi);
+        IMatcherCostumerCab.setClientToMatch(ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));*/
+        return ResponseEntity.ok(mediator.send(new NotificationDTO("notification",
+                "road",
+                ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()),
+                listTaxi.get(0))));
     }
 }

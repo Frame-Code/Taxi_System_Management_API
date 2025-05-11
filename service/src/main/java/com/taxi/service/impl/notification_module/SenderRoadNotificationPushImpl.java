@@ -23,6 +23,9 @@ public class SenderRoadNotificationPushImpl implements ISenderRoadNotificationPu
     public RoadNotification send(NotificationDTO notificationDTO) {
         var client = clientRepository.findById(notificationDTO.clientDTO().id());
         var taxi = taxiRepository.findById(notificationDTO.taxiDTO().id());
+        log.info("Sender: " + client);
+        log.info("Sender: " + taxi);
+
 
         return roadNotificationRepository.save(RoadNotification.builder()
                 .client(client.orElseThrow())
