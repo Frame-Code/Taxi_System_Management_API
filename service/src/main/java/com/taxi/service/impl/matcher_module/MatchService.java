@@ -9,6 +9,7 @@ import dto.TaxiDTO;
 import dto.TaxiResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @CommonsLog
@@ -30,64 +30,55 @@ public class MatchService {
     private final IMatchingScheduler scheduler;
 
     public Optional<TaxiDTO> initMath(TaxiDTO taxiDTO, ClientDTO clientDTO) {
-        AtomicInteger initialDelay = new AtomicInteger(0);
         AtomicReference<Optional<TaxiDTO>> taxiDTOAtomicReference = new AtomicReference<>(Optional.empty());
         AtomicReference<NotificationDTO> notificationDTOAtomicReference = new AtomicReference<>();
-
         sendNotification(taxiDTO, clientDTO, notificationDTOAtomicReference);
 
-        ScheduledFuture<?> periodReview = scheduler.schedulePeriod(() -> {
+        scheduler.scheduleUnique(() -> {
+            setTimeOut(notificationDTOAtomicReference);
+            closeScheduledFuture((ScheduledFuture<?>) this);
+        }, 13);
+
+        scheduler.schedulePeriod(() -> {
             log.info("Waiting response of taxi with id: " + taxiDTO.id());
             TaxiResponseDTO taxiResponse = mediator.getResponse(notificationDTOAtomicReference.get().getId());
 
             if (taxiResponse.isAccepted()) {
-                processResponse(taxiDTOAtomicReference, Optional.of(taxiDTO), REQUEST_STATUS.ACCEPTED, (ScheduledFuture<?>) this);
-                return;
-            }
-            if(taxiResponse.isTimeOut()) {
-                processResponse(taxiDTOAtomicReference, Optional.empty(), REQUEST_STATUS.TIMEOUT, (ScheduledFuture<?>) this);
+                processResponse(taxiDTOAtomicReference, Optional.of(taxiDTO), REQUEST_STATUS.ACCEPTED);
+                closeScheduledFuture((ScheduledFuture<?>) this);
                 return;
             }
             if(taxiResponse.isRejected()) {
-                processResponse(taxiDTOAtomicReference, Optional.empty(), REQUEST_STATUS.REJECTED, (ScheduledFuture<?>) this);
+                processResponse(taxiDTOAtomicReference, Optional.empty(), REQUEST_STATUS.REJECTED);
+                closeScheduledFuture((ScheduledFuture<?>) this);
             }
         }, 0, 2);
-
-
-        ScheduledFuture<?> periodTimeOut = scheduler.schedulePeriod(() -> {
-            mediator.updateStatus(REQUEST_STATUS.TIMEOUT, notificationDTOAtomicReference.get().getId());
-            log.info("Wait response timeout...");
-            closeScheduledFuture((ScheduledFuture<?>) this);
-        }, 10, 10);
+        var executorPeriod = scheduler.getExecutor();
 
         try {
-            scheduler.getExecutor().awaitTermination((long) 3 * 10 + 10, TimeUnit.SECONDS);
-            log.info("All task ended");
+            executorPeriod.awaitTermination(13, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             log.warn("Interrupted task finishing");
             Thread.currentThread().interrupt();
         }
 
-        if (!scheduler.getExecutor().isShutdown()) {
-            scheduler.getExecutor().shutdownNow();
-            log.info("ScheduleExecutorService finished");
+       if (!executorPeriod.isShutdown()) {
+            executorPeriod.shutdownNow();
+            log.info("ScheduledFuturePeriodReview finished");
         }
         return taxiDTOAtomicReference.get();
     }
 
-    private void processResponse(AtomicReference<Optional<TaxiDTO>> atomicReference, Optional<TaxiDTO> response, REQUEST_STATUS status, ScheduledFuture<?> schedule) {
-        log.info("Road was " + status.name().toLowerCase());
+    private void processResponse(@NotNull AtomicReference<Optional<TaxiDTO>> atomicReference, Optional<TaxiDTO> response, @NotNull REQUEST_STATUS status) {
+        log.info("Status road: " + status.name().toLowerCase());
         atomicReference.set(response);
-        if(response.isPresent()) {
-            closeScheduledFuture(schedule);
-        }
     }
 
-    private void closeScheduledFuture(ScheduledFuture<?> schedule) {
+    private void closeScheduledFuture(@NotNull ScheduledFuture<?> schedule) {
         schedule.cancel(false);
     }
 
-    private void sendNotification(TaxiDTO taxiDTO, ClientDTO clientDTO, AtomicReference<NotificationDTO> notificationDTOAtomicReference) {
+    private void sendNotification(TaxiDTO taxiDTO, ClientDTO clientDTO, @NotNull AtomicReference<NotificationDTO> notificationDTOAtomicReference) {
         notificationDTOAtomicReference.set(mediator.send(NotificationDTO.builder()
                 .title("New road message!!")
                 .message("A new client want a road!!")
@@ -95,5 +86,10 @@ public class MatchService {
                 .clientDTO(clientDTO)
                 .build()));
 
+    }
+
+    private void setTimeOut(AtomicReference<NotificationDTO> notificationDTOAtomicReference) {
+        log.info("Wait response timeout...");
+        mediator.updateStatus(REQUEST_STATUS.TIMEOUT, notificationDTOAtomicReference.get().getId());
     }
 }
