@@ -30,7 +30,8 @@ public class SearchCabByDistance extends AbstractSearchCab {
         while (minDistance <= MAX_DISTANCE) {
             nearbyCabs = findCabsService.findNearbyCabs(coordinatesDTO, minDistance);
             if(!nearbyCabs.isEmpty()) {
-                log.info("Nearby cabs founded for the client " + coordinatesDTO.toString() + "with distance min: " + minDistance);
+                log.info("Nearby cabs founded for the client " + coordinatesDTO.toString() + " with distance min: " + minDistance);
+                log.info("Total cabs founded: " + nearbyCabs.size());
                 break;
             }
             minDistance += 500;

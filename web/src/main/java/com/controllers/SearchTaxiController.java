@@ -40,14 +40,6 @@ public class SearchTaxiController {
     public ResponseEntity<?> searchCabs(@RequestBody final CoordinatesDTO coordinatesDTO) {
         AbstractSearchCab abstractSearchCab = abstractSearchCabFactory.createSearchCab(new SearchCabDTO(coordinatesDTO));
         var listTaxi = abstractSearchCab.findCabs();
-        /*IMatcherCostumerCab.setCabsToNotify(listTaxi);
-        IMatcherCostumerCab.setClientToMatch(ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));*/
-        mediator.send(NotificationDTO.builder()
-                .title("notification")
-                .message("road")
-                .clientDTO(ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()))
-                .taxiDTO(listTaxi.get(0))
-                .build());
         for (TaxiDTO taxiDTO : listTaxi) {
             var taxiOpt = mediator.match(taxiDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
             if( taxiOpt.isPresent()) {

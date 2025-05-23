@@ -10,15 +10,17 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class MatchingSchedulerImpl implements IMatchingScheduler {
-    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+    private ScheduledExecutorService executor;
 
     @Override
     public ScheduledFuture<?> schedulePeriod(Runnable task, int delay, int period) {
+        executor = Executors.newScheduledThreadPool(1);
         return executor.scheduleAtFixedRate(task, delay, period, TimeUnit.SECONDS);
     }
 
     @Override
     public ScheduledFuture<?> scheduleUnique(Runnable task, int delay) {
+        executor = Executors.newScheduledThreadPool(1);
         return executor.schedule(task, delay, TimeUnit.SECONDS);
     }
 
