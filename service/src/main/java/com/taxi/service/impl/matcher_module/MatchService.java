@@ -32,16 +32,20 @@ public class MatchService {
     public Optional<TaxiDTO> initMath(TaxiDTO taxiDTO, ClientDTO clientDTO) {
         AtomicReference<Optional<TaxiDTO>> taxiDTOAtomicReference = new AtomicReference<>(Optional.empty());
         AtomicReference<NotificationDTO> notificationDTOAtomicReference = new AtomicReference<>();
+        AtomicReference<TaxiResponseDTO> taxiResponseDTOAtomicReference = new AtomicReference<>();
         sendNotification(taxiDTO, clientDTO, notificationDTOAtomicReference);
 
         scheduler.scheduleUnique(() -> {
-            setTimeOut(notificationDTOAtomicReference);
+            if(taxiResponseDTOAtomicReference.get().isPending()) {
+                setTimeOut(notificationDTOAtomicReference);
+            }
             closeScheduledFuture((ScheduledFuture<?>) this);
         }, 13);
 
         scheduler.schedulePeriod(() -> {
             log.info("Waiting response of taxi with id: " + taxiDTO.id());
             TaxiResponseDTO taxiResponse = mediator.getResponse(notificationDTOAtomicReference.get().getId());
+            taxiResponseDTOAtomicReference.set(taxiResponse);
 
             if (taxiResponse.isAccepted()) {
                 processResponse(taxiDTOAtomicReference, Optional.of(taxiDTO), REQUEST_STATUS.ACCEPTED);
@@ -54,6 +58,13 @@ public class MatchService {
             }
         }, 0, 2);
         var executorPeriod = scheduler.getExecutor();
+
+        scheduler.schedulePeriod(() -> {
+            if(taxiResponseDTOAtomicReference.get().isRejected() || taxiResponseDTOAtomicReference.get().isAccepted()) {
+                executorPeriod.shutdownNow();
+                closeScheduledFuture((ScheduledFuture<?>) this);
+            }
+        }, 2, 2);
 
         try {
             executorPeriod.awaitTermination(13, TimeUnit.SECONDS);
