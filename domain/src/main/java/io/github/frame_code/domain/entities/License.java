@@ -27,8 +27,8 @@ public class License extends BaseEntity {
     @Column(nullable = false, unique = true, length = 50)
     private String driverLicense;
 
-    @Column(nullable = false)
-    private Integer licenseType;
+    @Column(nullable = false, columnDefinition = "varchar(5)")
+    private String licenseType;
 
     @Column(nullable = false)
     private LocalDate issuanceDate;

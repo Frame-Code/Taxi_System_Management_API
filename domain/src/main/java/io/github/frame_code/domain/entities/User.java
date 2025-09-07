@@ -1,12 +1,6 @@
 package io.github.frame_code.domain.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +18,7 @@ import java.time.Period;
 @NoArgsConstructor
 @SuperBuilder
 @Entity
+@Table(name = "users")
 @ToString
 public class User extends BaseEntity {
     @Id
@@ -42,7 +37,7 @@ public class User extends BaseEntity {
     @Column(length = 15, nullable = false, unique = true)
     private String phone;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "varchar(max)", nullable = false)
     private String passwordHash;
 
     @Column(length = 255)

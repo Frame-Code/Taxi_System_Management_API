@@ -26,21 +26,21 @@ public class SearchCabByDistance extends AbstractSearchCab {
         double minDistance = 4000;
         double MAX_DISTANCE = 6500;
 
-        List<Taxi> nearbyCabs = List.of();
+        List<Taxi> nearbyTaxis = List.of();
         while (minDistance <= MAX_DISTANCE) {
-            nearbyCabs = findCabsService.findNearbyCabs(coordinatesDTO, minDistance);
-            if(!nearbyCabs.isEmpty()) {
+            nearbyTaxis = findCabsService.findNearbyCabs(coordinatesDTO, minDistance);
+            if(!nearbyTaxis.isEmpty()) {
                 log.info("Nearby cabs founded for the client " + coordinatesDTO.toString() + " with distance min: " + minDistance);
-                log.info("Total cabs founded: " + nearbyCabs.size());
+                log.info("Total cabs founded: " + nearbyTaxis.size());
                 break;
             }
             minDistance += 500;
         }
 
-        if(nearbyCabs.isEmpty()) {
+        if(nearbyTaxis.isEmpty()) {
             log.warn("No nearby cabs founded for the client " + coordinatesDTO.toString());
         }
-        return nearbyCabs.stream()
+        return nearbyTaxis.stream()
                 .map(TaxiMapper.INSTANCE::toDTO)
                 .toList();
     }

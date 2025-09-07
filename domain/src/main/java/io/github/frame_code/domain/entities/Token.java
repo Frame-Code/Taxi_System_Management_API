@@ -29,7 +29,7 @@ public class Token {
     private Long id;
 
     @Lob
-    @Column(unique = true, columnDefinition = "TEXT")
+    @Column(unique = true, length = 400, nullable = false)
     private String token;
 
     @Enumerated(EnumType.STRING)

@@ -2,9 +2,9 @@ package com.taxi.service.impl.find_cabs_module;
 
 import dto.CoordinatesDTO;
 import Enums.entitiesEnums.STATUS_TAXI;
+import io.github.frame_code.domain.entities.Taxi;
 import utils.GeolocationUtils;
 import com.taxi.service.interfaces.find_cabs_module.IFindCabsService;
-import io.github.frame_code.domain.entities.Taxi;
 import io.github.frame_code.domain.entities.TaxiLiveAddress;
 import io.github.frame_code.domain.repository.TaxiLiveAddressRepository;
 import lombok.RequiredArgsConstructor;

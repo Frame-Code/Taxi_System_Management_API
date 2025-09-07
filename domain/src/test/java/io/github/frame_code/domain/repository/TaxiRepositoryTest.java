@@ -1,8 +1,6 @@
 package io.github.frame_code.domain.repository;
 
-import Enums.entitiesEnums.STATUS_TAXI;
 import io.github.frame_code.domain.config.TestJPAConfig;
-import io.github.frame_code.domain.entities.Taxi;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

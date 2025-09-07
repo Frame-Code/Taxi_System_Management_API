@@ -43,7 +43,7 @@ public class SearchTaxiController {
         for (TaxiDTO taxiDTO : listTaxi) {
             var taxiOpt = mediator.match(taxiDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
             if( taxiOpt.isPresent()) {
-                log.info("Cab accepted the road");
+                log.info("Taxi accepted the road");
                 return ResponseEntity.ok(taxiOpt.get());
             }
             log.info("end of loop");

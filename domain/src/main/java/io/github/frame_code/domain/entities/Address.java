@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.type.SqlTypes;
 import org.locationtech.jts.geom.Point;
 
 @SuperBuilder
@@ -35,7 +37,7 @@ public abstract class Address {
     @JoinColumn(name = "idCity")
     private City city;
 
-    @Column(columnDefinition = "POINT SRID 4326", nullable = false)
+    @Column(columnDefinition = "geography", nullable = false)
     private Point location;
 
     private String reference;

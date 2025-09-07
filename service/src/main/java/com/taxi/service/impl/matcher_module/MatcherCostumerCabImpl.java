@@ -79,7 +79,7 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
         Runnable sendAndVerifyRequest = () -> {
             if (isTaskCompleted.get() || attemptCount.get() >= MAX_ATTEMPTS) {
                 executor.shutdown();
-                log.info("Finalizing Tasks to match a client with a cab");
+                log.info("Finalizing Tasks to match a client with a taxi");
                 return;
             }
             ScheduledFuture<?> verifyRequestAccepted = executor.scheduleAtFixedRate(() -> {
@@ -103,7 +103,7 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
                                     .orElse(false);
 
                             if (isAccepted) {
-                                log.info("Cab accepted the road!");
+                                log.info("Taxi accepted the road!");
                                 isTaskCompleted.set(true);
                                 cabToAccepted.set(roadNotificationOpt
                                         .map(RoadNotification::getTaxi)
@@ -117,10 +117,10 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
                                 return;
                             }
 
-                            log.info("Cab doesn't accept the road");
+                            log.info("Taxi doesn't accept the road");
 
                         } catch (Exception e) {
-                            log.warn("Exception matching client and cab ex: " + e.getMessage());
+                            log.warn("Exception matching client and taxi ex: " + e.getMessage());
                         }
                     }, 0, RANGE, TimeUnit.SECONDS
             );
@@ -139,7 +139,7 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
                 log.info("A new Road Notification was set on the Atomic reference");
 
 
-                log.info("Starting a new matching between cab with a client, attempt: " + attemptCount.get());
+                log.info("Starting a new matching between taxi with a client, attempt: " + attemptCount.get());
                 sendAndVerifyRequest.run();
             } else {
                 log.warn("End attempt #" + attemptCount.getAndIncrement());
@@ -154,11 +154,11 @@ public class MatcherCostumerCabImpl implements IMatcherCostumerCab {
                     log.info("A new Road Notification was set on the Atomic reference");
 
 
-                    log.info("Starting a new matching between cab with a client, attempt: " + attemptCount.get());
+                    log.info("Starting a new matching between taxi with a client, attempt: " + attemptCount.get());
                     sendAndVerifyRequest.run();
                 } else if (!isTaskCompleted.get()) {
                     roadNotificationService.updateStatus(REQUEST_STATUS.TIMEOUT, roadNotificationAtomicReference.get().getId());
-                    log.warn("Maximum attempts reached, any cab accept this road");
+                    log.warn("Maximum attempts reached, any taxi accept this road");
                     executor.shutdown();
                 }
             }

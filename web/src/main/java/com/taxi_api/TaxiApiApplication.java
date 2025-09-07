@@ -1,16 +1,10 @@
 package com.taxi_api;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import io.github.frame_code.domain.entities.City;
-import io.github.frame_code.domain.entities.Province;
-import io.github.frame_code.domain.repository.CityRepository;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -46,22 +40,5 @@ public class TaxiApiApplication {
 
 		SpringApplication.run(TaxiApiApplication.class, args);
 	}
-
-	@Bean
-	CommandLineRunner init(CityRepository cityRepository) {
-		return args -> {
-			Province province1 = Province.builder()
-					.name("Guayas")
-					.build();
-			City city1 = City.builder()
-					.name("Durán")
-					.province(province1)
-					.build();
-
-			cityRepository.save(city1);
-			log.log(Level.INFO, "City saved");
-			log.log(Level.INFO, "Application loaded correctly");
-		};
-    }
 
 }
