@@ -8,13 +8,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Builder
 @Getter @Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Admin{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

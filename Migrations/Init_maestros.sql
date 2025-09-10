@@ -119,7 +119,6 @@ BEGIN TRY
 			(3, 3, 'ENABLE', CAST(GETDATE() AS DATE), 'ADMIN', 0),
 			(4, 4, 'ENABLE', CAST(GETDATE() AS DATE), 'ADMIN', 0);
 			PRINT 'Taxis insertados'
-			SELECT * FROM taxi
 
 			PRINT 'Maestros insertados correctamente'
 			COMMIT;

@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### sql workshett ##
+Migrations/Worksheet.sql
+
 ### cursor ###
 .cursor
 

@@ -10,6 +10,7 @@ import io.github.frame_code.domain.repository.TaxiLiveAddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 @RequiredArgsConstructor

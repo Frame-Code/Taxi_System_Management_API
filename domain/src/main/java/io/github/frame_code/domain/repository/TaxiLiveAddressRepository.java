@@ -10,11 +10,6 @@ import java.util.List;
 
 @Repository
 public interface TaxiLiveAddressRepository extends JpaRepository<TaxiLiveAddress, Long> {
-    @Query(value = """
-            SELECT *
-            FROM address
-            INNER JOIN taxi_live_address
-            ON address.id = taxi_live_address.id
-            WHERE ST_Distance_Sphere(address.location, ST_GeomFromText(:point, 4326)) <= :meters""", nativeQuery = true)
+    @Query(value = "EXEC spGetNearbyCabs :point , :meters", nativeQuery = true)
     List<TaxiLiveAddress> findNearbyTaxis(@Param("point") String pointWKT, @Param("meters") double meters );
 }
