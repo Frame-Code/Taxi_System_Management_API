@@ -1,7 +1,8 @@
 package com.taxi.external.client.openRouteService;
 
 import dto.FullCoordinatesDTO;
+import reactor.core.publisher.Mono;
 
 public interface IOpenRouteServiceClient {
-    String getResponse(FullCoordinatesDTO coordinates);
+    Mono<String> getResponse(FullCoordinatesDTO coordinates);
 }
