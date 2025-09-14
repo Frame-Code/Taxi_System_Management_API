@@ -33,7 +33,7 @@ public class TestJPAConfig {
         }
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         dataSource.setUrl(System.getProperty("DB_URL"));
         dataSource.setUsername(System.getProperty("DB_USERNAME"));
         dataSource.setPassword(System.getProperty("DB_PASSWORD"));
