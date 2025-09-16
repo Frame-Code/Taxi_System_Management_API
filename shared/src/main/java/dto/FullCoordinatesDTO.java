@@ -8,6 +8,6 @@ public record FullCoordinatesDTO(
         return origin.longitude() + splitter + origin.latitude();
     }
     public String getDestiny(String splitter) {
-        return origin.longitude() + splitter + origin.latitude();
+        return destiny.longitude() + splitter + destiny.latitude();
     }
 }

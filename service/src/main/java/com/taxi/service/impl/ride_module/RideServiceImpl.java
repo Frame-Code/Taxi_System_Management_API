@@ -54,7 +54,6 @@ public class RideServiceImpl implements IRideService {
     public Optional<RideInfoDTO> getRideInfo(FullCoordinatesDTO coordinatesDTO) throws IOException {
         String response = openRouteServiceClient.getResponse(coordinatesDTO)
                 .block(Duration.ofSeconds(25));
-
         JsonElement rootElement = gson.fromJson(response, JsonElement.class);
         if(!rootElement.isJsonObject()) {
             return Optional.empty();
