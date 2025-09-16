@@ -64,7 +64,7 @@ BEGIN TRY
 			PRINT 'Role_permission insertados'
 
 			INSERT INTO fare (id, price_per_minute, price_per_km, base_fare, created_at) VALUES
-			(1, 0.15, 0.40, 1.50, CAST(GETDATE() AS DATE));
+			(1, 0.25, 0.50, 2.0, CAST(GETDATE() AS DATE));
 			PRINT 'Precio insertado'
 
 

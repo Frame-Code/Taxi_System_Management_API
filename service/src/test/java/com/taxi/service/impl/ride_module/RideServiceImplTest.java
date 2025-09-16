@@ -21,8 +21,7 @@ class RideServiceImplTest {
 
     @Test
     void getTotalPrice() {
-        Double price = rideService.getTotalPrice(15, 20);
-        System.out.println(price);
+        Double price = rideService.getTotalPrice(5, 2000);
         assertNotNull(price);
     }
 

@@ -40,12 +40,12 @@ public class RideServiceImpl implements IRideService {
     }
 
     @Override
-    public double getTotalPrice(double distance, double duration) {
+    public double getTotalPrice(double approxDistance, double approxSeconds) {
         log.info("Calculating price for ride...");
         return Math.round(fareRepository.find()
                 .map(fare ->
-                        (fare.getPricePerKm() * distance) / 1000
-                                + (fare.getPricePerMinute() * getMinutes(duration))
+                        (fare.getPricePerKm() * approxDistance) / 1000
+                                + (fare.getPricePerMinute() * getMinutes(approxSeconds))
                                 + (fare.getBaseFare()))
                 .orElseThrow(FareNotFoundException::new));
     }
@@ -79,7 +79,6 @@ public class RideServiceImpl implements IRideService {
     }
 
     private double getMinutes(double seconds) {
-        return (TimeUnit.SECONDS.toMinutes((long) seconds) -
-                (TimeUnit.SECONDS.toHours((long) seconds)* 60));
+        return seconds / 60;
     }
 }
