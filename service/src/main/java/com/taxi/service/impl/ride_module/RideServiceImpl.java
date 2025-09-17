@@ -8,7 +8,7 @@ import com.taxi.exceptions.FareNotFoundException;
 import com.taxi.external.client.openRouteService.IOpenRouteServiceClient;
 import com.taxi.service.interfaces.ride_module.IRideService;
 import dto.FullCoordinatesDTO;
-import dto.RideInfoDTO;
+import dto.DistanceInfoDTO;
 import io.github.frame_code.domain.entities.Road;
 import io.github.frame_code.domain.repository.IFareRepository;
 import io.github.frame_code.domain.repository.IRoadRepository;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @CommonsLog
 @Service
@@ -51,7 +50,7 @@ public class RideServiceImpl implements IRideService {
     }
 
     @Override
-    public Optional<RideInfoDTO> getRideInfo(FullCoordinatesDTO coordinatesDTO) throws IOException {
+    public Optional<DistanceInfoDTO> getRideInfo(FullCoordinatesDTO coordinatesDTO) throws IOException {
         String response = openRouteServiceClient.getResponse(coordinatesDTO)
                 .block(Duration.ofSeconds(25));
         JsonElement rootElement = gson.fromJson(response, JsonElement.class);
@@ -70,7 +69,7 @@ public class RideServiceImpl implements IRideService {
                 .get(0)
                 .getAsJsonObject();
         return Optional.of(
-                new RideInfoDTO(
+                new DistanceInfoDTO(
                         rideSegments.getAsJsonObject().get("distance").getAsDouble(),
                         rideSegments.getAsJsonObject().get("duration").getAsDouble()
                 )

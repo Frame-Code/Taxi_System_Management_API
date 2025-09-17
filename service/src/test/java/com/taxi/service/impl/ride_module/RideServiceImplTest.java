@@ -4,7 +4,7 @@ import com.taxi.external.client.openRouteService.OpenRouteServiceClient;
 import com.taxi.service.interfaces.ride_module.IRideService;
 import dto.CoordinatesDTO;
 import dto.FullCoordinatesDTO;
-import dto.RideInfoDTO;
+import dto.DistanceInfoDTO;
 import lombok.extern.apachecommons.CommonsLog;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ class RideServiceImplTest {
     @Test
     void getRideInfo() {
         try {
-            Optional<RideInfoDTO> rideInfoDTO = rideService.getRideInfo(
+            Optional<DistanceInfoDTO> rideInfoDTO = rideService.getRideInfo(
                     new FullCoordinatesDTO(
                             new CoordinatesDTO(-2.192284, -79.879845),
                             new CoordinatesDTO(-2.155990, -79.891978)
@@ -51,7 +51,7 @@ class RideServiceImplTest {
     @Test
     void integration() {
         try {
-            Optional<RideInfoDTO> rideInfoDTO = rideService.getRideInfo(
+            Optional<DistanceInfoDTO> rideInfoDTO = rideService.getRideInfo(
                     new FullCoordinatesDTO(
                             new CoordinatesDTO(-2.192284, -79.879845),
                             new CoordinatesDTO(-2.155990, -79.891978)
@@ -59,7 +59,7 @@ class RideServiceImplTest {
             );
             assertNotNull(rideInfoDTO);
             assertTrue(rideInfoDTO.isPresent());
-            Double price = rideService.getTotalPrice(rideInfoDTO.get().approxDistance(), rideInfoDTO.get().approxTime());
+            Double price = rideService.getTotalPrice(rideInfoDTO.get().approxDistance(), rideInfoDTO.get().approxSeconds());
             assertNotNull(price);
 
         } catch (IOException ex) {

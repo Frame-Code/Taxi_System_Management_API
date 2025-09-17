@@ -1,6 +1,7 @@
 package com.controllers;
 
 import com.taxi.service.interfaces.matcher_module.IMatchMediator;
+import com.taxi.service.interfaces.ride_module.IRideService;
 import dto.*;
 import com.taxi.mappers.ClientMapper;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @CommonsLog
 @RestController
@@ -28,6 +31,9 @@ public class SearchTaxiController {
 
     @Autowired
     private IMatchMediator mediator;
+
+    @Autowired
+    private IRideService rideService;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -66,4 +72,31 @@ public class SearchTaxiController {
                         .build());
     }
 
+    @GetMapping(value = "/get_info_ride")
+    public ResponseEntity<BaseResponse> getInfoRide(@RequestBody final FullCoordinatesDTO coordinatesDTO) {
+        try {
+            Optional<DistanceInfoDTO> distanceInfoDTO = rideService.getRideInfo(coordinatesDTO);
+            if(distanceInfoDTO.isEmpty()) return ResponseEntity.ok(BaseResponse.builder()
+                    .response(null)
+                    .status_code("503")
+                    .status_message("Error")
+                    .message("Can't get the ride info...")
+                    .timeStamp(LocalDateTime.now())
+                    .build());
+
+            double totalPrice = rideService.getTotalPrice(distanceInfoDTO.get().approxDistance(), distanceInfoDTO.get().approxSeconds());
+            RideInfoDTO rideInfoDTO = new RideInfoDTO(distanceInfoDTO.get(), totalPrice);
+            log.info("Returning ride info...");
+            return ResponseEntity.ok(BaseResponse.builder()
+                    .response(rideInfoDTO)
+                    .status_code("200")
+                    .status_message("Successfully")
+                    .message("The ride info")
+                    .timeStamp(LocalDateTime.now())
+                    .build());
+        } catch (IOException e) {
+            log.error("Error, can't get the ride info");
+            throw new RuntimeException(e);
+        }
+    }
 }
