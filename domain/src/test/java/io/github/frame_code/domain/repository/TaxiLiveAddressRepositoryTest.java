@@ -1,16 +1,12 @@
 package io.github.frame_code.domain.repository;
 
-import utils.GeolocationUtils;
 import io.github.frame_code.domain.config.TestJPAConfig;
-import io.github.frame_code.domain.entities.TaxiLiveAddress;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ContextConfiguration;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -24,7 +20,7 @@ public class TaxiLiveAddressRepositoryTest {
     TaxiLiveAddressRepository taxiLiveAddressRepository;
 
     @Autowired
-    TaxiRepository taxiRepository;
+    ITaxiRepository taxiRepository;
 
     @Test
     public void testSave() {

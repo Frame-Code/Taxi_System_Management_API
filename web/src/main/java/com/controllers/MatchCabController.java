@@ -24,7 +24,7 @@ import java.util.Optional;
 @RequestMapping("/api/cabs")
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchTaxiController {
+public class MatchCabController {
     @Qualifier("byDistance")
     @Autowired
     private AbstractSearchCabFactory abstractSearchCabFactory;
@@ -99,4 +99,11 @@ public class SearchTaxiController {
             throw new RuntimeException(e);
         }
     }
+
+    //El cliente acepta la ruta y se tiene que guardar en road la nueva ruta inicializada
+    public ResponseEntity<?> acceptRoad(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
+        Optional<>
+        return null;
+    }
+
 }

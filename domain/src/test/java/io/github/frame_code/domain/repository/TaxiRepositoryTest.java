@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class TaxiRepositoryTest {
     @Autowired
-    TaxiRepository taxiRepository;
+    ITaxiRepository taxiRepository;
 
     @Autowired
     DriverRepository driverRepository;

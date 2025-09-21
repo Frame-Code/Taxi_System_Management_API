@@ -6,7 +6,7 @@ import com.taxi.service.interfaces.notification_module.ISenderRoadNotificationPu
 import io.github.frame_code.domain.entities.RoadNotification;
 import io.github.frame_code.domain.repository.ClientRepository;
 import io.github.frame_code.domain.repository.RoadNotificationRepository;
-import io.github.frame_code.domain.repository.TaxiRepository;
+import io.github.frame_code.domain.repository.ITaxiRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @CommonsLog
 public class SenderRoadNotificationPushImpl implements ISenderRoadNotificationPush {
     private final RoadNotificationRepository roadNotificationRepository;
-    private final TaxiRepository taxiRepository;
+    private final ITaxiRepository taxiRepository;
     private final ClientRepository clientRepository;
 
     @Override
