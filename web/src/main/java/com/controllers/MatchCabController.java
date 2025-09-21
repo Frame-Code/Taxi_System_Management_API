@@ -2,6 +2,7 @@ package com.controllers;
 
 import com.taxi.service.interfaces.matcher_module.IMatchMediator;
 import com.taxi.service.interfaces.ride_module.IRideService;
+import com.taxi.service.interfaces.ride_module.IRideUseCaseService;
 import dto.*;
 import com.taxi.mappers.ClientMapper;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
@@ -37,6 +38,9 @@ public class MatchCabController {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private IRideUseCaseService rideUseCaseService;
 
     @PostMapping(value = "/search_cab")
     public ResponseEntity<BaseResponse> searchCabs(@RequestBody final CoordinatesDTO coordinatesDTO) {
@@ -101,9 +105,16 @@ public class MatchCabController {
     }
 
     //El cliente acepta la ruta y se tiene que guardar en road la nueva ruta inicializada
+    //Crear controller advice para gestionar las exepciones
+    @PostMapping(value = "/accept_road")
     public ResponseEntity<?> acceptRoad(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
-        Optional<>
-        return null;
+        return ResponseEntity.ok(BaseResponse.builder()
+                        .response(rideUseCaseService.acceptRoad(acceptRoadDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get())))
+                        .message("The road was accepted")
+                        .status_message("Successfully")
+                        .timeStamp(LocalDateTime.now())
+                        .status_code("200")
+                .build());
     }
 
 }

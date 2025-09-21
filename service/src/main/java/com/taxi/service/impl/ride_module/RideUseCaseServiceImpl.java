@@ -3,6 +3,7 @@ package com.taxi.service.impl.ride_module;
 import Enums.entitiesEnums.STATUS_ROAD;
 import com.taxi.service.interfaces.ride_module.*;
 import dto.AcceptRoadDTO;
+import dto.ClientDTO;
 import io.github.frame_code.domain.entities.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
@@ -20,13 +21,15 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
     private final ICabService cabService;
     private final IPaymentService paymentService;
     private final ICityService cityService;
+    private final IClientService clientService;
 
     @Override
-    public Road acceptRoad(AcceptRoadDTO roadDTO) {
+    public Road acceptRoad(AcceptRoadDTO roadDTO, ClientDTO clientDTO) {
         Payment payment = paymentService.findToGenerateRide(roadDTO.idPayment());
         Taxi taxi = cabService.findToGenerateRide(roadDTO.idTaxi());
         City cityOrigin = cityService.findToGenerateRide(roadDTO.idCityOrigin());
         City cityDestiny = cityService.findToGenerateRide(roadDTO.idCityDestiny());
+        Client client = clientService.findToGenerateRide(clientDTO.id());
         Point origin = GeolocationUtils.createPoint(roadDTO.coordinatesDTO().origin().latitude(), roadDTO.coordinatesDTO().origin().longitude());
         Point destiny = GeolocationUtils.createPoint(roadDTO.coordinatesDTO().destiny().latitude(), roadDTO.coordinatesDTO().destiny().longitude());
 
@@ -34,6 +37,7 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
                 .status(STATUS_ROAD.INITIALIZED)
                 .payment(payment)
                 .taxi(taxi)
+                .client(client)
                 .startAddress(RoadAddress.builder()
                         .location(origin)
                         .city(cityOrigin)
