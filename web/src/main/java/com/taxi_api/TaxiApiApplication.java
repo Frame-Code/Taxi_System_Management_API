@@ -17,7 +17,8 @@ import java.util.logging.Level;
 @ComponentScan(basePackages = {
 	"com.controllers",
 	"com.taxi.service",
-	"com.taxi.external"
+	"com.taxi.external",
+	"com.exceptionHandler"
 })
 @EnableJpaRepositories(basePackages = {
 	"io.github.frame_code.domain.repository"

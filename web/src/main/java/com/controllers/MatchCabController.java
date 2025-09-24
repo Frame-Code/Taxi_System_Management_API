@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -80,13 +81,15 @@ public class MatchCabController {
     public ResponseEntity<BaseResponse> getInfoRide(@RequestBody final FullCoordinatesDTO coordinatesDTO) {
         try {
             Optional<DistanceInfoDTO> distanceInfoDTO = rideService.getRideInfo(coordinatesDTO);
-            if(distanceInfoDTO.isEmpty()) return ResponseEntity.ok(BaseResponse.builder()
-                    .response(null)
-                    .status_code("503")
-                    .status_message("Error")
-                    .message("Can't get the ride info...")
-                    .timeStamp(LocalDateTime.now())
-                    .build());
+            if(distanceInfoDTO.isEmpty()) return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(BaseResponse.builder()
+                        .response(null)
+                        .status_code("503")
+                        .status_message("Error")
+                        .message("Can't get the ride info...")
+                        .timeStamp(LocalDateTime.now())
+                        .build()
+                    );
 
             double totalPrice = rideService.getTotalPrice(distanceInfoDTO.get().approxDistance(), distanceInfoDTO.get().approxSeconds());
             RideInfoDTO rideInfoDTO = new RideInfoDTO(distanceInfoDTO.get(), totalPrice);
@@ -107,7 +110,7 @@ public class MatchCabController {
     //El cliente acepta la ruta y se tiene que guardar en road la nueva ruta inicializada
     //Crear controller advice para gestionar las exepciones
     @PostMapping(value = "/accept_road")
-    public ResponseEntity<?> acceptRoad(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
+    public ResponseEntity<BaseResponse> acceptRoad(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
         return ResponseEntity.ok(BaseResponse.builder()
                         .response(rideUseCaseService.acceptRoad(acceptRoadDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get())))
                         .message("The road was accepted")
