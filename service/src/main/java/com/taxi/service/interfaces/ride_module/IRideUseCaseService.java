@@ -5,5 +5,5 @@ import dto.ClientDTO;
 import io.github.frame_code.domain.entities.Road;
 
 public interface IRideUseCaseService {
-    Road acceptRoad(AcceptRoadDTO roadDTO, ClientDTO clientDTO);
+    void acceptRoad(AcceptRoadDTO roadDTO, ClientDTO clientDTO);
 }

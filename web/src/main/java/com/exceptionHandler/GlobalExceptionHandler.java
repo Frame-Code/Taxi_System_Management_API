@@ -2,14 +2,17 @@ package com.exceptionHandler;
 
 import com.taxi.exceptions.*;
 import dto.BaseResponse;
+import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @RestControllerAdvice
+@CommonsLog
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(PaymentNotFoundException.class)
@@ -39,6 +42,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<BaseResponse> generateHandler(Exception ex, HttpStatus status, String response, String message, String statusCode, String statusMessage) {
+        log.warn(ex.getClass().getName() + ": " + ex.getMessage() + ". Stack trace: " + Arrays.toString(ex.getStackTrace()));
         return ResponseEntity.status(status)
                 .body(BaseResponse.builder()
                         .response(response)

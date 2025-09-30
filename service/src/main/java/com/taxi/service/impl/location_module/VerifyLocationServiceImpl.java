@@ -25,11 +25,7 @@ public class VerifyLocationServiceImpl implements IVerifyLocationService {
      */
     @Override
     public boolean isLocationAvailable(LocationDTO locationDTO) {
-        return provinceRepository.findProvinceByName(locationDTO.province())
-                .map(Province::getCities)
-                .filter(cities -> !cities.isEmpty())
-                .map(cities -> cities.stream()
-                        .anyMatch(city -> city.getName().equals(locationDTO.city())))
-                .orElse(false);
+        return provinceRepository.findCitiesByProvince(locationDTO.province())
+                .stream().anyMatch(city -> city.getName().equals(locationDTO.city()));
     }
 }

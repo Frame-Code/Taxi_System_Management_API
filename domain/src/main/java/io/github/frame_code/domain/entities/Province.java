@@ -27,6 +27,4 @@ public class Province {
     @Column(nullable = false, length = 60)
     private String name;
 
-    @OneToMany(mappedBy = "province")
-    private Set<City> cities;
 }

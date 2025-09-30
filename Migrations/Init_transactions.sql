@@ -17,6 +17,9 @@ BEGIN TRY
 		(3, 2),
 		(4, 3);
 
+		INSERT INTO payment (amount, is_deleted, created_at, transaction_code, created_by, payment_method) VALUES
+		(10, 0, GETDATE(), '07a0bd82-66d5-418e-b947-ea8d50c9f0a8', 'Admin', 'CASH')
+
 	COMMIT;
 END TRY
 BEGIN CATCH

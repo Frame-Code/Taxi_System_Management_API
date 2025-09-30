@@ -1,38 +1,32 @@
 package com.taxi.service.impl.ride_module;
 
-import Enums.entitiesEnums.STATUS_ROAD;
 import Enums.entitiesEnums.STATUS_TAXI;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.taxi.exceptions.FareNotFoundException;
 import com.taxi.external.client.openRouteService.IOpenRouteServiceClient;
-import com.taxi.service.interfaces.ride_module.ICabService;
-import com.taxi.service.interfaces.ride_module.ICityService;
-import com.taxi.service.interfaces.ride_module.IPaymentService;
 import com.taxi.service.interfaces.ride_module.IRideService;
-import dto.AcceptRoadDTO;
 import dto.FullCoordinatesDTO;
 import dto.DistanceInfoDTO;
 import io.github.frame_code.domain.entities.*;
 import io.github.frame_code.domain.repository.IFareRepository;
+import io.github.frame_code.domain.repository.IRoadAddressRepository;
 import io.github.frame_code.domain.repository.IRoadRepository;
 import io.github.frame_code.domain.repository.ITaxiRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
-import utils.GeolocationUtils;
-import org.locationtech.jts.geom.Point;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @CommonsLog
 @Service
 @RequiredArgsConstructor
 public class RideServiceImpl implements IRideService {
+    private final IRoadAddressRepository roadAddressRepository;
     private final IFareRepository fareRepository;
     private final IRoadRepository roadRepository;
     private final IOpenRouteServiceClient openRouteServiceClient;
@@ -82,6 +76,11 @@ public class RideServiceImpl implements IRideService {
                         rideSegments.getAsJsonObject().get("duration").getAsDouble()
                 )
         );
+    }
+
+    @Override
+    public RoadAddress save(RoadAddress roadAddress) {
+        return roadAddressRepository.save(roadAddress);
     }
 
     private double getMinutes(double seconds) {

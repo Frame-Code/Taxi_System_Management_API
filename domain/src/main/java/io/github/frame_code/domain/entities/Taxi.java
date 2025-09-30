@@ -52,6 +52,18 @@ public class Taxi extends BaseEntity {
     @OneToMany(mappedBy = "taxi", cascade = CascadeType.ALL)
     private List<TrackingTaxi> trackingTaxiList;
 
+    public boolean isWorking() {
+        return status == STATUS_TAXI.WORKING;
+    }
+
+    public boolean isEnable() {
+        return status == STATUS_TAXI.ENABLE;
+    }
+
+    public boolean isDisable() {
+        return status == STATUS_TAXI.DISABLE;
+    }
+
     @Override
     public String toString() {
         return "Taxi{" +

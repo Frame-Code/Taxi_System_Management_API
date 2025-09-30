@@ -18,6 +18,10 @@ public class CabServiceImpl implements ICabService {
     public Taxi findToGenerateRide(Long id) {
         return taxiRepository
                 .findById(id)
+                .filter(cab -> {
+                    if(!cab.isEnable()) throw new CabNotFoundException("The cab selected is not enable to work");
+                    return true;
+                })
                 .orElseThrow(CabNotFoundException::new);
     }
 }

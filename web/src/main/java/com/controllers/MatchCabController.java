@@ -107,12 +107,11 @@ public class MatchCabController {
         }
     }
 
-    //El cliente acepta la ruta y se tiene que guardar en road la nueva ruta inicializada
-    //Crear controller advice para gestionar las exepciones
     @PostMapping(value = "/accept_road")
     public ResponseEntity<BaseResponse> acceptRoad(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
+        rideUseCaseService.acceptRoad(acceptRoadDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
         return ResponseEntity.ok(BaseResponse.builder()
-                        .response(rideUseCaseService.acceptRoad(acceptRoadDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get())))
+                        .response(null)
                         .message("The road was accepted")
                         .status_message("Successfully")
                         .timeStamp(LocalDateTime.now())
