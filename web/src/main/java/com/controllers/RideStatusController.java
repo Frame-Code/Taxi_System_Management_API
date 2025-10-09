@@ -1,16 +1,13 @@
 package com.controllers;
 
-import Enums.entitiesEnums.STATUS_ROAD;
 import com.taxi.service.interfaces.ride_module.ISetStatus;
 import dto.BaseResponse;
+import dto.request_body.SetStatusDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -22,8 +19,8 @@ public class RideStatusController {
     private final ISetStatus setStatus;
 
     @PostMapping(value = "/set")
-    public ResponseEntity<BaseResponse> setStatus(@RequestParam final STATUS_ROAD status, @RequestParam Long idRide) {
-        var result = setStatus.set(status, idRide);
+    public ResponseEntity<BaseResponse> setStatus(@RequestBody SetStatusDTO statusDTO) {
+        var result = setStatus.set(statusDTO.status(),statusDTO.idRide());
         return result.isSaved()?
                 ResponseEntity.ok(BaseResponse.builder()
                         .response(null)
