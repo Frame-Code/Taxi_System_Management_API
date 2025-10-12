@@ -37,9 +37,9 @@ public class Road extends BaseEntity {
     @JoinColumn(name = "idAddressDestiny")
     private Address endAddress;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private STATUS_ROAD status;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "idRideStatus")
+    private RideStatus status;
 
     @ManyToOne
     @JoinColumn(name = "idPayment")

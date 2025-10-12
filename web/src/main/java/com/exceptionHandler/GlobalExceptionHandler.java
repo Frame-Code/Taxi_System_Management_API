@@ -36,6 +36,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseResponse> handle(CabNotFoundException ex) {
         return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "404", "Error");
     }
+    @ExceptionHandler(RideStatusNotFoundException.class)
+    public ResponseEntity<BaseResponse> handle(RideStatusNotFoundException ex) {
+        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "500", "Error");
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse> handle(Exception ex) {
         return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "500", "Error");

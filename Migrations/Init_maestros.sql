@@ -120,6 +120,13 @@ BEGIN TRY
 			(4, 4, 'ENABLE', CAST(GETDATE() AS DATE), 'ADMIN', 0);
 			PRINT 'Taxis insertados'
 
+			INSERT INTO	ride_status VALUES
+			(1, 'INITIALIZED'),
+			(2, 'STARTING'),
+			(3, 'IN_PROCESS'),
+			(4, 'ENDED'),
+			(5, 'INCONSISTENT')
+
 			PRINT 'Maestros insertados correctamente'
 			COMMIT;
 END TRY

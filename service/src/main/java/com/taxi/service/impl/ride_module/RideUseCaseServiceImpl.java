@@ -24,6 +24,7 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
     private final IPaymentService paymentService;
     private final ICityService cityService;
     private final IClientService clientService;
+    private final IRideStatusService statusService;
 
     @Override
     public void acceptRoad(AcceptRoadDTO roadDTO, ClientDTO clientDTO) {
@@ -34,6 +35,7 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
         Client client = clientService.findToGenerateRide(clientDTO.id());
         Point origin = GeolocationUtils.createPoint(roadDTO.coordinatesDTO().origin().latitude(), roadDTO.coordinatesDTO().origin().longitude());
         Point destiny = GeolocationUtils.createPoint(roadDTO.coordinatesDTO().destiny().latitude(), roadDTO.coordinatesDTO().destiny().longitude());
+        RideStatus status = statusService.findByStatusNameToGenerateRide(STATUS_ROAD.INITIALIZED);
         UserAuditoryDTO userAuditoryDTO = new UserAuditoryDTO(client.getUser().getFullNames(), client.getUser().getRole().getRoleName().toString());
         RoadAddress startAddress = service.save(RoadAddress.builder()
                 .location(origin)
@@ -45,7 +47,7 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
                 .build());
 
         Road road = Road.builder()
-                .status(STATUS_ROAD.INITIALIZED)
+                .status(status)
                 .payment(payment)
                 .taxi(taxi)
                 .client(client)
