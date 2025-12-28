@@ -77,7 +77,7 @@ public class MatchCabController {
                         .build());
     }
 
-    @GetMapping(value = "/get_info_ride")
+    @PostMapping(value = "/get_info_ride")
     public ResponseEntity<BaseResponse> getInfoRide(@RequestBody final FullCoordinatesDTO coordinatesDTO) {
         try {
             Optional<DistanceInfoDTO> distanceInfoDTO = rideService.getRideInfo(coordinatesDTO);
