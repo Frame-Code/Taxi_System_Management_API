@@ -1,3 +1,5 @@
+import { setPickupMarker, clearPickupMarker, initializeMap } from "./map.js";
+
 const impOrigin = document.getElementById("imp_origen");
 const pickupActions = document.getElementById("pickupActions");
 const btnUseCurrentLocation = document.getElementById("btnUseCurrentLocation");
@@ -20,9 +22,13 @@ function setStatus(msg) {
     pickupStatus.classList.remove("d-none");
 }
 
+// Geolocation functions
 function getCoordinatesSuccess(pos, watchId, e) {
     const { latitude, longitude, accuracy } = pos.coords;
 
+    //Aqui se tiene que agregar el metodo para mostrar el nombre real de la ubicacion
+    clearPickupMarker();
+    setPickupMarker(latitude, longitude, "Ubicación actual");
     impOrigin.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (±${Math.round(accuracy)}m)`;
     setStatus("Ubicación detectada correctamente.");
 
@@ -75,6 +81,10 @@ function getCoordinates(watchId, e) {
 
 
 function init(){
+    //Initialize map
+    initializeMap();
+
+
     let watchId = null;
 
     //Listeners--------------------------------------------
