@@ -23,34 +23,41 @@ public class VerifyLocationController {
     private final IVerifyLocationService verifyLocationService;
 
     @GetMapping(value = "/verify_location")
-    public ResponseEntity<?> verifyLocation(
+    public ResponseEntity<BaseResponse> verifyLocation(
             @RequestParam("latitude") final Double latitude,
             @RequestParam("longitude") final Double longitude) {
         
         CoordinatesDTO coordinatesDTO = new CoordinatesDTO(latitude, longitude);
         Optional<LocationDTO> locationOpt = parseCoordinatesService.parseCoordinatesToLocation(coordinatesDTO);
-        return locationOpt.map(locationDTO -> verifyLocationService.isLocationAvailable(locationDTO) ?
-                ResponseEntity.ok(BaseResponse.builder()
-                        .status_code("200")
-                        .response(coordinatesDTO)
-                        .status_message("Successfully")
-                        .message("Location is available")
-                        .timeStamp(LocalDateTime.now())
-                        .build()) :
-                ResponseEntity.ok(BaseResponse.builder()
-                        .status_code("204")
-                        .response(coordinatesDTO)
-                        .status_message("Successfully")
-                        .message("The system has not support the location provided")
-                        .timeStamp(LocalDateTime.now())
-                        .build())
-        ).orElseGet(() ->
-                ResponseEntity.ok(BaseResponse.builder()
-                        .status_code("204")
-                        .response(coordinatesDTO)
-                        .status_message("Successfully")
-                        .message("Coordinates not founded")
-                        .timeStamp(LocalDateTime.now())
-                        .build()));
+
+        if (locationOpt.isEmpty()) {
+            return ResponseEntity.status(404).body(BaseResponse.builder()
+                    .status_code("404")
+                    .response(coordinatesDTO)
+                    .status_message("Error")
+                    .message("Ubicación solicitada no encontrada.\nIntente una ubicación distinta...")
+                    .timeStamp(LocalDateTime.now())
+                    .build());
+        }
+
+        LocationDTO locationDTO = locationOpt.get();
+        if (!verifyLocationService.isLocationAvailable(locationDTO)) {
+            return ResponseEntity.status(422).body(BaseResponse.builder()
+                    .status_code("422")
+                    .response(coordinatesDTO)
+                    .status_message("Unavailable")
+                    .message("El sistema no soporta la ubicación solicitada\nIntente una ubicación distinta...")
+                    .timeStamp(LocalDateTime.now())
+                    .build());
+        }
+
+        return ResponseEntity.ok(BaseResponse.builder()
+                .status_code("200")
+                .response(locationDTO)
+                .status_message("Successfully")
+                .message("Location is available")
+                .timeStamp(LocalDateTime.now())
+                .build());
+
     }
 }

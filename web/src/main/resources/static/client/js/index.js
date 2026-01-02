@@ -1,4 +1,5 @@
 import { setPickupMarker, clearPickupMarker, initializeMap } from "./map.js";
+import { get_location_name } from "./client.js";
 
 const impOrigin = document.getElementById("imp_origen");
 const pickupActions = document.getElementById("pickupActions");
@@ -23,15 +24,16 @@ function setStatus(msg) {
 }
 
 // Geolocation functions
-function getCoordinatesSuccess(pos, watchId, e) {
+async function getCoordinatesSuccess(pos, watchId, e) {
     const { latitude, longitude, accuracy } = pos.coords;
 
     //Aqui se tiene que agregar el metodo para mostrar el nombre real de la ubicacion
     clearPickupMarker();
     setPickupMarker(latitude, longitude, "Ubicación actual");
-    impOrigin.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (±${Math.round(accuracy)}m)`;
-    setStatus("Ubicación detectada correctamente.");
+    let locationName = await get_location_name(latitude, longitude);
+    impOrigin.value = locationName;
 
+    setStatus("Ubicación detectada correctamente.");
     navigator.geolocation.clearWatch(watchId);
     watchId = null;
     hideActions(e);
@@ -81,12 +83,9 @@ function getCoordinates(watchId, e) {
 
 
 function init(){
-    //Initialize map
     initializeMap();
 
-
     let watchId = null;
-
     //Listeners--------------------------------------------
     impOrigin.addEventListener("click", showActions);
     document.addEventListener("click", hideActions);

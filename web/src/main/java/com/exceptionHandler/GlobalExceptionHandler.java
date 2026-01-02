@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BaseResponse> handle(Exception ex) {
-        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "500", "Error");
+        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, "500", "Error");
     }
 
     private ResponseEntity<BaseResponse> generateHandler(Exception ex, HttpStatus status, String response, String message, String statusCode, String statusMessage) {

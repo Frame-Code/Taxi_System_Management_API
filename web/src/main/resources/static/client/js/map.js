@@ -13,11 +13,7 @@ export function initializeMap() {
 }
 
 export function setPickupMarker(lat, lng, msg) {
-  //if (!pickupMarker) {
   pickupMarker = L.marker([lat, lng]).addTo(map).bindPopup(msg).openPopup();
-  /*} else {
-    pickupMarker.setLatLng([lat, lng]);
-  }*/
 }
 
 export function clearPickupMarker() {
