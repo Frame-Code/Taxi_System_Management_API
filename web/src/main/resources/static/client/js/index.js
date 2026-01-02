@@ -1,5 +1,7 @@
 import { setPickupMarker, clearPickupMarker, initializeMap } from "./map.js";
 import { get_location_name } from "./client.js";
+import { setButtonLoading } from "../../common/loading_button.js";
+import { showErrorToast } from "../../common/ui_messages.js";
 
 const impOrigin = document.getElementById("imp_origen");
 const pickupActions = document.getElementById("pickupActions");
@@ -27,7 +29,7 @@ function setStatus(msg) {
 async function getCoordinatesSuccess(pos, watchId, e) {
     const { latitude, longitude, accuracy } = pos.coords;
 
-    //Aqui se tiene que agregar el metodo para mostrar el nombre real de la ubicacion
+    setButtonLoading(btnUseCurrentLocation, true); 
     clearPickupMarker();
     setPickupMarker(latitude, longitude, "Ubicación actual");
     let locationName = await get_location_name(latitude, longitude);
@@ -37,6 +39,7 @@ async function getCoordinatesSuccess(pos, watchId, e) {
     navigator.geolocation.clearWatch(watchId);
     watchId = null;
     hideActions(e);
+    setButtonLoading(btnUseCurrentLocation, false);
     return watchId;
 }
 
@@ -44,24 +47,29 @@ function getCoordinatesError(error, e) {
     switch(error.code) {
         case error.PERMISSION_DENIED:
             setStatus("Permiso denegado para acceder a la ubicación.");
+            showErrorToast("Permiso denegado para acceder a la ubicación.");
             break;
         case error.POSITION_UNAVAILABLE:
             setStatus("La información de ubicación no está disponible.");
+            showErrorToast("La información de ubicación no está disponible.");
             break;
         case error.TIMEOUT:
             setStatus("La solicitud para obtener la ubicación ha caducado.");
+            showErrorToast("La solicitud para obtener la ubicación ha caducado.");
             break;
         default:
             setStatus("Error desconocido al obtener la ubicación.");
+            showErrorToast("Error desconocido al obtener la ubicación.");
             break;
     }
     watchId = null;
     return watchId;
 }
 
-function getCoordinates(watchId, e) {
+async function getCoordinates(watchId, e) {
     if (!("geolocation" in navigator)) {
         setStatus("Tu navegador no soporta geolocalización.");
+        showErrorToast("Tu navegador no soporta geolocalización.");
         return;
     }
 
@@ -69,8 +77,9 @@ function getCoordinates(watchId, e) {
         return;
 
     setStatus("Solicitando permiso y obteniendo ubicación...");
-    watchId = navigator.geolocation.watchPosition((position) => {
-        watchId = getCoordinatesSuccess(position, watchId, e);
+    
+    watchId = navigator.geolocation.watchPosition(async (position) => {
+        watchId = await getCoordinatesSuccess(position, watchId, e);
     }, (error) => {
         watchId = getCoordinatesError(error, e);
     }, { 
@@ -89,8 +98,8 @@ function init(){
     //Listeners--------------------------------------------
     impOrigin.addEventListener("click", showActions);
     document.addEventListener("click", hideActions);
-    btnUseCurrentLocation.addEventListener("click", (e) => {
-        watchId = getCoordinates(watchId, e);
+    btnUseCurrentLocation.addEventListener("click", async (e) => {
+        watchId = await getCoordinates(watchId, e);
     });
 
 }

@@ -1,4 +1,4 @@
-import { showErrorToast } from "./ui_alters.js";
+import { showErrorToast } from "./ui_messages.js";
 
 function getFriendlyErrorMessage(errorResponse) {
   // Caso 1: backend manda mensaje claro
