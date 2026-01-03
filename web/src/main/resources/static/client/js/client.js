@@ -23,11 +23,14 @@ export async function verify_location(latitude, longitude) {
 export async function get_location_name(latitude, longitude) {
     try {
         const locationData = await verify_location(latitude, longitude);
-        if(locationData) {
-            showSuccessToast("Ubicación verificada correctamente.");
-            return locationData.response.city + ", " + locationData.response.province + ", " + locationData.response.road;
+        if(!locationData) {
+            return null;
         }
+
+        showSuccessToast("Ubicación verificada correctamente.");
+        return locationData.response.city + ", " + locationData.response.province + ", " + locationData.response.road;
     } catch (error) {
         await handleApiError(error);
+        return null;
     }
 }

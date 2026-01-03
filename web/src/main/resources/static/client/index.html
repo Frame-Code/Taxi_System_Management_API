@@ -42,19 +42,24 @@
                             <div class="form-group text-start">
                                 <label for="imp_destino" class="lead fw-normal text-muted mb-1">¿Cuál es tu destino?</label>
                                 <input type="text" class="form-control form-control-lg" id="imp_destino" placeholder="Ej. Centro Comercial">
+                                <input type="hidden" id="pickupLatDestiny">
+                                <input type="hidden" id="pickupLngDestiny">
                             </div>
 
                             <div class="form-group text-start">
                                 <label for="imp_origen" class="lead fw-normal text-muted mb-1">¿Dónde te recogeremos?</label>
+                                <input type="hidden" id="pickupLatOrigin">
+                                <input type="hidden" id="pickupLngOrigin">
                                 <input type="text" class="form-control form-control-lg" id="imp_origen" placeholder="Ej. Mi ubicación actual">
-                                  <div id="pickupActions" class="border rounded bg-white mt-1 p-2 d-none">
-                                    <button id="btnUseCurrentLocation" type="button" class="btn btn-outline-primary w-100">
-                                            <span class="btn-text">Usar mi ubicación actual</span>
-                                            <span class="spinner-border spinner-border-sm d-none" role="status"></span>
-                                    </button>
+                                    <div id="pickupActions" class="border rounded bg-white mt-1 p-2 d-none">
+                                        <button id="btnUseCurrentLocation" type="button" class="btn btn-outline-primary w-100">
+                                                <span class="btn-text">Usar mi ubicación actual</span>
+                                                <span class="spinner-border spinner-border-sm d-none" role="status"></span>
+                                        </button>
 
-                                    <div id="pickupStatus" class="text-muted small mt-2 d-none"></div>
-                                </div>
+                                        <div id="pickupStatus" class="text-muted small mt-2 d-none"></div>
+                                    </div>
+                                <input type="text" class="form-control form-control-lg" id="imp_origen_reference" placeholder="Escribe aquí una referencia de tu ubicación" style="margin-top: 8px;">
                             </div>
                         </div>
                         

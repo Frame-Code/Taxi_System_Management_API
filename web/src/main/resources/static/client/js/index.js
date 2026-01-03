@@ -1,4 +1,4 @@
-import { setPickupMarker, clearPickupMarker, initializeMap } from "./map.js";
+import { setPickupMarkerOrigin, clearPickupMarker, initializeMap } from "./map.js";
 import { get_location_name } from "./client.js";
 import { setButtonLoading } from "../../common/loading_button.js";
 import { showErrorToast } from "../../common/ui_messages.js";
@@ -7,6 +7,12 @@ const impOrigin = document.getElementById("imp_origen");
 const pickupActions = document.getElementById("pickupActions");
 const btnUseCurrentLocation = document.getElementById("btnUseCurrentLocation");
 const pickupStatus = document.getElementById("pickupStatus");
+const pickupLatOrigin = document.getElementById("pickupLatOrigin");
+const pickupLngOrigin = document.getElementById("pickupLngOrigin");
+
+const impDestiny = document.getElementById("imp_destino");
+const pickupLatDestiny = document.getElementById("pickupLatDestiny");
+const pickupLngDestiny = document.getElementById("pickupLngDestiny");
 
 function showActions(e){ 
     pickupActions.classList.remove("d-none");
@@ -30,16 +36,22 @@ async function getCoordinatesSuccess(pos, watchId, e) {
     const { latitude, longitude, accuracy } = pos.coords;
 
     setButtonLoading(btnUseCurrentLocation, true); 
-    clearPickupMarker();
-    setPickupMarker(latitude, longitude, "Ubicación actual");
     let locationName = await get_location_name(latitude, longitude);
-    impOrigin.value = locationName;
-
-    setStatus("Ubicación detectada correctamente.");
+    setButtonLoading(btnUseCurrentLocation, false);
     navigator.geolocation.clearWatch(watchId);
     watchId = null;
+
+    if(!locationName) {
+        setStatus("No se pudo obtener el nombre de la ubicación.");
+        return watchId;
+    }
+
+    impOrigin.value = locationName;
+    pickupLatOrigin.value = latitude;
+    pickupLngOrigin.value = longitude;
+    setPickupMarkerOrigin(latitude, longitude, "Ubicación actual");
+    setStatus("Ubicación detectada correctamente.");
     hideActions(e);
-    setButtonLoading(btnUseCurrentLocation, false);
     return watchId;
 }
 
@@ -90,9 +102,21 @@ async function getCoordinates(watchId, e) {
     return watchId
 }
 
+function setDestiny(ev, lat, lng) {
+    pickupLatDestiny.value = lat;
+    pickupLngDestiny.value = lng;
+    impDestiny.value = `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`;
+}
+
+function setOrigin(ev, lat, lng) {
+    pickupLatOrigin.value = lat;
+    pickupLngOrigin.value = lng;
+    impOrigin.value = `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`;
+}
+
 
 function init(){
-    initializeMap();
+    initializeMap(setDestiny, setOrigin);
 
     let watchId = null;
     //Listeners--------------------------------------------
