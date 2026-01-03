@@ -102,16 +102,36 @@ async function getCoordinates(watchId, e) {
     return watchId
 }
 
-function setDestiny(ev, lat, lng) {
+async function setDestiny(ev, lat, lng) {
+    const destinySelected = document.getElementById("btn_select_destination");
+    setButtonLoading(destinySelected, true); 
+    let locationName = await get_location_name(lat, lng);
+    setButtonLoading(destinySelected, false);
+
+    if(!locationName) {
+        return null;
+    }
+
+    impDestiny.value = locationName;
     pickupLatDestiny.value = lat;
     pickupLngDestiny.value = lng;
-    impDestiny.value = `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`;
+    return locationName;
 }
 
-function setOrigin(ev, lat, lng) {
+async function setOrigin(ev, lat, lng) {
+    const originSelected = document.getElementById("btn_select_origin");
+    setButtonLoading(originSelected, true); 
+    let locationName = await get_location_name(lat, lng);
+    setButtonLoading(originSelected, false);
+
+    if(!locationName) {
+        return null;
+    }
+
+    impOrigin.value = locationName;
     pickupLatOrigin.value = lat;
     pickupLngOrigin.value = lng;
-    impOrigin.value = `Lat: ${lat.toFixed(5)}, Lng: ${lng.toFixed(5)}`;
+    return locationName;
 }
 
 
