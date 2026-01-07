@@ -1,5 +1,5 @@
-import { drawRoute } from './routing.js';
-import { showErrorToast } from "../../common/ui_messages.js";
+import { drawRoute } from '../services/routing.js';
+import { showErrorToast } from "../../../common/ui_messages.js";
 
 let map;
 let pickupMarker;
@@ -37,7 +37,7 @@ export function setPickupMarkerOrigin(lat, lng, msg) {
   }
 }
 
-function setPickupMarkerDestiny(lat, lng, msg) {
+export function setPickupMarkerDestiny(lat, lng, msg) {
   pickUpMakerDestiny?.remove();
   pickUpMakerDestiny = null;
   pickUpMakerDestiny = L.marker([lat, lng])
@@ -103,6 +103,16 @@ function setPickupMarkerCustom(latitude, longitude, destiny, origin) {
 export function clearPickupMarker() {
   pickupMarker?.remove();
   pickupMarker = null;
+}
+
+export function clearPickupMarkerOrigin() {
+  pickUpMakerOrigin?.remove();
+  pickUpMakerOrigin = null;
+}
+
+export function clearPickupMarkerDestiny() {
+  pickUpMakerDestiny?.remove();
+  pickUpMakerDestiny = null;
 }
 
 function drawRouteWrapper() {

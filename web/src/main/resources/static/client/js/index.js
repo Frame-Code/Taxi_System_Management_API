@@ -1,7 +1,8 @@
-import { setPickupMarkerOrigin, clearPickupMarker, initializeMap } from "./map.js";
-import { get_location_name } from "./client.js";
+import { setPickupMarkerOrigin, setPickupMarkerDestiny, clearPickupMarkerOrigin, clearPickupMarkerDestiny, initializeMap } from "./services/map.js";
+import { get_location_name } from "./api/client.js";
 import { setButtonLoading } from "../../common/loading_button.js";
 import { showErrorToast } from "../../common/ui_messages.js";
+import { attachAutocomplete } from "./suggestions_address.js";
 
 const impOrigin = document.getElementById("imp_origen");
 const pickupActions = document.getElementById("pickupActions");
@@ -104,9 +105,13 @@ async function getCoordinates(watchId, e) {
 
 async function setDestiny(ev, lat, lng) {
     const destinySelected = document.getElementById("btn_select_destination");
-    setButtonLoading(destinySelected, true); 
+    if(destinySelected) 
+        setButtonLoading(destinySelected, true); 
+
     let locationName = await get_location_name(lat, lng);
-    setButtonLoading(destinySelected, false);
+
+    if(destinySelected) 
+        setButtonLoading(destinySelected, false);
 
     if(!locationName) {
         return null;
@@ -120,9 +125,13 @@ async function setDestiny(ev, lat, lng) {
 
 async function setOrigin(ev, lat, lng) {
     const originSelected = document.getElementById("btn_select_origin");
-    setButtonLoading(originSelected, true); 
+    if(originSelected) 
+        setButtonLoading(originSelected, true);  
+
     let locationName = await get_location_name(lat, lng);
-    setButtonLoading(originSelected, false);
+    
+    if(originSelected) 
+        setButtonLoading(originSelected, false);
 
     if(!locationName) {
         return null;
@@ -146,6 +155,47 @@ function init(){
         watchId = await getCoordinates(watchId, e);
     });
 
+    // Initialize autocomplete for pickup and destination inputs
+    attachAutocomplete({
+        inputEl: impOrigin,
+        sugEl: document.getElementById("pickupSug"),
+        onSelected: async ({ displayName, lat, lng, raw }) => {
+            let origin = await setOrigin(null, lat, lng);
+            if(!origin)  {
+                pickupLatOrigin.value = null;
+                pickupLngOrigin.value = null;
+                impOrigin.value = "";
+                clearPickupMarkerOrigin();
+                return;
+            }
+
+            pickupLatOrigin.value = lat;
+            pickupLngOrigin.value = lng;
+            impOrigin.value = displayName;
+            setPickupMarkerOrigin(lat, lng, "Tu lugar de recogida");
+        }
+    });
+
+    attachAutocomplete({
+        inputEl: impDestiny,
+        sugEl: document.getElementById("dropoffSug"),
+        onSelected: async ({ displayName, lat, lng, raw }) => {
+            let destiny = await setDestiny(null, lat, lng);
+            if(!destiny) {
+                pickupLatDestiny.value = null;
+                pickupLngDestiny.value = null;
+                impDestiny.value = "";    
+                clearPickupMarkerDestiny();
+                return;
+            }
+
+            pickupLatDestiny.value = lat;
+            pickupLngDestiny.value = lng;
+            impDestiny.value = displayName;
+            setPickupMarkerDestiny(lat, lng, "Tu destino");
+            
+        }
+    }); 
 }
 
 //--- Main ---
