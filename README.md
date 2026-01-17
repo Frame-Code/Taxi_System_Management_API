@@ -44,11 +44,11 @@ App expuesta en `http://localhost:8080`.
 ## Endpoints clave (resumen)
 
 - `GET /` — health simple.
-- `GET /api/location_taxi/verify_location?latitude={lat}&longitude={lon}`
-- `POST /api/cabs/search_cab` — body: `CoordinatesDTO`
-- `GET /api/cabs/get_info_ride` — body: `FullCoordinatesDTO`
-- `POST /api/cabs/accept_road` — body: `AcceptRoadDTO`
-- `POST /api/ride_status/set` — body: `SetStatusDTO`
+- `GET /api/location/verify?latitude={lat}&longitude={lon}`
+- `POST /api/cab/search` — body: `CoordinatesDTO`
+- `GET /api/ride/info` — body: `FullCoordinatesDTO`
+- `POST /api/rideaccept` — body: `AcceptRoadDTO`
+- `POST /api/ride/status` — body: `SetStatusDTO`
 
 Detalles completos y ejemplos en `docs/API.md`.
 

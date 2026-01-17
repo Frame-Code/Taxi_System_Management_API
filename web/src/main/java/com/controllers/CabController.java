@@ -10,6 +10,7 @@ import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCabFactory;
 import io.github.frame_code.domain.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,27 +24,17 @@ import java.util.Optional;
 
 @CommonsLog
 @RestController
-@RequestMapping("/api/cabs")
+@RequestMapping("/api/cab")
 @AllArgsConstructor
-@NoArgsConstructor
-public class MatchCabController {
+@RequiredArgsConstructor
+public class CabController {
     @Qualifier("byDistance")
-    @Autowired
-    private AbstractSearchCabFactory abstractSearchCabFactory;
+    private final AbstractSearchCabFactory abstractSearchCabFactory;
+    private final IMatchMediator mediator;
+    private final ClientRepository clientRepository;
 
-    @Autowired
-    private IMatchMediator mediator;
 
-    @Autowired
-    private IRideService rideService;
-
-    @Autowired
-    private ClientRepository clientRepository;
-
-    @Autowired
-    private IRideUseCaseService rideUseCaseService;
-
-    @PostMapping(value = "/search_cab")
+    @PostMapping(value = "/search")
     public ResponseEntity<BaseResponse> searchCabs(@RequestBody final CoordinatesDTO coordinatesDTO) {
         AbstractSearchCab abstractSearchCab = abstractSearchCabFactory.createSearchCab(new SearchCabDTO(coordinatesDTO));
         var listTaxi = abstractSearchCab.findCabs();
@@ -76,47 +67,4 @@ public class MatchCabController {
                         .timeStamp(LocalDateTime.now())
                         .build());
     }
-
-    @PostMapping(value = "/get_info_ride")
-    public ResponseEntity<BaseResponse> getInfoRide(@RequestBody final FullCoordinatesDTO coordinatesDTO) {
-        try {
-            Optional<DistanceInfoDTO> distanceInfoDTO = rideService.getRideInfo(coordinatesDTO);
-            if(distanceInfoDTO.isEmpty()) return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(BaseResponse.builder()
-                        .response(null)
-                        .status_code("503")
-                        .status_message("Error")
-                        .message("Can't get the ride info...")
-                        .timeStamp(LocalDateTime.now())
-                        .build()
-                    );
-
-            double totalPrice = rideService.getTotalPrice(distanceInfoDTO.get().approxDistance(), distanceInfoDTO.get().approxSeconds());
-            RideInfoDTO rideInfoDTO = new RideInfoDTO(distanceInfoDTO.get(), totalPrice);
-            log.info("Returning ride info...");
-            return ResponseEntity.ok(BaseResponse.builder()
-                    .response(rideInfoDTO)
-                    .status_code("200")
-                    .status_message("Successfully")
-                    .message("The ride info")
-                    .timeStamp(LocalDateTime.now())
-                    .build());
-        } catch (IOException e) {
-            log.error("Error, can't get the ride info");
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PostMapping(value = "/accept_road")
-    public ResponseEntity<BaseResponse> acceptRoad(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
-        rideUseCaseService.acceptRoad(acceptRoadDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
-        return ResponseEntity.ok(BaseResponse.builder()
-                        .response(null)
-                        .message("The road was accepted")
-                        .status_message("Successfully")
-                        .timeStamp(LocalDateTime.now())
-                        .status_code("200")
-                .build());
-    }
-
 }

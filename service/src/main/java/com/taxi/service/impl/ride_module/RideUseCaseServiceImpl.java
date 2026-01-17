@@ -4,8 +4,11 @@ import Enums.entitiesEnums.STATUS_ROAD;
 import com.taxi.service.interfaces.ride_module.*;
 import dto.AcceptRoadDTO;
 import dto.ClientDTO;
+import dto.ResponseSetStatusDTO;
 import dto.UserAuditoryDTO;
 import io.github.frame_code.domain.entities.*;
+import io.github.frame_code.domain.repository.IRideStatusRepository;
+import io.github.frame_code.domain.repository.IRoadRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.locationtech.jts.geom.Point;
@@ -14,6 +17,7 @@ import utils.AuditoryUtils;
 import utils.GeolocationUtils;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @CommonsLog
@@ -25,6 +29,8 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
     private final ICityService cityService;
     private final IClientService clientService;
     private final IRideStatusService statusService;
+    private final IRoadRepository repository;
+    private final IRideStatusRepository statusRepository;
 
     @Override
     public void acceptRoad(AcceptRoadDTO roadDTO, ClientDTO clientDTO) {
@@ -58,5 +64,24 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
                 .build();
         service.save(road);
         log.info("Road saved correctly");
+    }
+
+    @Override
+    public ResponseSetStatusDTO setStatus(STATUS_ROAD status, Long idRide) {
+        Optional<Road> road = repository.findById(idRide);
+        Optional<RideStatus> rideStatus = statusRepository.findByStatus(status);
+
+        if(road.isEmpty() || rideStatus.isEmpty())
+            return new ResponseSetStatusDTO("Ride not found", false);
+
+        if(!isPosibleSet(road.get().getStatus(), rideStatus.get()))
+            return new ResponseSetStatusDTO("Invalid status to set, the order is not correct", false);
+        road.get().setStatus(rideStatus.get());
+        repository.save(road.get());
+        return new ResponseSetStatusDTO("Status saved", true);
+    }
+
+    private boolean isPosibleSet(RideStatus currentStatus, RideStatus statusToSet) {
+        return currentStatus.getStatusOrder() < statusToSet.getStatusOrder();
     }
 }

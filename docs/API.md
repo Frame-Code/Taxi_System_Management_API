@@ -9,13 +9,13 @@ Todas las respuestas usan `BaseResponse` con campos comunes: `status_code`, `sta
 
 ## Ubicación
 
-- GET `/api/location_taxi/verify_location?latitude={lat}&longitude={lon}`
+- GET `/api/location/verify?latitude={lat}&longitude={lon}`
   - 200 OK (`Location disponible`) o 204 lógico (sin soporte/coordenadas no encontradas) encapsulado en `BaseResponse`.
   - Ejemplo `response`: `{ "latitude": -2.19, "longitude": -79.88 }`
 
 ## Cabs
 
-- POST `/api/cabs/search_cab`
+- POST `/api/cab/search`
   - Body `CoordinatesDTO`:
     ```json
     { "latitude": -2.19, "longitude": -79.88 }
@@ -32,7 +32,7 @@ Todas las respuestas usan `BaseResponse` con campos comunes: `status_code`, `sta
     }
     ```
 
-- GET `/api/cabs/get_info_ride`
+- GET `/api/ride/info`
   - Body `FullCoordinatesDTO`:
     ```json
     { "origin": {"latitude": -2.19, "longitude": -79.88},
@@ -47,7 +47,7 @@ Todas las respuestas usan `BaseResponse` con campos comunes: `status_code`, `sta
     ```
   - 503/409 si no se puede obtener la ruta.
 
-- POST `/api/cabs/accept_road`
+- POST `/api/ride/accept`
   - Body `AcceptRoadDTO`:
     ```json
     {
@@ -66,7 +66,7 @@ Todas las respuestas usan `BaseResponse` con campos comunes: `status_code`, `sta
 
 ## Ride Status
 
-- POST `/api/ride_status/set`
+- POST `/api/ride/status`
   - Body `SetStatusDTO`:
     ```json
     { "status": "INITIALIZED|ACCEPTED|PICK_UP|ARRIVED|FINISHED", "idRide": 99 }

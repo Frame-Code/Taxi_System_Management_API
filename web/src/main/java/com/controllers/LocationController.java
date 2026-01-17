@@ -16,13 +16,13 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/api/location_taxi")
+@RequestMapping(value = "/api/location")
 @RequiredArgsConstructor
-public class VerifyLocationController {
+public class LocationController {
     private final IParseCoordinatesService parseCoordinatesService;
     private final IVerifyLocationService verifyLocationService;
 
-    @GetMapping(value = "/verify_location")
+    @GetMapping(value = "/verify")
     public ResponseEntity<BaseResponse> verifyLocation(
             @RequestParam("latitude") final Double latitude,
             @RequestParam("longitude") final Double longitude) {
