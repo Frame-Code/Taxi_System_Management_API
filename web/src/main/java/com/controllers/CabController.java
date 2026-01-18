@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,6 @@ import java.util.Optional;
 @CommonsLog
 @RestController
 @RequestMapping("/api/cab")
-@AllArgsConstructor
 @RequiredArgsConstructor
 public class CabController {
     @Qualifier("byDistance")
@@ -33,17 +33,19 @@ public class CabController {
     private final IMatchMediator mediator;
     private final ClientRepository clientRepository;
 
-
-    @PostMapping(value = "/search")
-    public ResponseEntity<BaseResponse> searchCabs(@RequestBody final CoordinatesDTO coordinatesDTO) {
-        AbstractSearchCab abstractSearchCab = abstractSearchCabFactory.createSearchCab(new SearchCabDTO(coordinatesDTO));
+    @GetMapping(value = "/search")
+    public ResponseEntity<BaseResponse> searchCabs(
+            @RequestParam("latitude") @NotNull final Double latitude,
+            @RequestParam("longitude") @NotNull final Double longitude) {
+        SearchCabDTO dto = new SearchCabDTO(new CoordinatesDTO(latitude, longitude));
+        AbstractSearchCab abstractSearchCab = abstractSearchCabFactory.createSearchCab(dto);
         var listTaxi = abstractSearchCab.findCabs();
         if(listTaxi.isEmpty()) return ResponseEntity.ok(BaseResponse.builder()
                         .response(null)
                         .message("No cabs founded nearby from you")
                         .timeStamp(LocalDateTime.now())
                         .status_message("Successfully")
-                        .status_code("200")
+                        .status_code("204")
                         .build());
 
         for (TaxiDTO taxiDTO : listTaxi) {
@@ -61,7 +63,7 @@ public class CabController {
         }
         return ResponseEntity.ok(BaseResponse.builder()
                         .response(null)
-                        .status_code("200")
+                        .status_code("204")
                         .status_message("Successfully")
                         .message("No cabs accepted the road")
                         .timeStamp(LocalDateTime.now())

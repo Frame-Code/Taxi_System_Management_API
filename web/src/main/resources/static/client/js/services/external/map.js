@@ -1,5 +1,5 @@
-import { drawRoute } from '../services/routing.js';
-import { showErrorToast } from "../../../common/ui_messages.js";
+import { drawRoute } from '../external/routing.js';
+import { showErrorToast } from "../../../../common/ui_messages.js";
 
 let map;
 let pickupMarker;

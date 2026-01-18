@@ -1,5 +1,5 @@
-import { showErrorToast } from "../../common/ui_messages.js";
-import { searchAddressNominatim } from "./services/addresses.js";
+import { showErrorToast } from "../../../common/ui_messages.js";
+import { searchAddressNominatim } from "./external/addresses.js";
 
 function debounce(fn, delay = 350) {
   let t = null;

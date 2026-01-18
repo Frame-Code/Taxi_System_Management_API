@@ -1,4 +1,4 @@
-import { showErrorToast } from "../../../common/ui_messages.js";
+import { showErrorToast } from "../../../../common/ui_messages.js";
 
 export async function searchAddressNominatim(query, { signal, countryCodes = "ec", limit = 6 } = {}) {
   const url = new URL("https://nominatim.openstreetmap.org/search");
