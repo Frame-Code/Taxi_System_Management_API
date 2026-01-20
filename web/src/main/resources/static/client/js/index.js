@@ -4,6 +4,7 @@ import { setButtonLoading } from "../../common/loading_button.js";
 import { showErrorToast } from "../../common/ui_messages.js";
 import { attachAutocomplete } from "./services/suggestions_service.js";
 import { searchCab } from "./services/api/cab_service.js";
+import { handle_cab_search } from "./services/api/ride_service.js";
 
 const impOrigin = document.getElementById("imp_origen");
 const pickupActions = document.getElementById("pickupActions");
@@ -17,7 +18,6 @@ const pickupLatDestiny = document.getElementById("pickupLatDestiny");
 const pickupLngDestiny = document.getElementById("pickupLngDestiny");
 
 const btnSearchCab = document.getElementById("btn_search_cab");
-const acceptRideModal = new bootstrap.Modal(document.getElementById('acceptRideModal'));
 
 function showActions(e){ 
     pickupActions.classList.remove("d-none");
@@ -149,23 +149,12 @@ async function setOrigin(ev, lat, lng) {
 
 
 async function btnSearchCabHandler() {
-    acceptRideModal.show();
-    /*setButtonLoading(btnSearchCab, true);
     if(!pickupLatOrigin.value || !pickupLngOrigin.value || !pickupLatDestiny.value || !pickupLngDestiny.value) {
         showErrorToast("Por favor, ingresa tanto el lugar de recogida como el destino.");
-        setButtonLoading(btnSearchCab, false);
         return;
     }
 
-    let response = await searchCab(pickupLatOrigin.value, pickupLngOrigin.value);
-    setButtonLoading(btnSearchCab, false);
-    if(!response) {
-        return;
-    }
-
-    acceptRideModal.show();
-    //Redirigir a pestaña para que el cliente acepte el taxi (pendiente de implementar)*/
-    console.log("Taxis encontrado:", response);
+    await handle_cab_search(pickupLatOrigin.value, pickupLngOrigin.value, pickupLatDestiny.value, pickupLngDestiny.value, btnSearchCab);
 }
 
 function init(){
@@ -225,4 +214,3 @@ function init(){
 
 //--- Main ---
 init();
-acceptRideModal.show();
