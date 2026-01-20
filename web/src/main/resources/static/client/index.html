@@ -111,7 +111,7 @@
             </div>
         </footer>
         <!-- Feedback Modal-->
-        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header bg-gradient-primary-to-secondary p-4">
@@ -165,6 +165,97 @@
                             <!-- Submit Button-->
                             <div class="d-grid"><button class="btn btn-primary rounded-pill btn-lg disabled" id="submitButton" type="submit">Submit</button></div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="acceptRideModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content w-500">
+                    <div class="modal-header bg-gradient-primary-to-secondary p-4">
+                        <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">Información de la ruta</h5>
+                        <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body border-0 p-4">
+                        <div class="card mb-2 shadow-sm">
+                            <h4 class="card-header">Datos del taxista</h4>
+                            <div class="row p-2">
+                                <div class="col-md-6 mb-3">
+                                    <div class="card m-2 shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-3">Información personal: </h5>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item" id="li_names"><strong>Nombre:</strong></li>
+                                                        <li class="list-group-item" id="li_age"><strong>Edad:</strong></li>
+
+                                                    </ul>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item" id="li_last_names"><strong>Apellido:</strong></li>
+                                                        <li class="list-group-item" id="li_email"><strong>Email:</strong></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card m-2 shadow-sm">
+
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-3">Información del vehiculo: </h5>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item" id="li_vh_color"><strong>Color:</strong></li>
+                                                        <li class="list-group-item" id="li_vh_model"><strong>Modelo:</strong></li>
+
+                                                    </ul>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item" id="li_vh_brand"><strong>Marca:</strong></li>
+                                                        <li class="list-group-item" id="li_vh_license_plate"><strong>Placa:</strong></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-2 shadow-sm centered">
+                            <h4 class="card-header">Datos de la ruta</h4>
+                            <div class="row p-2">
+                                <div class="col-md-6 mb-3">
+                                    <div class="card m-2 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item" id="li_price"><strong>Precio total:</strong></li>
+                                                        <li class="list-group-item" id="li_distance"><strong>Distancia aprox.:</strong></li>
+                                                        <li class="list-group-item" id="li_duration"><strong>Minutos aprox.:</strong></li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-primary rounded-pill btn-lg" id="submitButton">Comenzar ruta</button>
+                        </div>
                     </div>
                 </div>
             </div>

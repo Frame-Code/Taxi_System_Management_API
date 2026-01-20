@@ -17,6 +17,7 @@ const pickupLatDestiny = document.getElementById("pickupLatDestiny");
 const pickupLngDestiny = document.getElementById("pickupLngDestiny");
 
 const btnSearchCab = document.getElementById("btn_search_cab");
+const acceptRideModal = new bootstrap.Modal(document.getElementById('acceptRideModal'));
 
 function showActions(e){ 
     pickupActions.classList.remove("d-none");
@@ -148,7 +149,8 @@ async function setOrigin(ev, lat, lng) {
 
 
 async function btnSearchCabHandler() {
-    setButtonLoading(btnSearchCab, true);
+    acceptRideModal.show();
+    /*setButtonLoading(btnSearchCab, true);
     if(!pickupLatOrigin.value || !pickupLngOrigin.value || !pickupLatDestiny.value || !pickupLngDestiny.value) {
         showErrorToast("Por favor, ingresa tanto el lugar de recogida como el destino.");
         setButtonLoading(btnSearchCab, false);
@@ -161,7 +163,8 @@ async function btnSearchCabHandler() {
         return;
     }
 
-    //Redirigir a pestaña para que el cliente acepte el taxi (pendiente de implementar)
+    acceptRideModal.show();
+    //Redirigir a pestaña para que el cliente acepte el taxi (pendiente de implementar)*/
     console.log("Taxis encontrado:", response);
 }
 
@@ -222,3 +225,4 @@ function init(){
 
 //--- Main ---
 init();
+acceptRideModal.show();
