@@ -3,8 +3,8 @@ import { get_location_name } from "./services/api/location_service.js";
 import { setButtonLoading } from "../../common/loading_button.js";
 import { showErrorToast } from "../../common/ui_messages.js";
 import { attachAutocomplete } from "./services/suggestions_service.js";
-import { searchCab } from "./services/api/cab_service.js";
 import { handle_cab_search } from "./services/api/ride_service.js";
+import { InitPaymentMethod } from "./services/payment_method.js";
 
 const impOrigin = document.getElementById("imp_origen");
 const pickupActions = document.getElementById("pickupActions");
@@ -18,6 +18,9 @@ const pickupLatDestiny = document.getElementById("pickupLatDestiny");
 const pickupLngDestiny = document.getElementById("pickupLngDestiny");
 
 const btnSearchCab = document.getElementById("btn_search_cab");
+const btnAcceptRide = document.getElementById("btn_accept_ride");
+const acceptRideModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('acceptRideModal'));
+const paymentMethodModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('paymentMethodModal'));
 
 function showActions(e){ 
     pickupActions.classList.remove("d-none");
@@ -157,14 +160,21 @@ async function btnSearchCabHandler() {
     await handle_cab_search(pickupLatOrigin.value, pickupLngOrigin.value, pickupLatDestiny.value, pickupLngDestiny.value, btnSearchCab);
 }
 
+function btnAcceptRideHandler() {
+    acceptRideModal.hide();
+    paymentMethodModal.show();
+}
+
 function init(){
     initializeMap(setDestiny, setOrigin);
+    InitPaymentMethod();
 
     let watchId = null;
     //Listeners--------------------------------------------
     impOrigin.addEventListener("click", showActions);
     document.addEventListener("click", hideActions);
     btnSearchCab.addEventListener("click", btnSearchCabHandler);
+    btnAcceptRide.addEventListener("click", btnAcceptRideHandler);
     btnUseCurrentLocation.addEventListener("click", async (e) => {
         watchId = await getCoordinates(watchId, e);
     });

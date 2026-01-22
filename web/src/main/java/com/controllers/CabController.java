@@ -1,27 +1,18 @@
 package com.controllers;
 
 import com.taxi.service.interfaces.matcher_module.IMatchMediator;
-import com.taxi.service.interfaces.ride_module.IRideService;
-import com.taxi.service.interfaces.ride_module.IRideUseCaseService;
 import dto.*;
 import com.taxi.mappers.ClientMapper;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCabFactory;
 import io.github.frame_code.domain.repository.ClientRepository;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @CommonsLog
 @RestController

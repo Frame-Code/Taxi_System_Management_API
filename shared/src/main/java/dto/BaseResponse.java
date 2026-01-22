@@ -13,6 +13,6 @@ public class BaseResponse {
     private String status_code;
     private String status_message;
     private String message;
-    private LocalDateTime timeStamp;
+    private LocalDateTime timeStamp = LocalDateTime.now();
     private final String thanks = "Thanks for using this API :)";
 }

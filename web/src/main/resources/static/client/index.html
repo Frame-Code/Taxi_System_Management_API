@@ -241,10 +241,17 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item" id="li_price"><strong>Precio total:</strong></li>
                                                         <li class="list-group-item" id="li_distance"><strong>Distancia aprox.:</strong></li>
                                                         <li class="list-group-item" id="li_duration"><strong>Minutos aprox.:</strong></li>
+                                                    </ul>
+                                                </div>
 
+                                                <div class="col-md-6">
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item"><strong>Precio total:</strong></li>
+                                                        <div id="li_price" class="fs-4 fw-bold text-success ms-4">
+                                                            
+                                                        </div>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -254,7 +261,66 @@
                             </div>
                         </div>
                         <div class="d-grid mt-3">
-                            <button class="btn btn-primary rounded-pill btn-lg" id="submitButton">Comenzar ruta</button>
+                            <button class="btn btn-primary rounded-pill btn-lg" id="btn_accept_ride">Aceptar ruta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="paymentMethodModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-gradient-primary-to-secondary p-4">
+                        <h5 class="modal-title font-alt text-white" id="feedbackModalLabel">Información de la ruta</h5>
+                        <button class="btn-close btn-close-white" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body border-0 p-4">
+                        <div class="card mb-2 shadow-sm">
+                            <h4 class="card-header">Información de pago</h4>
+                            <div class="row p-2">
+                                <div class="d-flex gap-4 flex-nowrap justify-content-center overflow-auto py-2" role="radiogroup" aria-label="Selecciona una opción">
+                                <!-- Opción 1 -->
+                                <input class="btn-check" type="radio" name="imgOption" id="optCash" autocomplete="off" checked>
+                                <label class="img-option" for="optCash">
+                                    En efectivo</br>
+                                    <img src="assets/img/payment_method/cash-logo.png" alt="Efectivo" style="width: 80px; height: 80px;">
+                                </label>
+
+                                <!-- Opción 2 -->
+                                <input class="btn-check" type="radio" name="imgOption" id="optVisa" autocomplete="off">
+                                <label class="img-option" for="optVisa">
+                                    Visa</br>
+                                    <img src="assets/img/payment_method/visa-logo.png" alt="Visa" style="width: 80px; height: 80px;">
+                                </label>
+
+                                <!-- Opción 3 -->
+                                <input class="btn-check" type="radio" name="imgOption" id="optMasterCard" autocomplete="off">
+                                <label class="img-option" for="optMasterCard">
+                                        MasterCard</br>
+                                    <img src="assets/img/payment_method/mastercard-logo.png" alt="MasterCard" style="width: 80px; ">
+                                </label>
+
+                                <input class="btn-check" type="radio" name="imgOption" id="optPaypal" autocomplete="off">
+                                <label class="img-option" for="optPaypal">
+                                    PayPal</br>
+                                    <img src="assets/img/payment_method/paypal-logo.png" alt="PayPal" style="width: 80px; height: 80px;">
+                                </label>
+                                </div>
+                            </div>
+                            <div class="card mb-2 m-3 shadow-sm centered align-items-center d-none" id="messageCash">
+                                <h4 class="mt-3">Recuerda llevar cambio!</h4>
+                                <li class="list-group-item"><strong>Precio total:</strong></li>
+                                <div id="div_price" class="fs-4 fw-bold text-success"></div>
+                            </div>
+                            <div class="card mb-2 m-3 shadow-sm centered align-items-center d-none" id="messageOther">
+                                <h4 class="mt-3">Proximamente disponible este metodo de pago!</h4>
+                                <img src="assets/img/payment_method/building-web.png" alt="Opcion en construcción" style="width: 80px; height: 80px;">
+                            </div>
+                        </div>
+
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-primary rounded-pill btn-lg" id="btn_comenzar_ruta">Comenzar ruta</button>
                         </div>
                     </div>
                 </div>

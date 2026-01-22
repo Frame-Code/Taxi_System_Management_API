@@ -21,6 +21,7 @@ export async function handle_cab_search(latOrigin, lngOrigin, latDestiny, lngDes
     setButtonLoading(btnSearchCab, true);
     let response = await searchCab(latOrigin, lngOrigin);
     if(!response) {
+        setButtonLoading(btnSearchCab, false);
         return;
     }
 
@@ -46,7 +47,7 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     li_vh_license_plate.innerHTML = `<strong>Matrícula:</strong> ${cabInformation.vehicleDTO.licensePlate}`;
     li_vh_brand.innerHTML = `<strong>Marca:</strong> ${cabInformation.vehicleDTO.brand}`;
 
-    li_price.innerHTML = `<strong>Precio total:</strong> $${rideInfo.response.totalPrice}`;
+    li_price.innerHTML = `<strong>$${rideInfo.response.totalPrice}</strong>`;
     li_distance.innerHTML = `<strong>Distancia aprox.:</strong> ${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
     li_duration.innerHTML = `<strong>Minutos aprox.:</strong> ${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
     showSuccessToast("Información de la ruta obtenida correctamente.");
