@@ -35,3 +35,11 @@
 .btn-check:focus + .img-option{
     box-shadow: 0 0 0 .25rem rgba(13,110,253,.35);
 }
+
+.btn-shadow{
+  box-shadow: 0 6px 14px rgba(0,0,0,.25);
+}
+.btn-shadow:active{
+  box-shadow: 0 3px 8px rgba(0,0,0,.25);
+  transform: translateY(1px);
+}

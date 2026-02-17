@@ -37,19 +37,19 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     }
 
 
-    li_name.innerHTML = `<strong>Nombre:</strong> ${cabInformation.driverDTO.userDTO.names}`;
-    li_last_name.innerHTML = `<strong>Apellido:</strong> ${cabInformation.driverDTO.userDTO.lastNames}`;
-    li_email.innerHTML = `<strong>Email:</strong> ${cabInformation.driverDTO.userDTO.email}`;
-    li_age.innerHTML = `<strong>Edad:</strong> ${cabInformation.driverDTO.userDTO.age}`;
+    li_name.innerHTML = `<strong>Nombre:</strong><br/>${cabInformation.driverDTO.userDTO.names}`;
+    li_last_name.innerHTML = `<strong>Apellido:</strong><br/>${cabInformation.driverDTO.userDTO.lastNames}`;
+    li_email.innerHTML = `<strong>Email:</strong><br/>${cabInformation.driverDTO.userDTO.email}`;
+    li_age.innerHTML = `<strong>Edad:</strong><br/>${cabInformation.driverDTO.userDTO.age}`;
 
-    li_vh_color.innerHTML = `<strong>Color:</strong> ${cabInformation.vehicleDTO.color}`;
-    li_vh_model.innerHTML = `<strong>Modelo:</strong> ${cabInformation.vehicleDTO.model}`;
-    li_vh_license_plate.innerHTML = `<strong>Matrícula:</strong> ${cabInformation.vehicleDTO.licensePlate}`;
-    li_vh_brand.innerHTML = `<strong>Marca:</strong> ${cabInformation.vehicleDTO.brand}`;
+    li_vh_color.innerHTML = `<strong>Color:</strong><br/>${cabInformation.vehicleDTO.color}`;
+    li_vh_model.innerHTML = `<strong>Modelo:</strong><br/>${cabInformation.vehicleDTO.model}`;
+    li_vh_license_plate.innerHTML = `<strong>Matrícula:</strong><br/>${cabInformation.vehicleDTO.licensePlate}`;
+    li_vh_brand.innerHTML = `<strong>Marca:</strong><br/>${cabInformation.vehicleDTO.brand}`;
 
-    li_price.innerHTML = `<strong>$${rideInfo.response.totalPrice}</strong>`;
-    li_distance.innerHTML = `<strong>Distancia aprox.:</strong> ${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
-    li_duration.innerHTML = `<strong>Minutos aprox.:</strong> ${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
+    li_price.innerHTML = `<br/><strong>$${rideInfo.response.totalPrice}</strong>`;
+    li_distance.innerHTML = `<strong>Distancia aprox.:</strong><br/>${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
+    li_duration.innerHTML = `<strong>Minutos aprox.:</strong><br/>${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
     showSuccessToast("Información de la ruta obtenida correctamente.");
     acceptRideModal.show();
 }
