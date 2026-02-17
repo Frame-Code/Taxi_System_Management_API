@@ -1,6 +1,6 @@
-# Taxi API (Uber-like) — Monorepo
+# Stin City Taxi
 
-Proyecto multi-módulo (Maven) para una API tipo Uber: búsqueda de taxis cercanos, negociación/aceptación de viajes, cálculo de ruta y precio, y gestión del ciclo de vida del viaje.
+Proyecto multi-módulo (Maven) para una API de búsqueda de taxis cercanos, negociación/aceptación de viajes, cálculo de ruta y precio, y gestión del ciclo de vida del viaje.
 
 - Módulos: `web` (REST API), `service` (dominio de negocio), `domain` (JPA + Repositorios), `shared` (DTOs/Enums/Utils).
 - Base de datos: SQL Server con tipos espaciales (`geography`) y un procedimiento almacenado para cabs cercanos.
