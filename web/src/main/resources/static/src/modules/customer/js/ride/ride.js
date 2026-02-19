@@ -1,4 +1,3 @@
-import { handle_cab_search } from "../api/internal/ride_service.js";
 import { showErrorToast, showInfoToast,showSuccessToast } from "../../../../shared/components/ui_messages.js";
 import { setButtonLoading } from "../../../../shared/components/loading_button.js";
 import { searchCab } from "../api/internal/cab_service.js";
@@ -77,9 +76,3 @@ export async function searchCabHandler() {
     await handle_cab_search(pickupLatOrigin.value, pickupLngOrigin.value, pickupLatDestiny.value, pickupLngDestiny.value, btnSearchCab);
 }
 
-function init() {
-    initializeMap(null, null);
-
-}
-
-init();

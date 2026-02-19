@@ -101,8 +101,8 @@ function init(){
     });
 
     // Initialize autocomplete for pickup and destination inputs
-    attachAutocomplete(getJsonAutoComplete(true));
-    attachAutocomplete(getJsonAutoComplete(false)); 
+    attachAutocomplete(getJsonAutoComplete(true, setOrigin));
+    attachAutocomplete(getJsonAutoComplete(false, setDestiny)); 
 }
 
 //--- Main ---
