@@ -1,4 +1,4 @@
-import { showErrorToast, showSuccessToast } from "../../../../common/ui_messages.js";
+import { showErrorToast, showSuccessToast } from "../../../../../shared/components/ui_messages.js";
 
 let routeLayer;
 

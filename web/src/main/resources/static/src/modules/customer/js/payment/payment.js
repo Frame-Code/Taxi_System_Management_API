@@ -1,4 +1,4 @@
-import { showErrorToast, showInfoToast } from '../../../../common/ui_messages.js';
+import { showErrorToast, showInfoToast } from '../../../../shared/components/ui_messages.js';
 
 const li_price = document.getElementById("li_price");
 const div_price = document.getElementById("div_price");
@@ -15,7 +15,6 @@ export function InitPaymentMethod() {
         });
     });
 }
-
 
 function process(selected) {
     switch(selected) {

@@ -1,6 +1,7 @@
-import { API_URL, ENDPOINTS } from '../../../../config/api.config.js';
-import { handleApiError } from '../../../../common/error_handler.js';
-import { showSuccessToast, showInfoToast } from '../../../../common/ui_messages.js';
+import { API_URL, ENDPOINTS } from '../../../../../app/config/api.config.js';
+import { handleApiError } from '../../../../../shared/components/error_handler.js';
+import { showSuccessToast, showInfoToast } from '../../../../../shared/components/ui_messages.js';
+
 
 export async function verify_location(latitude, longitude) {
     const url = `${API_URL}${ENDPOINTS.LOCATION_VALIDATOR}?latitude=${latitude}&longitude=${longitude}`;

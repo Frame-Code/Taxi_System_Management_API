@@ -55,8 +55,9 @@ public class RideController {
         }
     }
 
-    @PostMapping(value = "/accept")
-    public ResponseEntity<BaseResponse> acceptRoad(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
+    @PostMapping(value = "/start")
+    public ResponseEntity<BaseResponse> startRide(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
+        //Cuando se habilita spring security se modificara con el id del usuario logeado
         rideUseCaseService.acceptRoad(acceptRoadDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
         return ResponseEntity.ok(BaseResponse.builder()
                 .response(null)

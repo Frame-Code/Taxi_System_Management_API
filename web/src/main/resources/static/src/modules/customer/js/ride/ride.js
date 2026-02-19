@@ -1,9 +1,15 @@
-import { API_URL, ENDPOINTS } from '../../../../config/api.config.js';
-import { handleApiError } from '../../../../common/error_handler.js';
-import { showSuccessToast, showInfoToast } from '../../../../common/ui_messages.js';
-import { setButtonLoading } from "../../../../common/loading_button.js";
-import { searchCab } from "./cab_service.js";
+import { handle_cab_search } from "../api/internal/ride_service.js";
+import { showErrorToast, showInfoToast,showSuccessToast } from "../../../../shared/components/ui_messages.js";
+import { setButtonLoading } from "../../../../shared/components/loading_button.js";
+import { searchCab } from "../api/internal/cab_service.js";
+import { getInfoRide } from "../api/internal/ride_service.js";
 
+const acceptRideModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('acceptRideModal'));
+const paymentMethodModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('paymentMethodModal'));
+const pickupLatOrigin = document.getElementById("pickupLatOrigin");
+const pickupLngOrigin = document.getElementById("pickupLngOrigin");
+const pickupLatDestiny = document.getElementById("pickupLatDestiny");
+const pickupLngDestiny = document.getElementById("pickupLngDestiny");
 const li_name = document.getElementById("li_names");
 const li_last_name = document.getElementById("li_last_names");
 const li_email = document.getElementById("li_email");
@@ -15,7 +21,6 @@ const li_vh_color = document.getElementById("li_vh_color");
 const li_vh_model = document.getElementById("li_vh_model");
 const li_vh_license_plate = document.getElementById("li_vh_license_plate");
 const li_vh_brand = document.getElementById("li_vh_brand");
-const acceptRideModal = new bootstrap.Modal(document.getElementById('acceptRideModal'));
 
 export async function handle_cab_search(latOrigin, lngOrigin, latDestiny, lngDestiny, btnSearchCab) {
     setButtonLoading(btnSearchCab, true);
@@ -54,32 +59,27 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     acceptRideModal.show();
 }
 
-async function getInfoRide(latOrigin, lngOrigin, latDestiny, lngDestiny) {
-    const url = `${API_URL}${ENDPOINTS.INFO_RIDE}`;
-    const payload = {
-        origin: {
-            latitude: latOrigin,
-            longitude: lngOrigin
-        },
-        destiny: {
-            latitude: latDestiny,
-            longitude: lngDestiny
-        }
-    }
+export async function acceptRoad(status) {
 
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
-
-    if(!response.ok) {
-        await handleApiError(response);
-        return null;
-    }
-
-    return await response.json();
 }
 
+export function acceptRideHandler() {
+    acceptRideModal.hide();
+    paymentMethodModal.show();
+}
+
+export async function searchCabHandler() {
+    if(!pickupLatOrigin.value || !pickupLngOrigin.value || !pickupLatDestiny.value || !pickupLngDestiny.value) {
+        showErrorToast("Por favor, ingresa tanto el lugar de recogida como el destino.");
+        return;
+    }
+
+    await handle_cab_search(pickupLatOrigin.value, pickupLngOrigin.value, pickupLatDestiny.value, pickupLngDestiny.value, btnSearchCab);
+}
+
+function init() {
+    initializeMap(null, null);
+
+}
+
+init();
