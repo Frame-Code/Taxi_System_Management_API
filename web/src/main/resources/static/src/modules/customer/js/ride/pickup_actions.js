@@ -1,7 +1,14 @@
+import { setPickupMarkerOrigin, setPickupMarkerDestiny, clearPickupMarkerDestiny, clearPickupMarkerOrigin } from "../api/external/map.js";
+
 const pickupActions = document.getElementById("pickupActions");
 const impOrigin = document.getElementById("imp_origen");
 const impDestiny = document.getElementById("imp_destino");
 const pickupStatus = document.getElementById("pickupStatus");
+const pickupLatDestiny = document.getElementById("pickupLatDestiny");
+const pickupLngDestiny = document.getElementById("pickupLngDestiny");
+const pickupLatOrigin = document.getElementById("pickupLatOrigin");
+const pickupLngOrigin = document.getElementById("pickupLngOrigin");
+
 
 export function showActions(e){ 
     pickupActions.classList.remove("d-none");

@@ -2,6 +2,7 @@ import { showErrorToast, showInfoToast,showSuccessToast } from "../../../../shar
 import { setButtonLoading } from "../../../../shared/components/loading_button.js";
 import { searchCab } from "../api/internal/cab_service.js";
 import { getInfoRide } from "../api/internal/ride_service.js";
+import { save, Keys } from "../../../../app/cache/localstorage.js"
 
 const acceptRideModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('acceptRideModal'));
 const paymentMethodModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('paymentMethodModal'));
@@ -20,6 +21,7 @@ const li_vh_color = document.getElementById("li_vh_color");
 const li_vh_model = document.getElementById("li_vh_model");
 const li_vh_license_plate = document.getElementById("li_vh_license_plate");
 const li_vh_brand = document.getElementById("li_vh_brand");
+const btnSearchCab = document.getElementById("btn_search_cab");
 
 export async function handle_cab_search(latOrigin, lngOrigin, latDestiny, lngDestiny, btnSearchCab) {
     setButtonLoading(btnSearchCab, true);
@@ -40,7 +42,6 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
         return;
     }
 
-
     li_name.innerHTML = `<strong>Nombre:</strong><br/>${cabInformation.driverDTO.userDTO.names}`;
     li_last_name.innerHTML = `<strong>Apellido:</strong><br/>${cabInformation.driverDTO.userDTO.lastNames}`;
     li_email.innerHTML = `<strong>Email:</strong><br/>${cabInformation.driverDTO.userDTO.email}`;
@@ -55,11 +56,29 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     li_distance.innerHTML = `<strong>Distancia aprox.:</strong><br/>${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
     li_duration.innerHTML = `<strong>Minutos aprox.:</strong><br/>${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
     showSuccessToast("Información de la ruta obtenida correctamente.");
+    const rideInfoJson = {
+        driver: {
+            names: cabInformation.driverDTO.userDTO.names,
+            lastNames: cabInformation.driverDTO.userDTO.lastNames,
+            email: cabInformation.driverDTO.userDTO.email,
+            age: cabInformation.driverDTO.userDTO.age
+        },
+        cab: {
+            color: cabInformation.vehicleDTO.color,
+            model: cabInformation.vehicleDTO.model,
+            licensePlate: cabInformation.vehicleDTO.licensePlate,
+            brand: cabInformation.vehicleDTO.brand
+        },
+        price: rideInfo.response.totalPrice,
+        distance: `${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`,
+        minutes: `${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`
+    }
+    save(Keys.CurrentRide, JSON.stringify(rideInfoJson), Math.round(rideInfo.response.distanceInfoDTO.approxMinutes) + 60)
     acceptRideModal.show();
 }
 
-export async function acceptRoad(status) {
-
+export async function startRoadHandler() {
+    
 }
 
 export function acceptRideHandler() {

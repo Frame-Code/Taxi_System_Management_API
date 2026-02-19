@@ -1,4 +1,10 @@
-export function set(key, value, ttmls) {
+export const Keys = Object.freeze({
+  CurrentRide: 'current_ride'
+});
+
+
+export function save(key, value, minutes) {
+    const ttmls = minutes * 60 * 1000
     localStorage.setItem(
         key,
         JSON.stringify({
