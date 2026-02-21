@@ -1,7 +1,7 @@
 import { setPickupMarkerOrigin, initializeMap } from "../api/external/map.js";
 import { showActions, hideActions, setStatus, getJsonAutoComplete } from "../ride/pickup_actions.js";
 import { getCoordinates } from "../api/navigator/geolocation.js";
-import { acceptRideHandler, searchCabHandler } from "../ride/ride.js";
+import { acceptRideHandler, searchCabHandler, startRideHandler } from "../ride/ride.js";
 import { get_location_name } from "../api/internal/location_service.js";
 import { setButtonLoading } from "../../../../shared/components/loading_button.js";
 import { showErrorToast } from "../../../../shared/components/ui_messages.js";
@@ -34,11 +34,30 @@ async function setDestiny(ev, lat, lng) {
     if(!locationName) {
         return null;
     }
+    
+    //Cache
+    let currentRide = get(Keys.CurrentRide);
+    if(!currentRide) {
+        currentRide = {
+            infoDestiny: {
+                idCityDestiny: locationName.idCity,
+                latDestiny: lat,
+                lngDestiny: lng
+            }
+        };
+    } else {
+        currentRide.infoDestiny = {
+            idCityDestiny: locationName.idCity,
+            latDestiny: lat,
+            lngDestiny: lng
+        }
+    }
+    save(Keys.CurrentRide, JSON.stringify(currentRide), 10);
 
-    impDestiny.value = locationName;
+    impDestiny.value = locationName.locationString;
     pickupLatDestiny.value = lat;
     pickupLngDestiny.value = lng;
-    return locationName;
+    return locationName.locationString;
 }
 
 async function setOrigin(ev, lat, lng) {
@@ -55,10 +74,30 @@ async function setOrigin(ev, lat, lng) {
         return null;
     }
 
-    impOrigin.value = locationName;
+    //Cache
+    let currentRide = get(Keys.CurrentRide);
+    if(!currentRide) {
+        currentRide = {
+            infoOrigin: {
+                idCityOrigin: locationName.idCity,
+                latOrigin: lat,
+                lngOrigin: lng
+            }
+        };
+    } else {
+        currentRide.infoOrigin = {
+            idCityOrigin: locationName.idCity,
+            latOrigin: lat,
+            lngOrigin: lng
+        }
+        
+    }
+    save(Keys.CurrentRide, JSON.stringify(currentRide), 10);
+
+    impOrigin.value = locationName.locationString;
     pickupLatOrigin.value = lat;
     pickupLngOrigin.value = lng;
-    return locationName;
+    return locationName.locationString;
 }
 
 // Geolocation functions
@@ -76,7 +115,27 @@ async function getCoordinatesSuccess(pos, watchId, e) {
         return watchId;
     }
 
-    impOrigin.value = locationName;
+    //Cache
+    let currentRide = get(Keys.CurrentRide);
+    if(!currentRide) {
+        currentRide = {
+            infoOrigin: {
+                idCityOrigin: locationName.idCity,
+                latOrigin: lat,
+                lngOrigin: lng
+            }
+        };
+    } else {
+        currentRide.infoOrigin = {
+            idCityOrigin: locationName.idCity,
+            latOrigin: lat,
+            lngOrigin: lng
+        }
+        
+    }
+    save(Keys.CurrentRide, JSON.stringify(currentRide), 10);
+
+    impOrigin.value = locationName.locationString;
     pickupLatOrigin.value = latitude;
     pickupLngOrigin.value = longitude;
     setPickupMarkerOrigin(latitude, longitude, "Ubicación actual");
@@ -96,6 +155,7 @@ function init(){
     document.addEventListener("click", hideActions);
     btnSearchCab.addEventListener("click", searchCabHandler);
     btnAcceptRide.addEventListener("click", acceptRideHandler);
+    btnStartRide.addEventListener("click", startRideHandler);
     btnUseCurrentLocation.addEventListener("click", async (e) => {
         watchId = await getCoordinates(watchId, e, setStatus, showErrorToast, getCoordinatesSuccess);
     });

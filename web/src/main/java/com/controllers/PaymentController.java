@@ -1,9 +1,9 @@
 package com.controllers;
 
 import com.taxi.service.interfaces.ride_module.IPaymentService;
-import dto.BaseResponse;
-import dto.http.PaymentRequestDto;
-import dto.http.PaymentResponseDto;
+import dto.http.HttpBaseResponse;
+import dto.http.request.SavePaymentRequestDto;
+import dto.http.response.SavePaymentResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.jetbrains.annotations.NotNull;
@@ -21,10 +21,10 @@ public class PaymentController {
     private final IPaymentService paymentService;
 
     @PostMapping()
-    public ResponseEntity<BaseResponse> save(@NotNull @RequestBody final PaymentRequestDto request) {
-        PaymentResponseDto response = paymentService.save(request);
+    public ResponseEntity<HttpBaseResponse> save(@NotNull @RequestBody final SavePaymentRequestDto request) {
+        SavePaymentResponseDto response = paymentService.save(request);
         return ResponseEntity.ok(
-                BaseResponse.builder()
+                HttpBaseResponse.builder()
                         .response(response)
                         .status_code("200")
                         .status_message("Payment created successfully")

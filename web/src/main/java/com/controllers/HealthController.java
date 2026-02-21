@@ -1,6 +1,6 @@
 package com.controllers;
 
-import dto.BaseResponse;
+import dto.http.HttpBaseResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthController {
 
     @GetMapping
-    public ResponseEntity<BaseResponse> getHealth() {
-        BaseResponse response = BaseResponse
+    public ResponseEntity<HttpBaseResponse> getHealth() {
+        HttpBaseResponse response = HttpBaseResponse
                 .builder()
                 .response(null)
                 .status_code("200")

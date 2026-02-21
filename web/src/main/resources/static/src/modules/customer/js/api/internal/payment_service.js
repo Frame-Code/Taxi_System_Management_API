@@ -1,6 +1,6 @@
 import { API_URL, ENDPOINTS } from '../../../../../app/config/api.config.js';
 
-export async function SavePaymentMethod(method, amount) {
+export async function savePaymentMethod(method, amount) {
     const url = `${API_URL}${ENDPOINTS.PAYMENT}`;
     const payload = {
         PAYMENT_METHOD: method,

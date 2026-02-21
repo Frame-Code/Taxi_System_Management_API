@@ -1,8 +1,8 @@
-package dto.http;
+package dto.http.response;
 
 import Enums.entitiesEnums.PAYMENT_METHOD;
 
-public record PaymentResponseDto(
+public record SavePaymentResponseDto(
         Long id,
         PAYMENT_METHOD paymentMethod,
         Double amount

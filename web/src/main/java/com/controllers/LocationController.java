@@ -1,6 +1,6 @@
 package com.controllers;
 
-import dto.BaseResponse;
+import dto.http.HttpBaseResponse;
 import dto.CoordinatesDTO;
 import dto.LocationDTO;
 import com.taxi.service.interfaces.location_module.IParseCoordinatesService;
@@ -23,7 +23,7 @@ public class LocationController {
     private final IVerifyLocationService verifyLocationService;
 
     @GetMapping(value = "/verify")
-    public ResponseEntity<BaseResponse> verifyLocation(
+    public ResponseEntity<HttpBaseResponse> verifyLocation(
             @RequestParam("latitude") final Double latitude,
             @RequestParam("longitude") final Double longitude) {
         
@@ -31,7 +31,7 @@ public class LocationController {
         Optional<LocationDTO> locationOpt = parseCoordinatesService.parseCoordinatesToLocation(coordinatesDTO);
 
         if (locationOpt.isEmpty()) {
-            return ResponseEntity.status(404).body(BaseResponse.builder()
+            return ResponseEntity.status(404).body(HttpBaseResponse.builder()
                     .status_code("404")
                     .response(coordinatesDTO)
                     .status_message("Error")
@@ -40,9 +40,9 @@ public class LocationController {
                     .build());
         }
 
-        LocationDTO locationDTO = locationOpt.get();
-        if (!verifyLocationService.isLocationAvailable(locationDTO)) {
-            return ResponseEntity.status(422).body(BaseResponse.builder()
+        Optional<LocationDTO> locationDTO = verifyLocationService.isLocationAvailable(locationOpt.get());
+        if (locationDTO.isEmpty()) {
+            return ResponseEntity.status(422).body(HttpBaseResponse.builder()
                     .status_code("422")
                     .response(coordinatesDTO)
                     .status_message("Unavailable")
@@ -51,7 +51,7 @@ public class LocationController {
                     .build());
         }
 
-        return ResponseEntity.ok(BaseResponse.builder()
+        return ResponseEntity.ok(HttpBaseResponse.builder()
                 .status_code("200")
                 .response(locationDTO)
                 .status_message("Successfully")

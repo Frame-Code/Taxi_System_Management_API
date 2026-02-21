@@ -30,7 +30,10 @@ export async function get_location_name(latitude, longitude) {
         }
 
         showSuccessToast("Ubicación verificada correctamente.");
-        return locationData.response.city + ", " + locationData.response.province + ", " + locationData.response.road;
+        return {
+            idCity: locationData.response.idCity,
+            locationString: locationData.response.city + ", " + locationData.response.province + ", " + locationData.response.road
+        };
     } catch (error) {
         await handleApiError(error);
         return null;

@@ -38,6 +38,6 @@ public class OpenCageClient implements IOpenCageClient {
         String province = response.getResults().get(0).getComponents().getState();
         String road = response.getResults().get(0).getComponents().getRoad();
 
-        return Optional.of(new LocationDTO(city, province, road));
+        return Optional.of(new LocationDTO(0L, city, province, road));
     }
 }

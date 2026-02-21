@@ -2,9 +2,8 @@ package com.taxi.service.impl.ride_module;
 
 import com.taxi.exceptions.PaymentNotFoundException;
 import com.taxi.service.interfaces.ride_module.IPaymentService;
-import dto.PaymentDTO;
-import dto.http.PaymentRequestDto;
-import dto.http.PaymentResponseDto;
+import dto.http.request.SavePaymentRequestDto;
+import dto.http.response.SavePaymentResponseDto;
 import io.github.frame_code.domain.entities.Payment;
 import io.github.frame_code.domain.repository.IPaymentRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class PaymentServiceImpl implements IPaymentService {
     private final IPaymentRepository paymentRepository;
 
     @Override
-    public PaymentResponseDto save(PaymentRequestDto payment) {
+    public SavePaymentResponseDto save(SavePaymentRequestDto payment) {
         Payment paymentEntity = Payment.builder()
                 .paymentMethod(payment.paymentMethod())
                 .amount(payment.amount())
@@ -29,7 +28,7 @@ public class PaymentServiceImpl implements IPaymentService {
                 .build();
 
         Payment paymentSaved = paymentRepository.save(paymentEntity);
-        return new PaymentResponseDto(paymentEntity.getId(), paymentSaved.getPaymentMethod(), paymentSaved.getAmount());
+        return new SavePaymentResponseDto(paymentEntity.getId(), paymentSaved.getPaymentMethod(), paymentSaved.getAmount());
     }
 
     @Override

@@ -1,4 +1,4 @@
-package dto;
+package dto.http;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Builder
 @Getter @Setter
-public class BaseResponse {
+public class HttpBaseResponse {
     private Object response;
     private String status_code;
     private String status_message;

@@ -56,28 +56,36 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     li_distance.innerHTML = `<strong>Distancia aprox.:</strong><br/>${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
     li_duration.innerHTML = `<strong>Minutos aprox.:</strong><br/>${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
     showSuccessToast("Información de la ruta obtenida correctamente.");
-    const rideInfoJson = {
-        driver: {
-            names: cabInformation.driverDTO.userDTO.names,
-            lastNames: cabInformation.driverDTO.userDTO.lastNames,
-            email: cabInformation.driverDTO.userDTO.email,
-            age: cabInformation.driverDTO.userDTO.age
-        },
-        cab: {
-            color: cabInformation.vehicleDTO.color,
-            model: cabInformation.vehicleDTO.model,
-            licensePlate: cabInformation.vehicleDTO.licensePlate,
-            brand: cabInformation.vehicleDTO.brand
-        },
-        price: rideInfo.response.totalPrice,
-        distance: `${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`,
-        minutes: `${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`
+
+    //Cache
+    let currentRide = get(Keys.CurrentRide);
+    if(!currentRide) {
+        showErrorToast("Imposible crear un nuevo viaje si no ha especificado el origen y destino, vuelva a intentar")
+        setTimeout(() => location.reload(), 3000);
     }
-    save(Keys.CurrentRide, JSON.stringify(rideInfoJson), Math.round(rideInfo.response.distanceInfoDTO.approxMinutes) + 60)
+    currentRide.id = cabInformation.id;
+    currentRide.driver = {
+        names: cabInformation.driverDTO.userDTO.names,
+        lastNames: cabInformation.driverDTO.userDTO.lastNames,
+        email: cabInformation.driverDTO.userDTO.email,
+        age: cabInformation.driverDTO.userDTO.age
+    };
+    currentRide.cab = {
+        color: cabInformation.vehicleDTO.color,
+        model: cabInformation.vehicleDTO.model,
+        licensePlate: cabInformation.vehicleDTO.licensePlate,
+        brand: cabInformation.vehicleDTO.brand
+    };
+    currentRide.price = rideInfo.response.totalPrice;
+    currentRide.distance = `${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
+    currentRide.minutes = `${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
+    
+    save(Keys.CurrentRide, JSON.stringify(currentRide), Math.round(rideInfo.response.distanceInfoDTO.approxMinutes) + 60)
     acceptRideModal.show();
 }
 
-export async function startRoadHandler() {
+export async function startRideHandler() {
+
     
 }
 

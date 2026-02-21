@@ -4,6 +4,7 @@ import com.taxi.mappers.ClientMapper;
 import com.taxi.service.interfaces.ride_module.IRideService;
 import com.taxi.service.interfaces.ride_module.IRideUseCaseService;
 import dto.*;
+import dto.http.HttpBaseResponse;
 import dto.request_body.SetStatusDTO;
 import io.github.frame_code.domain.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,11 @@ public class RideController {
     private final ClientRepository clientRepository;
 
     @PostMapping(value = "/info")
-    public ResponseEntity<BaseResponse> getInfo(@RequestBody final FullCoordinatesDTO coordinatesDTO) {
+    public ResponseEntity<HttpBaseResponse> getInfo(@RequestBody final FullCoordinatesDTO coordinatesDTO) {
         try {
             Optional<DistanceInfoDTO> distanceInfoDTO = rideService.getRideInfo(coordinatesDTO);
             if(distanceInfoDTO.isEmpty()) return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(BaseResponse.builder()
+                    .body(HttpBaseResponse.builder()
                             .response(null)
                             .status_code("503")
                             .status_message("Error")
@@ -42,7 +43,7 @@ public class RideController {
             double totalPrice = rideService.getTotalPrice(distanceInfoDTO.get().approxDistance(), distanceInfoDTO.get().approxSeconds());
             RideInfoDTO rideInfoDTO = new RideInfoDTO(distanceInfoDTO.get(), totalPrice);
             log.info("Returning ride info...");
-            return ResponseEntity.ok(BaseResponse.builder()
+            return ResponseEntity.ok(HttpBaseResponse.builder()
                     .response(rideInfoDTO)
                     .status_code("200")
                     .status_message("Successfully")
@@ -56,10 +57,10 @@ public class RideController {
     }
 
     @PostMapping(value = "/start")
-    public ResponseEntity<BaseResponse> startRide(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
+    public ResponseEntity<HttpBaseResponse> startRide(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
         //Cuando se habilita spring security se modificara con el id del usuario logeado
         rideUseCaseService.acceptRoad(acceptRoadDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
-        return ResponseEntity.ok(BaseResponse.builder()
+        return ResponseEntity.ok(HttpBaseResponse.builder()
                 .response(null)
                 .message("The road was accepted")
                 .status_message("Successfully")
@@ -69,10 +70,10 @@ public class RideController {
     }
 
     @PostMapping(value = "/status")
-    public ResponseEntity<BaseResponse> setStatus(@RequestBody SetStatusDTO statusDTO) {
+    public ResponseEntity<HttpBaseResponse> setStatus(@RequestBody SetStatusDTO statusDTO) {
         var result = rideUseCaseService.setStatus(statusDTO.status(),statusDTO.idRide());
         return result.isSaved()?
-                ResponseEntity.ok(BaseResponse.builder()
+                ResponseEntity.ok(HttpBaseResponse.builder()
                         .response(null)
                         .message(result.message())
                         .timeStamp(LocalDateTime.now())
@@ -81,7 +82,7 @@ public class RideController {
                         .build())
                 :
                 ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(BaseResponse.builder()
+                        .body(HttpBaseResponse.builder()
                         .response(null)
                         .message(result.message())
                         .timeStamp(LocalDateTime.now())
