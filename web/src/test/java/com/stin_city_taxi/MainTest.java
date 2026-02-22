@@ -1,10 +1,10 @@
-package com.taxi_api;
+package com.stin_city_taxi;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import junit.framework.TestCase;
 import org.junit.Test;
 
-public class TaxiApiApplicationTest extends TestCase {
+public class MainTest extends TestCase {
     @Test
     public void testLoadEnvironmentVariables() {
         Dotenv dotenv = Dotenv.configure()

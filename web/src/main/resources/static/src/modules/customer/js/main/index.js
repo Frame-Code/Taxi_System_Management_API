@@ -1,12 +1,13 @@
 import { setPickupMarkerOrigin, initializeMap } from "../api/external/map.js";
 import { showActions, hideActions, setStatus, getJsonAutoComplete } from "../ride/pickup_actions.js";
 import { getCoordinates } from "../api/navigator/geolocation.js";
-import { acceptRideHandler, searchCabHandler, startRideHandler } from "../ride/ride.js";
+import { acceptRideHandler, searchCabHandler, startRideHandler } from "../ride/index_ride.js";
 import { get_location_name } from "../api/internal/location_service.js";
 import { setButtonLoading } from "../../../../shared/components/loading_button.js";
 import { showErrorToast } from "../../../../shared/components/ui_messages.js";
 import { attachAutocomplete } from "../suggestions/suggestions_service.js";
 import { InitPaymentMethod } from "../payment/payment.js";
+import { save, Keys, get } from "../../../../app/cache/localstorage.js"
 
 const impOrigin = document.getElementById("imp_origen");
 const btnUseCurrentLocation = document.getElementById("btnUseCurrentLocation");
@@ -52,7 +53,7 @@ async function setDestiny(ev, lat, lng) {
             lngDestiny: lng
         }
     }
-    save(Keys.CurrentRide, JSON.stringify(currentRide), 10);
+    save(Keys.CurrentRide, currentRide, 10);
 
     impDestiny.value = locationName.locationString;
     pickupLatDestiny.value = lat;
@@ -92,7 +93,7 @@ async function setOrigin(ev, lat, lng) {
         }
         
     }
-    save(Keys.CurrentRide, JSON.stringify(currentRide), 10);
+    save(Keys.CurrentRide, currentRide, 10);
 
     impOrigin.value = locationName.locationString;
     pickupLatOrigin.value = lat;
@@ -121,19 +122,19 @@ async function getCoordinatesSuccess(pos, watchId, e) {
         currentRide = {
             infoOrigin: {
                 idCityOrigin: locationName.idCity,
-                latOrigin: lat,
-                lngOrigin: lng
+                latOrigin: latitude,
+                lngOrigin: longitude
             }
         };
     } else {
         currentRide.infoOrigin = {
             idCityOrigin: locationName.idCity,
-            latOrigin: lat,
-            lngOrigin: lng
+            latOrigin: latitude,
+            lngOrigin: longitude
         }
         
     }
-    save(Keys.CurrentRide, JSON.stringify(currentRide), 10);
+    save(Keys.CurrentRide, currentRide, 10);
 
     impOrigin.value = locationName.locationString;
     pickupLatOrigin.value = latitude;

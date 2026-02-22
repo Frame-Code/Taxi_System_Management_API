@@ -44,6 +44,9 @@ export function setPickupMarkerDestiny(lat, lng, msg) {
   .addTo(map)
   .bindPopup(msg)
   .openPopup();
+  if(pickUpMakerOrigin) {
+    drawRouteWrapper();
+  }
 }
 
 function setPickupMarkerCustom(latitude, longitude, destiny, origin) {

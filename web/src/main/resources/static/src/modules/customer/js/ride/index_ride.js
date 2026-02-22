@@ -80,13 +80,14 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     currentRide.distance = `${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
     currentRide.minutes = `${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
     
-    save(Keys.CurrentRide, JSON.stringify(currentRide), Math.round(rideInfo.response.distanceInfoDTO.approxMinutes) + 60)
+    save(Keys.CurrentRide, currentRide, Math.round(rideInfo.response.distanceInfoDTO.approxMinutes) + 60)
     acceptRideModal.show();
 }
 
 export async function startRideHandler() {
-
-    
+    //Crear el ride llamando al endpoint de crear ride, luego redirigir a la pagina de ride in progress
+    //Cambiando los estados del ride y cab a "en viaje" o "ocupado" respectivamente
+    window.location.replace("/src/modules/customer/views/ride_in_progress.html");
 }
 
 export function acceptRideHandler() {

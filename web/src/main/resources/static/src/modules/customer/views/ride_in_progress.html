@@ -20,13 +20,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap"
         rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+    <link href="/src/modules/customer/css/styles.css" rel="stylesheet" />
     <!-- Map OpenStreetMap -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="/src/modules/customer/css/custom.css">
 
 </head>
 
@@ -189,14 +189,14 @@
     </footer>
 
 
-    <!-- Core theme JS-->
-    <script src="/src/app/scripts.js"></script>
+        <!-- Bootstrap core JS (load first for any bootstrap.* usage) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- customs -->
-    <script type="module" src="/src/modules/customer/js/ride/ride.js"></script>
+        <!-- Theme/script helpers that rely on Bootstrap -->
+        <script src="/src/app/scripts.js"></script>
 
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Web components and app modules -->
+        <script type="module" src="/src/modules/customer/js/ride/ride_in_progress.js"></script>
 </body>
 
 </html>

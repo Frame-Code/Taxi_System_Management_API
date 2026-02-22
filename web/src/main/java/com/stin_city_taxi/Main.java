@@ -1,4 +1,4 @@
-package com.taxi_api;
+package com.stin_city_taxi;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.java.Log;
@@ -24,7 +24,7 @@ import java.util.logging.Level;
 	"io.github.frame_code.domain.repository"
 })
 @Log
-public class TaxiApiApplication {
+public class Main {
 	public static void main(String[] args) {
 		try {
 			Dotenv dotenv = Dotenv.configure()
@@ -39,7 +39,7 @@ public class TaxiApiApplication {
 			System.exit(1);
 		}
 
-		SpringApplication.run(TaxiApiApplication.class, args);
+		SpringApplication.run(Main.class, args);
 	}
 
 }

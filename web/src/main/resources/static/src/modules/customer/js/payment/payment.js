@@ -28,7 +28,7 @@ export async function SavePayment(paymentMethod, amount) {
         setTimeout(() => location.reload(), 3000);
     }
     currentRide.paymentId = response.id;
-    save(Keys.CurrentRide, JSON.stringify(currentRide), currentRide.minutes);
+    save(Keys.CurrentRide, currentRide, currentRide.minutes);
 
     
 }
@@ -58,7 +58,7 @@ function process(selected) {
                 setTimeout(() => location.reload(), 3000);
             }
             currentRide.paymentMethod = PaymentMethod.Cash;
-            save(Keys.CurrentRide, JSON.stringify(currentRide), currentRide.minutes);
+            save(Keys.CurrentRide, currentRide, currentRide.minutes);
 
             break;
         case 'Tarjeta de debito':
