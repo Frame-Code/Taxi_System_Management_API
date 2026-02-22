@@ -25,6 +25,7 @@ public class RideController {
     private final IRideService rideService;
     private final IRideUseCaseService rideUseCaseService;
     private final ClientRepository clientRepository;
+    private final ClientMapper mapper;
 
     @PostMapping(value = "/info")
     public ResponseEntity<HttpBaseResponse> getInfo(@RequestBody final FullCoordinatesDTO coordinatesDTO) {
@@ -59,7 +60,7 @@ public class RideController {
     @PostMapping(value = "/start")
     public ResponseEntity<HttpBaseResponse> startRide(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
         //Cuando se habilita spring security se modificara con el id del usuario logeado
-        rideUseCaseService.acceptRoad(acceptRoadDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
+        rideUseCaseService.acceptRoad(acceptRoadDTO, mapper.toClientDTO(clientRepository.findById(1L).get()));
         return ResponseEntity.ok(HttpBaseResponse.builder()
                 .response(null)
                 .message("The road was accepted")

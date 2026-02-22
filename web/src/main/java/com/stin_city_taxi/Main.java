@@ -17,6 +17,7 @@ import java.util.logging.Level;
 @ComponentScan(basePackages = {
 	"com.controllers",
 	"com.taxi.service",
+	"com.taxi.mappers",
 	"com.taxi.external",
 	"com.exceptionHandler"
 })

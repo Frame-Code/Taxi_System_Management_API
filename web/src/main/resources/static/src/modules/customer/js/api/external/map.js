@@ -118,7 +118,7 @@ export function clearPickupMarkerDestiny() {
   pickUpMakerDestiny = null;
 }
 
-function drawRouteWrapper() {
+export function drawRouteWrapper() {
   drawRoute(
     { lat: pickUpMakerOrigin.getLatLng().lat, lng: pickUpMakerOrigin.getLatLng().lng },
     { lat: pickUpMakerDestiny.getLatLng().lat, lng: pickUpMakerDestiny.getLatLng().lng },

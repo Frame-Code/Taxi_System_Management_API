@@ -20,6 +20,7 @@ import java.util.List;
 public class SearchCabByDistance extends AbstractSearchCab {
     private final IFindCabsService findCabsService;
     private CoordinatesDTO coordinatesDTO;
+    private final TaxiMapper mapper;
 
     @Override
     public List<TaxiDTO> findCabs() {
@@ -41,7 +42,7 @@ public class SearchCabByDistance extends AbstractSearchCab {
             log.warn("No nearby cabs founded for the client " + coordinatesDTO.toString());
         }
         return nearbyTaxis.stream()
-                .map(TaxiMapper.INSTANCE::toDTO)
+                .map(mapper::toDTO)
                 .toList();
     }
 }

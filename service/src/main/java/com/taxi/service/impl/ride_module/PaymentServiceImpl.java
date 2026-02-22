@@ -2,6 +2,8 @@ package com.taxi.service.impl.ride_module;
 
 import com.taxi.exceptions.PaymentNotFoundException;
 import com.taxi.service.interfaces.ride_module.IPaymentService;
+import dto.ClientDTO;
+import dto.UserDTO;
 import dto.http.request.SavePaymentRequestDto;
 import dto.http.response.SavePaymentResponseDto;
 import io.github.frame_code.domain.entities.Payment;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,11 +23,13 @@ public class PaymentServiceImpl implements IPaymentService {
     private final IPaymentRepository paymentRepository;
 
     @Override
-    public SavePaymentResponseDto save(SavePaymentRequestDto payment) {
+    public SavePaymentResponseDto save(SavePaymentRequestDto payment, ClientDTO userCreator) {
         Payment paymentEntity = Payment.builder()
                 .paymentMethod(payment.paymentMethod())
                 .amount(payment.amount())
                 .transactionCode(UUID.randomUUID())
+                .createdBy(userCreator.getInfoAuditory())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         Payment paymentSaved = paymentRepository.save(paymentEntity);

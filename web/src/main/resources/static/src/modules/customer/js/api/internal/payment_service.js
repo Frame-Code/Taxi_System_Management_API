@@ -1,9 +1,10 @@
 import { API_URL, ENDPOINTS } from '../../../../../app/config/api.config.js';
+import { handleApiError } from '../../../../../shared/components/error_handler.js';
 
 export async function savePaymentMethod(method, amount) {
     const url = `${API_URL}${ENDPOINTS.PAYMENT}`;
     const payload = {
-        PAYMENT_METHOD: method,
+        paymentMethod: method,
         amount: amount
     };
 

@@ -7,4 +7,7 @@ public record UserDTO(
         String email,
         String age
 ) {
+    public String getInfo() {
+        return names + " " + lastNames + ", email: " + email;
+    }
 }

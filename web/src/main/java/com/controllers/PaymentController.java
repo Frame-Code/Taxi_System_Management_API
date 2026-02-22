@@ -1,9 +1,11 @@
 package com.controllers;
 
+import com.taxi.mappers.ClientMapper;
 import com.taxi.service.interfaces.ride_module.IPaymentService;
 import dto.http.HttpBaseResponse;
 import dto.http.request.SavePaymentRequestDto;
 import dto.http.response.SavePaymentResponseDto;
+import io.github.frame_code.domain.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.jetbrains.annotations.NotNull;
@@ -19,10 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PaymentController {
     private final IPaymentService paymentService;
+    private final ClientRepository clientRepository;
+    private final ClientMapper mapper;
 
     @PostMapping()
     public ResponseEntity<HttpBaseResponse> save(@NotNull @RequestBody final SavePaymentRequestDto request) {
-        SavePaymentResponseDto response = paymentService.save(request);
+
+        SavePaymentResponseDto response = paymentService.save(request, mapper.toClientDTO(clientRepository.findById(1L).get()));
         return ResponseEntity.ok(
                 HttpBaseResponse.builder()
                         .response(response)

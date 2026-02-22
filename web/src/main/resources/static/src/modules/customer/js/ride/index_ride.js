@@ -2,7 +2,8 @@ import { showErrorToast, showInfoToast,showSuccessToast } from "../../../../shar
 import { setButtonLoading } from "../../../../shared/components/loading_button.js";
 import { searchCab } from "../api/internal/cab_service.js";
 import { getInfoRide } from "../api/internal/ride_service.js";
-import { save, Keys } from "../../../../app/cache/localstorage.js"
+import { save, Keys, get } from "../../../../app/cache/localstorage.js"
+import { SavePayment, PaymentMethod } from "../payment/payment.js"
 
 const acceptRideModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('acceptRideModal'));
 const paymentMethodModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('paymentMethodModal'));
@@ -62,8 +63,9 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     if(!currentRide) {
         showErrorToast("Imposible crear un nuevo viaje si no ha especificado el origen y destino, vuelva a intentar")
         setTimeout(() => location.reload(), 3000);
+        return;
     }
-    currentRide.id = cabInformation.id;
+    currentRide.id_cab = cabInformation.id;
     currentRide.driver = {
         names: cabInformation.driverDTO.userDTO.names,
         lastNames: cabInformation.driverDTO.userDTO.lastNames,
@@ -78,19 +80,39 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     };
     currentRide.price = rideInfo.response.totalPrice;
     currentRide.distance = `${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
-    currentRide.minutes = `${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
+    currentRide.minutes = Math.round(rideInfo.response.distanceInfoDTO.approxMinutes);
     
-    save(Keys.CurrentRide, currentRide, Math.round(rideInfo.response.distanceInfoDTO.approxMinutes) + 60)
+    save(Keys.CurrentRide, currentRide, currentRide.minutes + 30);
     acceptRideModal.show();
 }
 
 export async function startRideHandler() {
+    let currentRide = get(Keys.CurrentRide);
+    if(!currentRide) {
+        showErrorToast("Imposible iniciar el viaje si no se ha creado un viaje, vuelva a intentar")
+        setTimeout(() => location.reload(), 3000);
+        return;
+    }
+
+    const response = await SavePayment(currentRide.paymentMethod, currentRide.price);
+    if(!response) {
+        showErrorToast("No se pudo guardar el método de pago, intente nuevamente.");
+        return;
+    }
+
     //Crear el ride llamando al endpoint de crear ride, luego redirigir a la pagina de ride in progress
     //Cambiando los estados del ride y cab a "en viaje" o "ocupado" respectivamente
     window.location.replace("/src/modules/customer/views/ride_in_progress.html");
 }
 
 export function acceptRideHandler() {
+    let currentRide = get(Keys.CurrentRide);
+    if(!currentRide) {
+        showErrorToast("Imposible crear un nuevo viaje si no se ha asignado un conductor al viaje, vuelva a intentar")
+        setTimeout(() => location.reload(), 3000);
+    }
+    currentRide.paymentMethod = PaymentMethod.Cash;
+    save(Keys.CurrentRide, currentRide, currentRide.minutes);
     acceptRideModal.hide();
     paymentMethodModal.show();
 }

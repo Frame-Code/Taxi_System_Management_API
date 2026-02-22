@@ -26,11 +26,11 @@ export async function SavePayment(paymentMethod, amount) {
     if(!currentRide) {
         showErrorToast("Imposible crear un nuevo viaje si no se ha asignado un conductor al viaje, vuelva a intentar")
         setTimeout(() => location.reload(), 3000);
+        return;
     }
     currentRide.paymentId = response.id;
     save(Keys.CurrentRide, currentRide, currentRide.minutes);
-
-    
+    return response;
 }
 
 export function InitPaymentMethod() {
@@ -40,6 +40,7 @@ export function InitPaymentMethod() {
             process(selected);
         });
     });
+
 }
 
 function process(selected) {

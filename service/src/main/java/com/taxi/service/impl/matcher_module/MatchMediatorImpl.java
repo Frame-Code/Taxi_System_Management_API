@@ -22,10 +22,11 @@ public class MatchMediatorImpl implements IMatchMediator {
     private final IRoadNotificationVerifier notificationVerifier;
     private final IRoadNotificationManager notificationManager;
     private final MatchService matchService;
+    private final RoadNotificationMapper mapper;
 
     @Override
     public NotificationDTO send(NotificationDTO notificationDTO) {
-        return RoadNotificationMapper.INSTANCE.toDTO(notificationManager.sendNotification(notificationDTO));
+        return mapper.toDTO(notificationManager.sendNotification(notificationDTO));
     }
 
     @Override

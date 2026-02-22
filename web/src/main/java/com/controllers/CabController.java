@@ -24,6 +24,7 @@ public class CabController {
     private final AbstractSearchCabFactory abstractSearchCabFactory;
     private final IMatchMediator mediator;
     private final ClientRepository clientRepository;
+    private final ClientMapper mapper;
 
     @GetMapping(value = "/search")
     public ResponseEntity<HttpBaseResponse> searchCabs(
@@ -41,7 +42,7 @@ public class CabController {
                         .build());
 
         for (TaxiDTO taxiDTO : listTaxi) {
-            var taxiOpt = mediator.match(taxiDTO, ClientMapper.INSTANCE.toClientDTO(clientRepository.findById(1L).get()));
+            var taxiOpt = mediator.match(taxiDTO, mapper.toClientDTO(clientRepository.findById(1L).get()));
             if( taxiOpt.isPresent()) {
                 log.info("The road was accepted by a Cab");
                 return ResponseEntity.ok(HttpBaseResponse.builder()

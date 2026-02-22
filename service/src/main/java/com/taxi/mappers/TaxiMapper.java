@@ -10,12 +10,9 @@ import io.github.frame_code.domain.entities.Vehicle;
 import io.github.frame_code.domain.entities.Driver;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TaxiMapper {
-    TaxiMapper INSTANCE = Mappers.getMapper(TaxiMapper.class);
-
     @Mapping(target = "vehicleDTO", source = "vehicle")
     @Mapping(target = "driverDTO", source = "driver")
     @Mapping(target = "driverDTO.userDTO", expression = "java(toUserDTO(driver.getUser()))")
