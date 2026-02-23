@@ -1,6 +1,7 @@
 import { showSuccessToast, showErrorToast } from "../../../../shared/components/ui_messages.js";
 import { setPickupMarkerOrigin, setPickupMarkerDestiny, initializeMap, drawRouteWrapper } from "../api/external/map.js";
 import { save, Keys, get } from "../../../../app/cache/localstorage.js"
+import { getPaymentMethodName } from "../payment/payment.js";
 
 const li_name = document.getElementById("li_names");
 const li_last_name = document.getElementById("li_last_names");
@@ -33,10 +34,10 @@ function initInfoRide(currentRide) {
     li_vh_license_plate.innerHTML = `<strong>Matrícula:</strong><br/>${currentRide.cab.licensePlate}`;
     li_vh_brand.innerHTML = `<strong>Marca:</strong><br/>${currentRide.cab.brand}`;
 
-    li_price.innerHTML = `<br/><strong>$${currentRide.price}</strong>`;
+    li_price.innerHTML = `<strong>Precio total:</strong><br/><div class="fs-4 fw-bold text-success ms-4">${currentRide.price}$</div>`;
     li_distance.innerHTML = `<strong>Distancia aprox.:</strong><br/>${currentRide.distance}`;
     li_duration.innerHTML = `<strong>Minutos aprox.:</strong><br/>${Math.round(currentRide.minutes)} min`;
-    li_payment_method.innerHTML = `<strong>Método de pago:</strong><br/>${currentRide.paymentMethod}`;
+    li_payment_method.innerHTML = `<strong>Método de pago:</strong><br/>${getPaymentMethodName(currentRide.paymentMethod)}`;
 }
 
 function init() {

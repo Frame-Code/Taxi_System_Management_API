@@ -8,6 +8,19 @@ export const PaymentMethod = Object.freeze({
   Cash: 'CASH'
 });
 
+export function getPaymentMethodName(paymentMethod) {
+    switch(paymentMethod) {
+        case 'DEBIT_CARD':
+            return "Tarjeta de debito";
+        case 'CREDIT_CARD':
+            return "Tarjeta de credito";
+        case 'CASH':
+            return "Efectivo";
+        default:
+            return "Desconocido";
+    }
+}
+
 
 const li_price = document.getElementById("li_price");
 const div_price = document.getElementById("div_price");

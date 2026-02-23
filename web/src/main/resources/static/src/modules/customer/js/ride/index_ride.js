@@ -53,7 +53,7 @@ async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInform
     li_vh_license_plate.innerHTML = `<strong>Matrícula:</strong><br/>${cabInformation.vehicleDTO.licensePlate}`;
     li_vh_brand.innerHTML = `<strong>Marca:</strong><br/>${cabInformation.vehicleDTO.brand}`;
 
-    li_price.innerHTML = `<br/><strong>$${rideInfo.response.totalPrice}</strong>`;
+    li_price.innerHTML = `<strong>Precio total:</strong><br/><div class="fs-4 fw-bold text-success ms-4">${rideInfo.response.totalPrice}$</div>`;
     li_distance.innerHTML = `<strong>Distancia aprox.:</strong><br/>${Math.round(rideInfo.response.distanceInfoDTO.approxDistance)} km`;
     li_duration.innerHTML = `<strong>Minutos aprox.:</strong><br/>${Math.round(rideInfo.response.distanceInfoDTO.approxMinutes)} min`;
     showSuccessToast("Información de la ruta obtenida correctamente.");
