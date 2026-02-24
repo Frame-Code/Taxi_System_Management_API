@@ -17,32 +17,36 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PaymentNotFoundException.class)
     public ResponseEntity<HttpBaseResponse> handle(PaymentNotFoundException ex) {
-        return generateHandler(ex, HttpStatus.NOT_FOUND, null, ex.getMessage(), "404", "Error");
+        return generateHandler(ex, HttpStatus.NOT_FOUND, null, ex.getMessage(), "404", ex.getMessage());
     }
 
     @ExceptionHandler(FareNotFoundException.class)
     public ResponseEntity<HttpBaseResponse> handle(FareNotFoundException ex) {
-        return generateHandler(ex, HttpStatus.NOT_FOUND, null, ex.getMessage(), "404", "Error");
+        return generateHandler(ex, HttpStatus.NOT_FOUND, null, ex.getMessage(), "404", ex.getMessage());
     }
     @ExceptionHandler(ClientNotFoundException.class)
     public ResponseEntity<HttpBaseResponse> handle(ClientNotFoundException ex) {
-        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "500", "Error");
+        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "500", ex.getMessage());
     }
     @ExceptionHandler(CityNotFoundException.class)
     public ResponseEntity<HttpBaseResponse> handle(CityNotFoundException ex) {
-        return generateHandler(ex, HttpStatus.NOT_FOUND, null, ex.getMessage(), "404", "Error");
+        return generateHandler(ex, HttpStatus.NOT_FOUND, null, ex.getMessage(), "404", ex.getMessage());
     }
     @ExceptionHandler(CabNotFoundException.class)
     public ResponseEntity<HttpBaseResponse> handle(CabNotFoundException ex) {
-        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "404", "Error");
+        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "404", ex.getMessage());
     }
     @ExceptionHandler(RideStatusNotFoundException.class)
     public ResponseEntity<HttpBaseResponse> handle(RideStatusNotFoundException ex) {
-        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "500", "Error");
+        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, ex.getMessage(), "500", ex.getMessage());
+    }
+    @ExceptionHandler(InvalidStatusCabException.class)
+    public ResponseEntity<HttpBaseResponse> handle(InvalidStatusCabException ex) {
+        return generateHandler(ex, HttpStatus.CONFLICT, null, ex.getMessage(), "409", ex.getMessage());
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<HttpBaseResponse> handle(Exception ex) {
-        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, "500", "Error");
+        return generateHandler(ex, HttpStatus.INTERNAL_SERVER_ERROR, null, null, "500", ex.getMessage());
     }
 
     private ResponseEntity<HttpBaseResponse> generateHandler(Exception ex, HttpStatus status, String response, String message, String statusCode, String statusMessage) {

@@ -4,6 +4,8 @@ import { searchCab } from "../api/internal/cab_service.js";
 import { getInfoRide } from "../api/internal/ride_service.js";
 import { save, Keys, get } from "../../../../app/cache/localstorage.js"
 import { SavePayment, PaymentMethod } from "../payment/payment.js"
+import { setStatusCab, StatusCab } from "./index_cab.js";
+import { createRide } from "../api/internal/ride_service.js";
 
 const acceptRideModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('acceptRideModal'));
 const paymentMethodModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('paymentMethodModal'));
@@ -99,8 +101,30 @@ export async function startRideHandler() {
         return;
     }
 
-    //Crear el ride llamando al endpoint de crear ride, luego redirigir a la pagina de ride in progress
-    //Cambiando los estados del ride y cab a "en viaje" o "ocupado" respectivamente
+    //Cambiar estado del taxi a Working
+    await setStatusCab(StatusCab.Working);  
+    const rideCreated = await createRide({
+        coordinatesDTO: {
+            origin: {
+                latitude: currentRide.infoOrigin.latOrigin,
+                longitude: currentRide.infoOrigin.lngOrigin
+            },
+            destiny: {
+                latitude: currentRide.infoDestiny.latDestiny,
+                longitude: currentRide.infoDestiny.lngDestiny
+            }
+        },
+        idTaxi: currentRide.id_cab,
+        idPayment: response.id,
+        idCityOrigin: currentRide.infoOrigin.idCityOrigin,
+        idCityDestiny: currentRide.infoDestiny.idCityDestiny
+    });
+
+    if(!rideCreated) {
+        showErrorToast("No se pudo crear el viaje, intente nuevamente.");
+        return;
+    }
+
     window.location.replace("/src/modules/customer/views/ride_in_progress.html");
 }
 

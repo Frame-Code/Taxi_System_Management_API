@@ -35,3 +35,25 @@ export async function searchCab(latOrigin, lngOrigin) {
     showSuccessToast("Un taxi ha aceptado tu solicitud!");
     return responseData;
 }
+
+export async function setStatus(cabId, status) {
+    const url = `${API_URL}${ENDPOINTS.STATUS_CAB}`;
+    const payload = {
+        id: cabId,
+        status: status
+    }
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if(!response.ok) {
+        await handleApiError(response);
+        return false;
+    }
+
+    return true;
+}

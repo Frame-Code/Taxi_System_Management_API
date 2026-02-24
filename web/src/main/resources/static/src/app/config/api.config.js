@@ -4,6 +4,8 @@ export const API_URL = `${window.location.origin}/api`;
 export const ENDPOINTS = {
   LOCATION_VALIDATOR: "/location/verify",
   SEARCH_CAB: "/cab/search", 
+  STATUS_CAB: "/cab/status",
   INFO_RIDE: "/ride/info",
+  START_RIDE: "/ride/start",
   PAYMENT: "/payment"
 };

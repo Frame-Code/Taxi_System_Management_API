@@ -20,6 +20,6 @@ export async function savePaymentMethod(method, amount) {
         await handleApiError(response);
         return null;
     }
-
-    return await response.json();
+    const responseData = await response.json();
+    return await responseData.response;
 }

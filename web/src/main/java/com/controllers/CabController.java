@@ -6,6 +6,7 @@ import com.taxi.mappers.ClientMapper;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCabFactory;
 import dto.http.HttpBaseResponse;
+import dto.http.request.StatusCabDto;
 import io.github.frame_code.domain.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
@@ -61,5 +62,15 @@ public class CabController {
                         .message("No cabs accepted the road")
                         .timeStamp(LocalDateTime.now())
                         .build());
+    }
+
+    @PutMapping(value = "/status")
+    public ResponseEntity<HttpBaseResponse> status(@RequestBody @NotNull final StatusCabDto status) {
+        return ResponseEntity.ok(HttpBaseResponse.builder()
+                .response(null)
+                .status_code("200")
+                .status_message("Successfully")
+                .message("Status saved correctly")
+                .build());
     }
 }

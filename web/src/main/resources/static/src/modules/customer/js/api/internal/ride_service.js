@@ -30,3 +30,22 @@ export async function getInfoRide(latOrigin, lngOrigin, latDestiny, lngDestiny) 
     return await response.json();
 }
 
+export async function createRide(payload) {
+    const url = `${API_URL}${ENDPOINTS.START_RIDE}`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if(!response.ok) {
+        await handleApiError(response);
+        return false;
+    }
+
+    return true;
+}
+
