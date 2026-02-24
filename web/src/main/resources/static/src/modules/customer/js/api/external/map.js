@@ -92,15 +92,14 @@ function setPickupMarkerCustom(latitude, longitude, destiny, origin) {
         }
       });
     }
-
-    document.getElementById('btn_clean').addEventListener('click', (ev) => {
-      pickupMarker.remove();
-      pickupMarker = null;
-    }); 
-    
   });
 
   pickupMarker.openPopup();
+  document.getElementById('btn_clean').addEventListener('click', (ev) => {
+    pickupMarker.remove();
+    pickupMarker = null;
+  }); 
+
 }
 
 export function clearPickupMarker() {

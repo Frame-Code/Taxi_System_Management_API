@@ -31,9 +31,8 @@ export async function handle_cab_search(latOrigin, lngOrigin, latDestiny, lngDes
         setButtonLoading(btnSearchCab, false);
         return;
     }
-
-    await showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, response.response);
     setButtonLoading(btnSearchCab, false);
+    await showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, response.response);
 }
 
 async function showModal(latOrigin, lngOrigin, latDestiny, lngDestiny, cabInformation) {
