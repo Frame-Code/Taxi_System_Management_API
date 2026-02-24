@@ -28,15 +28,7 @@ function showToast(message, type) {
     toastEl.className = "toast align-items-center text-bg-" + type + " border-0";
     toastEl.setAttribute("role", "alert");
 
-    toastEl.innerHTML = `
-        <div class="d-flex">
-        <div class="toast-body">
-            ${message}
-        </div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-        </div>
-    `;
-
+    toastEl.innerHTML = buildInnerHTML(message);
     container.appendChild(toastEl);
 
     const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
@@ -52,7 +44,37 @@ function showStaticToast(message, type) {
     toastEl.className = "toast align-items-center text-bg-" + type + " border-0";
     toastEl.setAttribute("role", "alert");
 
-    toastEl.innerHTML = `
+    toastEl.innerHTML = buildInnerHTML(message);
+    container.appendChild(toastEl);
+
+    const toast = new bootstrap.Toast(toastEl, { autohide: false });
+    toast.show();   
+
+    const interval0 = setInterval(() => {
+        toastEl.innerHTML = buildInnerHTML(message + ".");
+    }, 1500);
+
+    const interval1 = setInterval(() => {
+        toastEl.innerHTML = buildInnerHTML(message + "..");
+    }, 2500);
+
+    const interval2 = setInterval(() => {
+        toastEl.innerHTML = buildInnerHTML(message + "...");
+    }, 3500);
+
+
+    return {
+        toast: toast,
+        clearIntervals: function() {            
+            clearInterval(interval0);
+            clearInterval(interval1);
+            clearInterval(interval2);
+        }
+    }
+}
+
+function buildInnerHTML(message) {
+    return `
         <div class="d-flex">
         <div class="toast-body">
             ${message}
@@ -60,12 +82,6 @@ function showStaticToast(message, type) {
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
         </div>
     `;
-
-    container.appendChild(toastEl);
-
-    const toast = new bootstrap.Toast(toastEl);
-    toast.show();
-    return toast;
 }
 
 export function hideStaticToast(toast) {

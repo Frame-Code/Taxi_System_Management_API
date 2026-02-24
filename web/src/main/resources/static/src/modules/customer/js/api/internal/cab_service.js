@@ -4,7 +4,7 @@ import { showSuccessToast, showInfoToastStatic, hideStaticToast } from '../../..
 
 
 export async function searchCab(latOrigin, lngOrigin) {
-    const toast = showInfoToastStatic("Buscando taxis cercanos...");
+    const {toast, clearIntervals} = showInfoToastStatic("Buscando taxis cercanos");
     const url = `${API_URL}${ENDPOINTS.SEARCH_CAB}?latitude=${latOrigin}&longitude=${lngOrigin}`;
 
     const response = await fetch(url, {
@@ -17,18 +17,21 @@ export async function searchCab(latOrigin, lngOrigin) {
     if(!response.ok) {
         await handleApiError(response);
         hideStaticToast(toast);
+        clearIntervals();
         return null;
     }
 
     let responseData = await response.json();
     if(responseData.status_code == 204) {
         hideStaticToast(toast);
+        clearIntervals();
         showInfoToast("No se encontraron taxis cercanos o ninguno esta disponible.");
         showInfoToast("Intenta mas tarde...");
         return null;
     }
 
     hideStaticToast(toast);
+    clearIntervals();
     showSuccessToast("Un taxi ha aceptado tu solicitud!");
     return responseData;
 }
