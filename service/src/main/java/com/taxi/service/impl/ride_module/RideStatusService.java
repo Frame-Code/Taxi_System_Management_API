@@ -14,7 +14,7 @@ public class RideStatusService implements IRideStatusService {
     private final IRideStatusRepository repository;
 
     @Override
-    public RideStatus findByStatusNameToGenerateRide(STATUS_ROAD status) {
+    public RideStatus findByStatus(STATUS_ROAD status) {
         return repository.findByStatus(status)
                 .orElseThrow(RideStatusNotFoundException::new);
     }

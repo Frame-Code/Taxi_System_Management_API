@@ -1,6 +1,7 @@
 package com.taxi.service.impl.ride_module;
 
 import Enums.entitiesEnums.STATUS_ROAD;
+import com.taxi.exceptions.RideNotFoundException;
 import com.taxi.service.interfaces.ride_module.*;
 import dto.AcceptRoadDTO;
 import dto.ClientDTO;
@@ -33,6 +34,12 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
     private final IRideStatusRepository statusRepository;
 
     @Override
+    public Road findById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(RideNotFoundException::new);
+    }
+
+    @Override
     public void acceptRoad(AcceptRoadDTO roadDTO, ClientDTO clientDTO) {
         Payment payment = paymentService.findToGenerateRide(roadDTO.idPayment());
         Taxi taxi = cabService.findToGenerateRide(roadDTO.idTaxi());
@@ -41,7 +48,7 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
         Client client = clientService.findToGenerateRide(clientDTO.id());
         Point origin = GeolocationUtils.createPoint(roadDTO.coordinatesDTO().origin().latitude(), roadDTO.coordinatesDTO().origin().longitude());
         Point destiny = GeolocationUtils.createPoint(roadDTO.coordinatesDTO().destiny().latitude(), roadDTO.coordinatesDTO().destiny().longitude());
-        RideStatus status = statusService.findByStatusNameToGenerateRide(STATUS_ROAD.INITIALIZED);
+        RideStatus status = statusService.findByStatus(STATUS_ROAD.INITIALIZED);
         UserAuditoryDTO userAuditoryDTO = new UserAuditoryDTO(client.getUser().getFullNames(), client.getUser().getRole().getRoleName().toString());
         RoadAddress startAddress = service.save(RoadAddress.builder()
                 .location(origin)

@@ -4,5 +4,5 @@ import Enums.entitiesEnums.STATUS_ROAD;
 import io.github.frame_code.domain.entities.RideStatus;
 
 public interface IRideStatusService {
-    RideStatus findByStatusNameToGenerateRide(STATUS_ROAD status);
+    RideStatus findByStatus(STATUS_ROAD status);
 }

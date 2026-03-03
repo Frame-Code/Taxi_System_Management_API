@@ -7,6 +7,7 @@ import dto.ResponseSetStatusDTO;
 import io.github.frame_code.domain.entities.Road;
 
 public interface IRideUseCaseService {
+    Road findById(Long id);
     void acceptRoad(AcceptRoadDTO roadDTO, ClientDTO clientDTO);
     ResponseSetStatusDTO setStatus(STATUS_ROAD status, Long idRide);
 }
