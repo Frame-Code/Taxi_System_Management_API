@@ -1,4 +1,4 @@
-package com.stin_city_taxi;
+package com.main;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.java.Log;

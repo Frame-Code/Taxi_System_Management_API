@@ -1,4 +1,4 @@
-package com.stin_city_taxi;
+package com.main;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
