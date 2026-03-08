@@ -125,7 +125,7 @@ export async function startRideHandler() {
         return;
     }
 
-    window.location.replace("/src/modules/customer/views/ride_in_progress.html");
+    window.location.replace("/modules/customer/views/ride_in_progress.html");
 }
 
 export function acceptRideHandler() {

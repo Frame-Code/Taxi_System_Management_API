@@ -51,7 +51,7 @@ function init() {
 
     } catch (error) {
         showErrorToast("Imposible mostrar el viaje en curso si no se ha especificado el origen y destino, vuelva a intentar")
-        setTimeout(() => window.location.replace("/src/modules/customer/views/index.html"), 3000);
+        setTimeout(() => window.location.replace("/modules/customer/views/index.html"), 3000);
         return;
     }
 }
