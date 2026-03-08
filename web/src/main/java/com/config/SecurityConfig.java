@@ -1,7 +1,7 @@
 package com.config;
 
 import Enums.entitiesEnums.ROLE_NAME;
-import com.security.filters.JwtTokenValidator;
+import com.security.middleware.JwtTokenValidator;
 import com.security.service.UserDetailsServiceImpl;
 import com.security.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,7 +36,6 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(http -> {
-                    http.anyRequest().denyAll();
                     http.requestMatchers("/static/**",
                             "/css/**",
                             "/img/**",
@@ -59,17 +58,19 @@ public class SecurityConfig {
 
                     http.requestMatchers(HttpMethod.POST, "/api/ride/info").hasAnyRole(ROLE_NAME.CLIENT.name(), ROLE_NAME.DRIVER.name());
                     http.requestMatchers(HttpMethod.POST, "/api/ride//status").hasAnyRole(ROLE_NAME.CLIENT.name(), ROLE_NAME.DRIVER.name());
+                    http.anyRequest().denyAll();
                 })
                 .exceptionHandling(ex -> {
                     ex.authenticationEntryPoint(((request, response, authException) -> {
                         if(request.getCookies() == null || Arrays.stream(request.getCookies()).noneMatch(cookie -> cookie.getName().equals("access_token"))) {
-                            response.sendRedirect("/auth/login.html");
+                            response.sendRedirect("/modules/auth/login.html");
+                            return;
                         }
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                     }));
                 })
                 .formLogin(form -> {
-                    form.loginPage("/auth/login.html");
+                    form.loginPage("/modules/auth/login.html");
                     form.loginProcessingUrl("auth/log-in").permitAll();
                 })
                 .addFilterBefore(new JwtTokenValidator(utils), BasicAuthenticationFilter.class)

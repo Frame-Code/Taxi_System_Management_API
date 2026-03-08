@@ -1,4 +1,4 @@
-package com.security.filters;
+package com.security.middleware;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;

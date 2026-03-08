@@ -18,6 +18,9 @@ import java.util.logging.Level;
 })
 @ComponentScan(basePackages = {
 	"com.controllers",
+	"com.config",
+	"com.security",
+	"com.utils",
 	"com.taxi.service",
 	"com.taxi.mappers",
 	"com.taxi.external",

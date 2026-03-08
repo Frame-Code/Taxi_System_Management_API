@@ -11,6 +11,7 @@ import io.github.frame_code.domain.entities.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -22,11 +23,15 @@ import java.util.stream.Collectors;
 
 @Component
 @CommonsLog
-@RequiredArgsConstructor
 public class JwtUtils {
-    private final String privateKey = System.getProperty("security.jwt.secret-key");
-    private final String userGenerator = System.getProperty("security.jwt.user.generator");
-    private final long expirationToken = Long.parseLong(System.getProperty("security.jwt.expiration"));
+    @Value("${security.jwt.secret-key}")
+    private String privateKey;
+
+    @Value("${security.jwt.user.generator}")
+    private String userGenerator;
+
+    @Value("${security.jwt.expiration}")
+    private long expirationToken;
 
     public Optional<String> createToken(@NotNull Authentication authentication, String owner) {
         Algorithm algorithm = Algorithm.HMAC256(privateKey);

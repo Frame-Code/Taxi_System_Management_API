@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -43,6 +44,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidStatusCabException.class)
     public ResponseEntity<HttpBaseResponse> handle(InvalidStatusCabException ex) {
         return generateHandler(ex, HttpStatus.CONFLICT, null, ex.getMessage(), "409", ex.getMessage());
+    }
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<HttpBaseResponse> handle(NoResourceFoundException ex) {
+        return generateHandler(ex, HttpStatus.NOT_FOUND, null, null, "404", ex.getMessage());
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<HttpBaseResponse> handle(Exception ex) {
