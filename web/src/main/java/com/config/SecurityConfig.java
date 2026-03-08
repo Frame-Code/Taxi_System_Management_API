@@ -1,11 +1,14 @@
 package com.config;
 
+import Enums.entitiesEnums.ROLE_NAME;
 import com.security.filters.JwtTokenValidator;
 import com.security.service.UserDetailsServiceImpl;
 import com.security.utils.JwtUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import java.util.Arrays;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -30,6 +35,43 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(http -> {
+                    http.anyRequest().denyAll();
+                    http.requestMatchers("/static/**",
+                            "/css/**",
+                            "/img/**",
+                            "/js/**",
+                            "/META-INF/**",
+                            "/scss/**",
+                            "/vendor/**",
+                            "/WEB-INF/**",
+                            "/login.html",
+                            "/register.html",
+                            "/").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/auth/**").permitAll();
+                    http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+                    http.requestMatchers(HttpMethod.GET, "/api/health").permitAll();
+
+                    http.requestMatchers(HttpMethod.GET, "/api/cab/search").hasRole(ROLE_NAME.CLIENT.name());
+                    http.requestMatchers(HttpMethod.GET, "/api/location/verify").hasRole(ROLE_NAME.CLIENT.name());
+                    http.requestMatchers(HttpMethod.POST, "/api/payment").hasRole(ROLE_NAME.CLIENT.name());
+                    http.requestMatchers(HttpMethod.POST, "/api/ride/start").hasRole(ROLE_NAME.CLIENT.name());
+
+                    http.requestMatchers(HttpMethod.POST, "/api/ride/info").hasAnyRole(ROLE_NAME.CLIENT.name(), ROLE_NAME.DRIVER.name());
+                    http.requestMatchers(HttpMethod.POST, "/api/ride//status").hasAnyRole(ROLE_NAME.CLIENT.name(), ROLE_NAME.DRIVER.name());
+                })
+                .exceptionHandling(ex -> {
+                    ex.authenticationEntryPoint(((request, response, authException) -> {
+                        if(request.getCookies() == null || Arrays.stream(request.getCookies()).noneMatch(cookie -> cookie.getName().equals("access_token"))) {
+                            response.sendRedirect("/auth/login.html");
+                        }
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+                    }));
+                })
+                .formLogin(form -> {
+                    form.loginPage("/auth/login.html");
+                    form.loginProcessingUrl("auth/log-in").permitAll();
+                })
                 .addFilterBefore(new JwtTokenValidator(utils), BasicAuthenticationFilter.class)
                 .build();
     }

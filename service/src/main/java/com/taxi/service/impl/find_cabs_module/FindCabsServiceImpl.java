@@ -1,6 +1,6 @@
 package com.taxi.service.impl.find_cabs_module;
 
-import dto.CoordinatesDTO;
+import dto.in.CoordinatesDTO;
 import Enums.entitiesEnums.STATUS_TAXI;
 import io.github.frame_code.domain.entities.Taxi;
 import utils.GeolocationUtils;
@@ -10,7 +10,6 @@ import io.github.frame_code.domain.repository.TaxiLiveAddressRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 @RequiredArgsConstructor

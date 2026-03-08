@@ -1,4 +1,4 @@
-package dto;
+package dto.in;
 
 public record CoordinatesDTO(
         Double latitude,

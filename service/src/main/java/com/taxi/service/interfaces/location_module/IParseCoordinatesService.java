@@ -1,7 +1,7 @@
 package com.taxi.service.interfaces.location_module;
 
-import dto.CoordinatesDTO;
-import dto.LocationDTO;
+import dto.in.CoordinatesDTO;
+import dto.entities.LocationDTO;
 
 import java.util.Optional;
 

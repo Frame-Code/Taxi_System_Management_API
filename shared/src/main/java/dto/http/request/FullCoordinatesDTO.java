@@ -1,4 +1,6 @@
-package dto;
+package dto.http.request;
+
+import dto.in.CoordinatesDTO;
 
 public record FullCoordinatesDTO(
         CoordinatesDTO origin,

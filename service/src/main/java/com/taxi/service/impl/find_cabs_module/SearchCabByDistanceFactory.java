@@ -1,6 +1,6 @@
 package com.taxi.service.impl.find_cabs_module;
 
-import dto.SearchCabDTO;
+import dto.in.SearchCabDTO;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCabFactory;
 import org.springframework.beans.factory.annotation.Autowired;

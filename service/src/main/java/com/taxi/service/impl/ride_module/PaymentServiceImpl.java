@@ -2,8 +2,7 @@ package com.taxi.service.impl.ride_module;
 
 import com.taxi.exceptions.PaymentNotFoundException;
 import com.taxi.service.interfaces.ride_module.IPaymentService;
-import dto.ClientDTO;
-import dto.UserDTO;
+import dto.entities.ClientDTO;
 import dto.http.request.SavePaymentRequestDto;
 import dto.http.response.SavePaymentResponseDto;
 import io.github.frame_code.domain.entities.Payment;

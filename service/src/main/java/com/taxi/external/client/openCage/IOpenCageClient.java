@@ -1,6 +1,6 @@
 package com.taxi.external.client.openCage;
 
-import dto.LocationDTO;
+import dto.entities.LocationDTO;
 
 import java.util.Optional;
 

@@ -1,14 +1,13 @@
 package com.taxi.external.client.openRouteService;
 
-import dto.CoordinatesDTO;
-import dto.FullCoordinatesDTO;
+import dto.in.CoordinatesDTO;
+import dto.http.request.FullCoordinatesDTO;
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.apachecommons.CommonsLog;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.logging.Level;
 
 import static org.junit.jupiter.api.Assertions.*;
 

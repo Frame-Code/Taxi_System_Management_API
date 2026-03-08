@@ -1,6 +1,6 @@
 package com.taxi.mappers;
 
-import dto.NotificationDTO;
+import dto.entities.NotificationDTO;
 import io.github.frame_code.domain.entities.RoadNotification;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,8 +1,7 @@
 package com.taxi.service.interfaces.ride_module;
 
-import dto.AcceptRoadDTO;
-import dto.FullCoordinatesDTO;
-import dto.DistanceInfoDTO;
+import dto.http.request.FullCoordinatesDTO;
+import dto.out.DistanceInfoDTO;
 import io.github.frame_code.domain.entities.Road;
 import io.github.frame_code.domain.entities.RoadAddress;
 

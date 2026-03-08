@@ -1,4 +1,4 @@
-package dto;
+package dto.entities;
 
 import Enums.entitiesEnums.PAYMENT_METHOD;
 

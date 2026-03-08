@@ -1,6 +1,6 @@
 package utils;
 
-import dto.UserAuditoryDTO;
+import dto.entities.UserAuditoryDTO;
 
 public class AuditoryUtils {
     public static String createCreatedAt(UserAuditoryDTO userAuditoryDTO) {

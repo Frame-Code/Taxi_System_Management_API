@@ -3,9 +3,12 @@ package com.controllers;
 import com.taxi.mappers.ClientMapper;
 import com.taxi.service.interfaces.ride_module.IRideService;
 import com.taxi.service.interfaces.ride_module.IRideUseCaseService;
-import dto.*;
 import dto.http.HttpBaseResponse;
-import dto.request_body.SetStatusDTO;
+import dto.http.request.AcceptRoadDto;
+import dto.http.request.FullCoordinatesDTO;
+import dto.http.request.SetStatusDTO;
+import dto.http.response.RideInfoDTO;
+import dto.out.DistanceInfoDTO;
 import io.github.frame_code.domain.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
@@ -58,7 +61,7 @@ public class RideController {
     }
 
     @PostMapping(value = "/start")
-    public ResponseEntity<HttpBaseResponse> startRide(@RequestBody AcceptRoadDTO acceptRoadDTO)  {
+    public ResponseEntity<HttpBaseResponse> startRide(@RequestBody AcceptRoadDto acceptRoadDTO)  {
         //Cuando se habilita spring security se modificara con el id del usuario logeado
         rideUseCaseService.acceptRoad(acceptRoadDTO, mapper.toClientDTO(clientRepository.findById(1L).get()));
         return ResponseEntity.ok(HttpBaseResponse.builder()

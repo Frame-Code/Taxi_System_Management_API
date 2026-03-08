@@ -2,9 +2,9 @@ package com.taxi.service.impl.ride_module;
 
 import com.taxi.external.client.openRouteService.OpenRouteServiceClient;
 import com.taxi.service.interfaces.ride_module.IRideService;
-import dto.CoordinatesDTO;
-import dto.FullCoordinatesDTO;
-import dto.DistanceInfoDTO;
+import dto.in.CoordinatesDTO;
+import dto.http.request.FullCoordinatesDTO;
+import dto.out.DistanceInfoDTO;
 import lombok.extern.apachecommons.CommonsLog;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

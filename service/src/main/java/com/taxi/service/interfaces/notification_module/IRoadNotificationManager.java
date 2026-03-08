@@ -1,6 +1,6 @@
 package com.taxi.service.interfaces.notification_module;
 
-import dto.NotificationDTO;
+import dto.entities.NotificationDTO;
 import Enums.entitiesEnums.REQUEST_STATUS;
 import io.github.frame_code.domain.entities.RoadNotification;
 

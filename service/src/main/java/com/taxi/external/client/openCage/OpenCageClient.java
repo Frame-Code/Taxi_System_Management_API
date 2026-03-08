@@ -1,6 +1,6 @@
 package com.taxi.external.client.openCage;
 
-import dto.LocationDTO;
+import dto.entities.LocationDTO;
 import com.opencagedata.jopencage.JOpenCageGeocoder;
 import com.opencagedata.jopencage.model.JOpenCageResponse;
 import com.opencagedata.jopencage.model.JOpenCageReverseRequest;

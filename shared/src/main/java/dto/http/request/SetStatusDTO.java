@@ -1,4 +1,4 @@
-package dto.request_body;
+package dto.http.request;
 
 import Enums.entitiesEnums.STATUS_ROAD;
 

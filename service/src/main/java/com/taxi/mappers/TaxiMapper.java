@@ -1,9 +1,9 @@
 package com.taxi.mappers;
 
-import dto.TaxiDTO;
-import dto.UserDTO;
-import dto.VehicleDTO;
-import dto.DriverDTO;
+import dto.entities.TaxiDTO;
+import dto.entities.UserDTO;
+import dto.entities.VehicleDTO;
+import dto.entities.DriverDTO;
 import io.github.frame_code.domain.entities.Taxi;
 import io.github.frame_code.domain.entities.User;
 import io.github.frame_code.domain.entities.Vehicle;

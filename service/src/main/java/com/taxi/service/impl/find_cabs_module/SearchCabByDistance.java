@@ -1,7 +1,7 @@
 package com.taxi.service.impl.find_cabs_module;
 
-import dto.CoordinatesDTO;
-import dto.TaxiDTO;
+import dto.in.CoordinatesDTO;
+import dto.entities.TaxiDTO;
 import com.taxi.mappers.TaxiMapper;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
 import com.taxi.service.interfaces.find_cabs_module.IFindCabsService;

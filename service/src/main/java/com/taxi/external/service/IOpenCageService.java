@@ -1,6 +1,6 @@
 package com.taxi.external.service;
 
-import dto.LocationDTO;
+import dto.entities.LocationDTO;
 
 import java.util.Optional;
 

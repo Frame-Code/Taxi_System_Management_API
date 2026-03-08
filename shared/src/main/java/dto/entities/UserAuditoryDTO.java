@@ -1,4 +1,4 @@
-package dto;
+package dto.entities;
 
 public record UserAuditoryDTO(
         String userFullNames,

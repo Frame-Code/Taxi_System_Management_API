@@ -1,6 +1,7 @@
-package dto;
+package dto.entities;
 
 import com.google.gson.Gson;
+import dto.in.CoordinatesDTO;
 
 public record ClientDTO(
         Long id,

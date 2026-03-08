@@ -1,8 +1,8 @@
 package com.controllers;
 
 import dto.http.HttpBaseResponse;
-import dto.CoordinatesDTO;
-import dto.LocationDTO;
+import dto.in.CoordinatesDTO;
+import dto.entities.LocationDTO;
 import com.taxi.service.interfaces.location_module.IParseCoordinatesService;
 import com.taxi.service.interfaces.location_module.IVerifyLocationService;
 import lombok.RequiredArgsConstructor;

@@ -1,12 +1,14 @@
 package com.controllers;
 
 import com.taxi.service.interfaces.matcher_module.IMatchMediator;
-import dto.*;
 import com.taxi.mappers.ClientMapper;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCab;
 import com.taxi.service.abstracts.find_cabs_module.AbstractSearchCabFactory;
+import dto.entities.TaxiDTO;
 import dto.http.HttpBaseResponse;
 import dto.http.request.StatusCabDto;
+import dto.in.CoordinatesDTO;
+import dto.in.SearchCabDTO;
 import io.github.frame_code.domain.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;

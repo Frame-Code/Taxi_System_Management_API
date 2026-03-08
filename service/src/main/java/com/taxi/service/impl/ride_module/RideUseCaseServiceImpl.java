@@ -3,10 +3,10 @@ package com.taxi.service.impl.ride_module;
 import Enums.entitiesEnums.STATUS_ROAD;
 import com.taxi.exceptions.RideNotFoundException;
 import com.taxi.service.interfaces.ride_module.*;
-import dto.AcceptRoadDTO;
-import dto.ClientDTO;
-import dto.ResponseSetStatusDTO;
-import dto.UserAuditoryDTO;
+import dto.http.request.AcceptRoadDto;
+import dto.entities.ClientDTO;
+import dto.in.ResponseSetStatusDTO;
+import dto.entities.UserAuditoryDTO;
 import io.github.frame_code.domain.entities.*;
 import io.github.frame_code.domain.repository.IRideStatusRepository;
 import io.github.frame_code.domain.repository.IRoadRepository;
@@ -40,7 +40,7 @@ public class RideUseCaseServiceImpl implements IRideUseCaseService {
     }
 
     @Override
-    public void acceptRoad(AcceptRoadDTO roadDTO, ClientDTO clientDTO) {
+    public void acceptRoad(AcceptRoadDto roadDTO, ClientDTO clientDTO) {
         Payment payment = paymentService.findToGenerateRide(roadDTO.idPayment());
         Taxi taxi = cabService.findToGenerateRide(roadDTO.idTaxi());
         City cityOrigin = cityService.findToGenerateRide(roadDTO.idCityOrigin());

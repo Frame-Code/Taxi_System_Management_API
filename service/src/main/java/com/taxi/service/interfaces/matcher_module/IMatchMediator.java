@@ -1,10 +1,10 @@
 package com.taxi.service.interfaces.matcher_module;
 
 import Enums.entitiesEnums.REQUEST_STATUS;
-import dto.ClientDTO;
-import dto.NotificationDTO;
-import dto.TaxiDTO;
-import dto.TaxiResponseDTO;
+import dto.entities.ClientDTO;
+import dto.entities.NotificationDTO;
+import dto.entities.TaxiDTO;
+import dto.out.TaxiResponseDTO;
 
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
-package dto;
+package dto.http.request;
 
-public record AcceptRoadDTO(
+public record AcceptRoadDto(
         FullCoordinatesDTO coordinatesDTO,
         Long idTaxi,
         Long idPayment,

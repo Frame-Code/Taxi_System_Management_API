@@ -1,6 +1,6 @@
 package com.taxi.service.impl.location_module;
 
-import dto.LocationDTO;
+import dto.entities.LocationDTO;
 import com.taxi.service.interfaces.location_module.IVerifyLocationService;
 import io.github.frame_code.domain.entities.City;
 import io.github.frame_code.domain.repository.ProvinceRepository;

@@ -1,6 +1,6 @@
 package com.taxi.service.impl.notification_module;
 
-import dto.NotificationDTO;
+import dto.entities.NotificationDTO;
 import Enums.entitiesEnums.REQUEST_STATUS;
 import com.taxi.service.interfaces.notification_module.IRoadNotificationService;
 import com.taxi.service.interfaces.notification_module.IRoadNotificationManager;

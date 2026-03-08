@@ -1,6 +1,6 @@
 package com.taxi.service.abstracts.find_cabs_module;
 
-import dto.TaxiDTO;
+import dto.entities.TaxiDTO;
 
 import java.util.List;
 

@@ -1,12 +1,10 @@
 package com.taxi.external.client.openRouteService;
 
-import dto.FullCoordinatesDTO;
+import dto.http.request.FullCoordinatesDTO;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.util.Map;
 
 @Component
 @CommonsLog

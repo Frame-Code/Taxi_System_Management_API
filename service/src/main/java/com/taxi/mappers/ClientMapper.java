@@ -1,6 +1,6 @@
 package com.taxi.mappers;
 
-import dto.ClientDTO;
+import dto.entities.ClientDTO;
 import io.github.frame_code.domain.entities.Client;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

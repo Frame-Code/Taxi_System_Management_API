@@ -1,7 +1,6 @@
 package com.taxi.service.interfaces.ride_module;
 
-import dto.ClientDTO;
-import dto.UserDTO;
+import dto.entities.ClientDTO;
 import dto.http.request.SavePaymentRequestDto;
 import dto.http.response.SavePaymentResponseDto;
 import io.github.frame_code.domain.entities.Payment;

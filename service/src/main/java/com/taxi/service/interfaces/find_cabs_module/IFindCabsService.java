@@ -1,6 +1,6 @@
 package com.taxi.service.interfaces.find_cabs_module;
 
-import dto.CoordinatesDTO;
+import dto.in.CoordinatesDTO;
 import io.github.frame_code.domain.entities.Taxi;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package com.taxi.service.impl.notification_module;
 import Enums.entitiesEnums.REQUEST_STATUS;
 import com.taxi.service.interfaces.notification_module.IRoadNotificationService;
 
-import dto.NotificationDTO;
+import dto.entities.NotificationDTO;
 import com.taxi.service.interfaces.notification_module.ISenderNotification;
 import io.github.frame_code.domain.entities.RoadNotification;
 import io.github.frame_code.domain.repository.RoadNotificationRepository;
