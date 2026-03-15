@@ -46,6 +46,10 @@ public class SecurityConfig {
                             "/WEB-INF/**",
                             "/login.html",
                             "/register.html",
+                            "/shared/**",
+                            "/public/**",
+                            "/modules/**",
+                            "/static/**",
                             "/").permitAll();
                     http.requestMatchers(HttpMethod.GET, "/auth/**").permitAll();
                     http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
