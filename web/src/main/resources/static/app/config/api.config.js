@@ -7,5 +7,7 @@ export const ENDPOINTS = {
   STATUS_CAB: "/cab/status",
   INFO_RIDE: "/ride/info",
   START_RIDE: "/ride/start",
-  PAYMENT: "/payment"
+  PAYMENT: "/payment",
+  LOGIN: "/auth/log-in",
+  REGISTER: "/auth/sign-up"
 };

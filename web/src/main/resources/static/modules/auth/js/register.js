@@ -1,61 +1,63 @@
+import { RoleName } from './../../../shared/components/enums/role_name';
+import { showSuccessToast, showErrorToast } from "./../../../shared/components/ui_messages.js";
+import { save, Keys } from "./../../../app/cache/localstorage.js"
+import { registerUser } from './auth.service.js';
+import { getTokenInfo } from '../utils/jwt.utils.js';
+import { saveCookie } from '../../../app/cache/cookies.js';
+
 const d = document;
 
-d.querySelector("#btnRegister").addEventListener("click", checkPassword);
-
-function checkPassword() {
-    if (d.querySelector("#inputPassword").value.trim() !== d.querySelector("#repeatPassword").value.trim()) {
-        alert("Fields password are incorrect");
-        return;
-    }
-
-    checkFields();
-}
-
 function checkFields() {
-    if(d.querySelector("#inpFirstName").value == "" ||
-       d.querySelector("#impLastName").value == ""||
-       d.querySelector("#impEmail").value == "" ||
-       d.querySelector("#impPhone").value == "" ||
-       d.querySelector("#inputPassword").value == "") {
-       alert("Can not be empty field");
-       return;
+    if (d.querySelector("#password").value.trim() !== d.querySelector("#repeatPassword").value.trim()) {
+        showErrorToast("Las contraseñas no coinciden");
+        return false;
     }
 
-    if(!/^[0-9]+$/.test(d.querySelector("#impPhone").value)) {
-        alert("Invalid phone number");
-        return;
+    if(d.querySelector("#names").value == "" || d.querySelector("#lastnames").value == ""||
+        d.querySelector("#email").value == "" || d.querySelector("#phone").value == "" || 
+        d.querySelector("#borndate").value == "" || d.querySelector("#password").value == "" ||
+        d.querySelector("#repeatPassword").value == "") {
+        showErrorToast("No puede haber ningun campo vacio");
+        return false;
     }
 
-    if(!/^[a-zA-Z]+$/.test(d.querySelector("#inpFirstName").value) ||
-        !/^[a-zA-Z]+$/.test(d.querySelector("#impLastName").value)) {
-        alert("Invalid name or lastname fields");
-        return;
+    if(!/^[0-9]+$/.test(d.querySelector("#phone").value)) {
+        showErrorToast("Por favor escribe un numero de telefono valido");
+        return false;
     }
 
-    register();
+    if(!/^[a-zA-Z]+$/.test(d.querySelector("#names").value) ||
+        !/^[a-zA-Z]+$/.test(d.querySelector("#lastnames").value)) {
+        showErrorToast("Por favor escribe nombres validos");
+        return false;
+    }
+
+    return true;
 }
 
 
 async function register() {
+    if(checkFields()) {
+        return;
+    }
+
     const userData = {
-        name: d.querySelector("#inpFirstName").value.trim(),
-        lastName: d.querySelector("#impLastName").value.trim(),
-        email: d.querySelector("#impEmail").value.trim(),
-        phone: d.querySelector("#impPhone").value.trim(),
-        password: d.querySelector("#inputPassword").value.trim(),
-        rolesRegister: {
-            roleListName: ["USER"]
-        }
+        name: d.querySelector("#names").value.trim(),
+        lastName: d.querySelector("#lastnames").value.trim(),
+        email: d.querySelector("#email").value.trim(),
+        phone: d.querySelector("#phone").value.trim(),
+        password: d.querySelector("#password").value.trim(),
+        photo: null,
+        additionalInfoJson: null,
+        bornDate: d.querySelector("#borndate").value.trim(),
+        rolName: RoleName.Customer
     };
     
-    const request = await fetch("http://localhost:8080/auth/sign-up", {
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userData)
-    });
+    const response = await registerUser(userData);
+
+    if(!response) {
+        return;
+    }
 
     if(!request.ok) {
         if(request.status == 409) {
@@ -64,13 +66,17 @@ async function register() {
         throw new Error(`Http error! status ${request.status}`);
     }
 
-    const response = await request.json();
+    saveCookie("access_token", response.access_token, {path: "/", sameSite: "Lax"})
+    const tokenInfo = getTokenInfo(response.access_token);
+    save(Keys.Username, response.user_name, tokenInfo.remaining);
 
-    d.cookie = `access_token=${response.access_token}; Path=/; SameSite=Lax`;
-    d.cookie = `refresh_token=${response.refresh_token}; Path=/; SameSite=Lax`;
-    localStorage.setItem("user_name", response.user_name);
-
-    await alert("User created successfully");
-    await window.location.replace("http://localhost:8080/index.html");
-   
+    showSuccessToast("Nuevo usuario creado correctamente, cargando...");
+    const url = window.location.href;
+    setTimeout(() => window.location.replace(`${url.hostname}/modules/customer/views/index.html`), 2000);
 }
+
+function init() {
+    d.querySelector("#btnRegister").addEventListener("click", register);
+}
+
+init();

@@ -1,5 +1,6 @@
 export const Keys = Object.freeze({
-  CurrentRide: 'current_ride'
+  CurrentRide: 'current_ride',
+  Username: 'username'
 });
 
 
