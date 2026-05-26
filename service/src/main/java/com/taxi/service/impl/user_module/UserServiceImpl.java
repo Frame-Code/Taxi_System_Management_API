@@ -42,7 +42,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean isNewUser(String email, String phone) {
-        return repository.existsByEmailAndPhone(email, phone);
+        // Retorna true si el email NO existe aún (usuario nuevo)
+        return !repository.existsByEmail(email);
     }
 
     @Override
@@ -55,6 +56,7 @@ public class UserServiceImpl implements IUserService {
     public UserDTO save(RegisterUserDto userDto, final String passwordHash, final RoleDto role) {
         User user = mapper.toUser(userDto);
         user.setPasswordHash(passwordHash);
+        user.setCreatedBy(userDto.email()); // BaseEntity.createdBy es NOT NULL; usamos email como auditoría de creación
         user.setRole(Role.builder()
                 .id(role.id())
                 .build());

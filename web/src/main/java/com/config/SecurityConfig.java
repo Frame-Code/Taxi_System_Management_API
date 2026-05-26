@@ -22,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
@@ -47,36 +46,53 @@ public class SecurityConfig {
                             "/login.html",
                             "/register.html",
                             "/shared/**",
+                            "/auth/**",
+                            "/cache/**",
+                            "/config/**",
                             "/public/**",
                             "/modules/**",
-                            "/static/**",
+                            "/app/**",
                             "/").permitAll();
                     http.requestMatchers(HttpMethod.GET, "/auth/**").permitAll();
-                    http.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+                    http.requestMatchers(HttpMethod.POST, "/auth/log-in").permitAll();
+                    http.requestMatchers(HttpMethod.POST, "/auth/sign-up").permitAll();
+                    http.requestMatchers(HttpMethod.POST, "/auth/log-out").permitAll(); // logout siempre accesible aunque el token haya expirado
                     http.requestMatchers(HttpMethod.GET, "/api/health").permitAll();
+
+                    // Auth: /api/auth/me requiere JWT válido (cualquier rol)
+                    http.requestMatchers(HttpMethod.GET, "/api/auth/me").authenticated();
 
                     http.requestMatchers(HttpMethod.GET, "/api/cab/search").hasRole(ROLE_NAME.CLIENT.name());
                     http.requestMatchers(HttpMethod.GET, "/api/location/verify").hasRole(ROLE_NAME.CLIENT.name());
                     http.requestMatchers(HttpMethod.POST, "/api/payment").hasRole(ROLE_NAME.CLIENT.name());
                     http.requestMatchers(HttpMethod.POST, "/api/ride/start").hasRole(ROLE_NAME.CLIENT.name());
+                    http.requestMatchers(HttpMethod.GET, "/api/ride/active").hasRole(ROLE_NAME.CLIENT.name());
 
                     http.requestMatchers(HttpMethod.POST, "/api/ride/info").hasAnyRole(ROLE_NAME.CLIENT.name(), ROLE_NAME.DRIVER.name());
-                    http.requestMatchers(HttpMethod.POST, "/api/ride//status").hasAnyRole(ROLE_NAME.CLIENT.name(), ROLE_NAME.DRIVER.name());
+                    http.requestMatchers(HttpMethod.POST, "/api/ride/status").hasAnyRole(ROLE_NAME.CLIENT.name(), ROLE_NAME.DRIVER.name());
                     http.anyRequest().denyAll();
                 })
                 .exceptionHandling(ex -> {
-                    ex.authenticationEntryPoint(((request, response, authException) -> {
-                        if(request.getCookies() == null || Arrays.stream(request.getCookies()).noneMatch(cookie -> cookie.getName().equals("access_token"))) {
+                    // Para rutas /api/** devolvemos JSON 401 (el fetch del frontend lo detecta).
+                    // Para cualquier otra ruta redirigimos a la página de login.
+                    ex.authenticationEntryPoint((request, response, authException) -> {
+                        if (request.getRequestURI().startsWith("/api/")) {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("{\"message\":\"Sesión no válida o expirada\",\"status_code\":\"401\"}");
+                        } else {
                             response.sendRedirect("/modules/auth/login.html");
-                            return;
                         }
-                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-                    }));
+                    });
+                    // Acceso denegado (usuario autenticado pero sin permisos): JSON 403
+                    ex.accessDeniedHandler((request, response, accessDeniedException) -> {
+                        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.getWriter().write("{\"message\":\"No tienes permisos para esta acción\",\"status_code\":\"403\"}");
+                    });
                 })
-                .formLogin(form -> {
-                    form.loginPage("/modules/auth/login.html");
-                    form.loginProcessingUrl("auth/log-in").permitAll();
-                })
+                // Sin form login: el sistema es stateless con JWT en cookie HttpOnly.
+                .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new JwtTokenValidator(utils), BasicAuthenticationFilter.class)
                 .build();
     }

@@ -16,5 +16,6 @@ public interface UserMapper {
     @Mapping(target = "updatedBy", ignore = true)
     @Mapping(target = "passwordHash", ignore = true)
     @Mapping(target = "role", ignore = true)
+    @Mapping(source = "lastnames", target = "lastNames")
     User toUser(RegisterUserDto dto);
 }

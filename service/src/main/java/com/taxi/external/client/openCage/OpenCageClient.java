@@ -28,7 +28,7 @@ public class OpenCageClient implements IOpenCageClient {
         request.setMinConfidence(3);
 
         JOpenCageResponse response = jOpenCageGeocoder.reverse(request);
-
+        var a  = System.getProperty("API_KEY_OPEN_CAGE");
         if(response.getResults().isEmpty()) {
             log.log(Level.INFO, "Coordinates not founded");
             return Optional.empty();

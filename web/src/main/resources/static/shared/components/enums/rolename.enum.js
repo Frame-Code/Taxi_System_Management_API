@@ -1,5 +1,5 @@
 export const RoleName = Object.freeze({
-  Customer: 'ADMIN',
+  Customer: 'CLIENT',
   Driver: 'DRIVER',
-  Admin: 'CLIENT'
+  Admin: 'ADMIN'
 });

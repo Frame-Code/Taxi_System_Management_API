@@ -7,7 +7,8 @@ import { setButtonLoading } from "../../../../shared/components/loading_button.j
 import { showErrorToast } from "../../../../shared/components/ui_messages.js";
 import { attachAutocomplete } from "../suggestions/suggestions_service.js";
 import { InitPaymentMethod } from "../payment/payment.js";
-import { save, Keys, get } from "../../../../app/cache/localstorage.js"
+import { save, Keys, get } from "../../../../app/cache/localstorage.js";
+import { requireAuth } from "../../../../app/guards/auth_guard.js";
 
 const impOrigin = document.getElementById("imp_origen");
 const btnUseCurrentLocation = document.getElementById("btnUseCurrentLocation");
@@ -166,5 +167,37 @@ function init(){
     attachAutocomplete(getJsonAutoComplete(false, setDestiny)); 
 }
 
+/** Verifica si el cliente tiene una ruta activa en la BD. */
+async function checkActiveRide() {
+    try {
+        const res = await fetch(`${window.location.origin}/api/ride/active`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+        if (!res.ok) return;    // cualquier error de red/servidor: no redirigir
+        const data = await res.json();
+        if (data?.response?.hasActive === true) {
+            window.location.replace('/modules/customer/views/ride_in_progress.html');
+        }
+    } catch (_) {
+        // Error de red: dejamos que el usuario permanezca en index
+    }
+}
+
 //--- Main ---
-init();
+async function main() {
+    // 1. Valida que haya sesión activa; si no, redirige al login
+    try {
+        await requireAuth();
+    } catch (_) {
+        return; // requireAuth ya hizo el redirect
+    }
+
+    // 2. Si tiene una ruta activa, lo manda a ride_in_progress
+    await checkActiveRide();
+
+    // 3. Inicializa la página normalmente
+    init();
+}
+
+main();

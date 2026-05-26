@@ -1,7 +1,8 @@
 import { showSuccessToast, showErrorToast } from "../../../../shared/components/ui_messages.js";
 import { setPickupMarkerOrigin, setPickupMarkerDestiny, initializeMap, drawRouteWrapper } from "../api/external/map.js";
-import { save, Keys, get } from "../../../../app/cache/localstorage.js"
+import { save, Keys, get } from "../../../../app/cache/localstorage.js";
 import { getPaymentMethodName } from "../payment/payment.js";
+import { requireAuth } from "../../../../app/guards/auth_guard.js";
 
 const li_name = document.getElementById("li_names");
 const li_last_name = document.getElementById("li_last_names");
@@ -44,7 +45,7 @@ function init() {
     const currentRide = get(Keys.CurrentRide);
     showSuccessToast("¡Disfruta tu viaje!");
     initializeMap(null, null);
-    
+
     try {
         initInfoMap(currentRide);
         initInfoRide(currentRide);
@@ -56,7 +57,17 @@ function init() {
     }
 }
 
-init();
+async function main() {
+    // Verifica sesión activa antes de mostrar cualquier dato del viaje
+    try {
+        await requireAuth();
+    } catch (_) {
+        return; // requireAuth ya hizo el redirect al login
+    }
+    init();
+}
+
+main();
 
 
 

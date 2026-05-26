@@ -13,4 +13,7 @@ public interface IRideService {
     double getTotalPrice(double distance, double duration);
     Optional<DistanceInfoDTO> getRideInfo(FullCoordinatesDTO coordinatesDTO) throws IOException;
     RoadAddress save(RoadAddress roadAddress);
+
+    /** Devuelve true si el cliente (identificado por email) tiene una ruta no finalizada. */
+    boolean hasActiveRide(String clientEmail);
 }

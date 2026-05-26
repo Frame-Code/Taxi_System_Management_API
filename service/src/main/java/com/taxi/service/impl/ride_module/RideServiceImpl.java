@@ -1,5 +1,6 @@
 package com.taxi.service.impl.ride_module;
 
+import Enums.entitiesEnums.STATUS_ROAD;
 import Enums.entitiesEnums.STATUS_TAXI;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 import java.util.Optional;
 
 @CommonsLog
@@ -81,6 +83,16 @@ public class RideServiceImpl implements IRideService {
     @Override
     public RoadAddress save(RoadAddress roadAddress) {
         return roadAddressRepository.save(roadAddress);
+    }
+
+    @Override
+    public boolean hasActiveRide(String clientEmail) {
+        List<STATUS_ROAD> activeStatuses = List.of(
+                STATUS_ROAD.INITIALIZED,
+                STATUS_ROAD.STARTING,
+                STATUS_ROAD.IN_PROCESS
+        );
+        return roadRepository.findActiveByClientEmail(clientEmail, activeStatuses).isPresent();
     }
 
     private double getMinutes(double seconds) {

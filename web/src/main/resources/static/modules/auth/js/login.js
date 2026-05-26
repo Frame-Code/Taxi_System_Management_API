@@ -1,33 +1,25 @@
-const d = document;
+import { loginUser } from './auth.service.js';
+import { showErrorToast } from '../../../shared/components/ui_messages.js';
+import { save, Keys } from '../../../app/cache/localstorage.js';
 
-d.querySelector("#btnLogin").addEventListener("click", login);
+document.querySelector("#btnLogin").addEventListener("click", login);
 
 async function login() {
-    const data = {
-        email: d.querySelector("#exampleInputEmail").value,
-        password: d.querySelector("#exampleInputPassword").value
-    };
+    const email    = document.querySelector("#email").value.trim();
+    const password = document.querySelector("#password").value.trim();
 
-    const request = await fetch("http://localhost:8080/auth/log-in", {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-
-    if(!request.ok) {
-        if(request.status == 404 || request.status == 401) {
-            alert(await request.text());
-        }
-        throw new Error("Request error, status code: ", request.status);
+    if (!email || !password) {
+        showErrorToast("Por favor completa todos los campos");
+        return;
     }
 
-    const response = await request.json();
+    const data = await loginUser({ email, password });
+    if (!data) return; // handleApiError ya mostró el toast de error
 
-    d.cookie = `access_token=${response.access_token}; Path=/; SameSite=Lax`;
-    d.cookie = `refresh_token=${response.refresh_token}; Path=/; SameSite=Lax`;
-    localStorage.setItem("user_name", response.user_name);
-    window.location.replace("http://localhost:8080/index.html");
+    // El token llegó como cookie HttpOnly — el navegador lo enviará solo.
+    // Solo guardamos el nombre para mostrarlo en la UI.
+    const username = data?.response?.user_name ?? '';
+    save(Keys.Username, username, 1440); // 24 h en minutos
+
+    window.location.replace('/modules/customer/views/index.html');
 }

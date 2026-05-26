@@ -14,10 +14,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.apachecommons.CommonsLog;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @CommonsLog
@@ -29,6 +31,22 @@ public class RideController {
     private final IRideUseCaseService rideUseCaseService;
     private final ClientRepository clientRepository;
     private final ClientMapper mapper;
+
+    /**
+     * Devuelve si el usuario autenticado tiene una ruta activa (no finalizada).
+     * El email del cliente se extrae del JWT vía el SecurityContext.
+     */
+    @GetMapping(value = "/active")
+    public ResponseEntity<HttpBaseResponse> hasActiveRide(Authentication auth) {
+        boolean active = rideService.hasActiveRide(auth.getName());
+        return ResponseEntity.ok(HttpBaseResponse.builder()
+                .response(Map.of("hasActive", active))
+                .status_code("200")
+                .status_message("Successfully")
+                .message(active ? "El usuario tiene una ruta activa" : "Sin rutas activas")
+                .timeStamp(LocalDateTime.now())
+                .build());
+    }
 
     @PostMapping(value = "/info")
     public ResponseEntity<HttpBaseResponse> getInfo(@RequestBody final FullCoordinatesDTO coordinatesDTO) {
